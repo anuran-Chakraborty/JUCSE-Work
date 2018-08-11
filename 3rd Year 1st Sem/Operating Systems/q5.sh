@@ -10,7 +10,7 @@ test -e $filename || echo "File does not exist"
 read -p "Enter word to search for: " word
 
 # Check if word exists in file
-count=$( grep -c "$word" "$filename" )
+count=$( grep -o -w "$word" "$filename" | wc -l )
 
 if [ $count -gt 0 ]
 then
@@ -20,7 +20,8 @@ then
     # Ask for the second word
     read -p "Enter word to replace with: " word2
 
-    sed -ni "$word " "$word2 " "$filename"
+    # sed -i 's/\<'"$word1"'\>/'"$word2"'/g' $filename
+    sed -i 's/\<'"$word"'\>/'"$word2"'/g' $filename
     echo "Replacement done"
 else
     # If not found
