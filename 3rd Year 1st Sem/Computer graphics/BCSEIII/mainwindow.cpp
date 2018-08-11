@@ -35,13 +35,18 @@ void MainWindow::point(int x,int y)
 
 
     int k = ui->gridsize->value();//GridSize
-    int startX=x/k*k;
-    int startY=y/k*k;
+    if(k>1)
+    {
+        int startX=x/k*k;
+        int startY=y/k*k;
 
-    //Drawing the pixels
-    for(int i=startX+1;i<(startX+k);i++)
-            for(int j=startY+1;j<(startY+k);j++)
-                img.setPixel(i,j,qRgb(255,255,0));
+        //Drawing the pixels
+        for(int i=startX+1;i<(startX+k);i++)
+                for(int j=startY+1;j<(startY+k);j++)
+                    img.setPixel(i,j,qRgb(255,255,0));
+    }
+    else
+        img.setPixel(x,y,qRgb(255,255,0));
     ui->frame->setPixmap(QPixmap::fromImage(img));
 }
 
@@ -206,32 +211,32 @@ void MainWindow::on_bress_clicked()
     int x2=p2.x();
     int y2=p2.y();
 
-    string s=to_string(changeX(x1))+" "+to_string(changeY(y1))+" "+to_string(changeX(x2))+" "+to_string(changeY(y2));
-    ui->debugger->setText(s.c_str());
 
 
 
-    int dx=x2-x1;
-    int dy=y2-y1;
+
+    int dx=abs(x2-x1);
+    int dy=abs(y2-y1);
 
     int p0=2*dy-dx;
-    int xk=x1,yk=y1;
 
-    for(int x=x1,y=y1;x<=x2;x++)
+    string s=to_string(changeX(x1))+" "+to_string(changeY(y1))+" "+to_string(changeX(x2))+" "+to_string(changeY(y2))+" "+to_string(p0);
+    ui->debugger->setText(s.c_str());
+
+    int x=x1,y=y1;
+
+    while(x<x2)
     {
-
-        xk=x;
-        if(p0<0)
+        x++;
+        if(p0>=0)
         {
-            point(xk+1,yk);
-            p0+=2*dy;
+            y--;
+            p0=p0+2*(dy-dx);
         }
         else
         {
-            point(xk,yk+1);
-            yk+=1;
-            p0=p0+2*dy-2*dx;
+            p0=p0+2*dy;
         }
-
+        point(x,y);
     }
 }
