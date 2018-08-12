@@ -31,7 +31,7 @@ MainWindow::~MainWindow()
 void MainWindow::point(int x,int y)
 {
 
-//    img.setPixel(x,y,qRgb(255,255,0));
+    //    img.setPixel(x,y,qRgb(255,255,0));
 
 
     int k = ui->gridsize->value();//GridSize
@@ -42,8 +42,8 @@ void MainWindow::point(int x,int y)
 
         //Drawing the pixels
         for(int i=startX+1;i<(startX+k);i++)
-                for(int j=startY+1;j<(startY+k);j++)
-                    img.setPixel(i,j,qRgb(255,255,0));
+            for(int j=startY+1;j<(startY+k);j++)
+                img.setPixel(i,j,qRgb(255,255,0));
     }
     else
         img.setPixel(x,y,qRgb(255,255,0));
@@ -192,51 +192,71 @@ void MainWindow::on_dda_clicked()
 
     for(int v=0; v < steps; v++)
     {
-       x = x + Xinc;
-       y = y + Yinc;
-       point((int)(x+0.5),(int)(y+0.5));
+        x = x + Xinc;
+        y = y + Yinc;
+        point((int)(x+0.5),(int)(y+0.5));
     }
 
 
 }
 
+//string s=to_string(changeX(x1))+" "+to_string(changeY(y1))+" "+to_string(changeX(x2))+" "+to_string(changeY(y2))+" "+to_string(p0);
+//ui->debugger->setText(s.c_str());
+
+
+
+
 void MainWindow::on_bress_clicked()
 {
-    //This function draws a line between the two selected points using Bressenham algorithm
-    int k = ui->gridsize->value();//GridSize
-    //Now p1 and p2 contains the points
+    //Store the two points
     int x1=p1.x();
     int y1=p1.y();
 
     int x2=p2.x();
     int y2=p2.y();
 
+    int dx=x2-x1;
+    int dy=y2-y1;
 
+    int xinc=(dx>0)?1:-1;
+    int yinc=(dy>0)?1:-1;
 
+    dx=abs(dx);
+    dy=abs(dy);
 
-
-    int dx=abs(x2-x1);
-    int dy=abs(y2-y1);
-
-    int p0=2*dy-dx;
-
-    string s=to_string(changeX(x1))+" "+to_string(changeY(y1))+" "+to_string(changeX(x2))+" "+to_string(changeY(y2))+" "+to_string(p0);
-    ui->debugger->setText(s.c_str());
-
-    int x=x1,y=y1;
-
-    while(x<x2)
+    //Case for gentle slope
+    if(abs(dx)>=abs(dy))
     {
-        x++;
-        if(p0>=0)
+        int p=2*(dy)-dx;
+        int y=y1;
+
+        for(int x=x1; x!=x2+xinc; x+=xinc)
         {
-            y--;
-            p0=p0+2*(dy-dx);
+            point(x,y);
+            if(p>=0)
+            {
+                y+=yinc;
+                p-=2*dx;
+            }
+            p+=2*dy;
         }
-        else
+    }
+    //Case for steep slope
+    else
+    {
+
+        int p=2*(dy)-dx;
+        int x=x1;
+
+        for(int y=y1; y!=y2+yinc; y+=yinc)
         {
-            p0=p0+2*dy;
+            point(x,y);
+            if(p>=0)
+            {
+                x+=xinc;
+                p-=2*(dy);
+            }
+            p+=2*(dx);
         }
-        point(x,y);
     }
 }
