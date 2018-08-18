@@ -40,6 +40,10 @@ private slots:
 
     void on_bress_clicked();
 
+    void on_midpt_clicked();
+
+    void drawCircle(QPoint p1,int r0);
+
 private:
     Ui::MainWindow *ui;
     QPoint p1,p2;

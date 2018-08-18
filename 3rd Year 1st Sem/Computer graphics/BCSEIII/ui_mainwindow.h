@@ -55,6 +55,8 @@ public:
     QPushButton *dda;
     QPushButton *bress;
     QLabel *debugger;
+    QLabel *label_4;
+    QPushButton *midpt;
     QMenuBar *menuBar;
     QToolBar *mainToolBar;
     QStatusBar *statusBar;
@@ -145,8 +147,14 @@ public:
         bress->setGeometry(QRect(800, 420, 91, 31));
         debugger = new QLabel(centralWidget);
         debugger->setObjectName(QStringLiteral("debugger"));
-        debugger->setGeometry(QRect(710, 490, 171, 51));
+        debugger->setGeometry(QRect(710, 630, 171, 51));
         debugger->setFrameShape(QFrame::Panel);
+        label_4 = new QLabel(centralWidget);
+        label_4->setObjectName(QStringLiteral("label_4"));
+        label_4->setGeometry(QRect(710, 460, 91, 16));
+        midpt = new QPushButton(centralWidget);
+        midpt->setObjectName(QStringLiteral("midpt"));
+        midpt->setGeometry(QRect(710, 480, 91, 31));
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QStringLiteral("menuBar"));
@@ -185,6 +193,8 @@ public:
         dda->setText(QApplication::translate("MainWindow", "DDA", 0));
         bress->setText(QApplication::translate("MainWindow", "BRESSENHAM", 0));
         debugger->setText(QString());
+        label_4->setText(QApplication::translate("MainWindow", "Circle Drawing Algo", 0));
+        midpt->setText(QApplication::translate("MainWindow", "Midpoint Circle", 0));
     } // retranslateUi
 
 };

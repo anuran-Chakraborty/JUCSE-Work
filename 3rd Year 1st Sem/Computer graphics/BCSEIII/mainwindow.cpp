@@ -260,3 +260,74 @@ void MainWindow::on_bress_clicked()
         }
     }
 }
+
+void MainWindow::on_midpt_clicked()
+{
+    //Get the radius
+    int r0=ui->circle_radius->value();
+
+    //Set the centre
+    if(ui->draw_circle->isChecked()){
+        p1.setX(ui->frame->x);
+        p1.setY(ui->frame->y);
+
+        drawCircle(p1,r0);
+    }
+}
+
+void MainWindow::drawCircle(QPoint p1, int r0)
+{
+    //Function to draw the circle
+    int x_centre=p1.x();
+    int y_centre=p1.y();
+
+    int k = ui->gridsize->value();//GridSize
+
+    x_centre=(x_centre/k)*k+k/2;
+    y_centre=(y_centre/k)*k+k/2;
+
+    int x=r0*k;
+    int y=0;
+
+    point(x+x_centre,y+y_centre);
+
+    if(r0>0)
+    {
+        point(x+x_centre,-y+y_centre);
+        point(y+x_centre,x+y_centre);
+        point(-y+x_centre,x+y_centre);
+    }
+
+
+    int P=(1-r0)*k;
+
+    while(x>y)
+    {
+        y++;
+
+        if(P<=0)
+            P=P+2*y+1;
+        else
+        {
+            x--;
+            P=P+2*y-2*x+1;
+        }
+        if(x<y)
+            break;
+
+        point(x+x_centre,y+y_centre);
+        point(-x+x_centre,y+y_centre);
+        point(x+x_centre,-y+y_centre);
+        point(-x+x_centre,-y+y_centre);
+
+        if(x!=y)
+        {
+            point(y+x_centre,x+y_centre);
+            point(-y+x_centre,x+y_centre);
+            point(y+x_centre,-x+y_centre);
+            point(-y+x_centre,-x+y_centre);
+        }
+    }
+
+
+}
