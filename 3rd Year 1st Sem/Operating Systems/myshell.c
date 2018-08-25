@@ -43,8 +43,23 @@ int main(int argc, char const *argv[])
 	clear();
 	//Display welcome message
 	printf("================ Welcome to JUBCSEIII ===============\n");
-	printf("Good morning\n");
+	printf("Hi! Good ");
 
+	time_t currTime=time(NULL);
+	struct tm *cuTime=localtime(&currTime);
+	int hour=cuTime->tm_hour;
+
+	if(hour>=4 && hour<12)
+		printf("Morning\n");
+	else
+	if(hour>=12 && hour<=17)
+		printf("Afternoon\n");
+	else
+	if(hour>17 && hour<=23)
+		printf("Evening\n");
+	else
+		printf("Night\n");
+	printf("======================================================\n");
 	// Call the shell loop
 	sh_loop();
 
