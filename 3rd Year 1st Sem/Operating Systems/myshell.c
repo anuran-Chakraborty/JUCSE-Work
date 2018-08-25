@@ -140,22 +140,19 @@ int sh_launch(char** args)
 {
 	//Create a child process and call functions
 	pid_t pid=fork();
-	int background;
+	int background=0;
 	if(args[2]!=NULL && strcmp(args[2],"&")==0)
 	{
 		background=1;
 		args[2]=NULL;
 	}
-	else
-		background=0; //Sets the background flag
+	
 	
 	if(background!=1 && args[1]!=NULL && strcmp(args[1],"&")==0)
 	{
 		background=1;
 		args[1]=NULL; 
 	}
-	else
-		background=0;
 
 	if(pid==-1)
 	{
@@ -172,14 +169,13 @@ int sh_launch(char** args)
 		close(STDERR_FILENO);
 	    int x = open("/dev/null", O_RDWR);   // Redirect input, output and stderr to /dev/null
 	    dup(x);
-	    dup(x);
-		//execute command
-		args[2]=NULL;
+		
 		if(execvp(args[0],args)==-1)//For invalid command
 		{
 			printf("jubcseIII: no such file or command\n");
 			return 0;
 		}
+		kill(getpid(),SIGINT);
 	}
 	else
 	if(pid==0 && background!=1)
@@ -219,13 +215,6 @@ int sh_launch_custom(char** args,int (*func)(char**))
 	else
 	if(pid==0 && background==1)
 	{
-		//If it is the child process and is background
-		close(STDIN_FILENO);
-		close(STDOUT_FILENO);
-		close(STDERR_FILENO);
-	    int x = open("/dev/null", O_RDWR);   // Redirect input, output and stderr to /dev/null
-	    dup(x);
-	    dup(x);
 		//execute command
 		if((*func)(args)==0)//For invalid command
 		{
@@ -270,6 +259,8 @@ int sh_execute(char** args)
 		{
 			if(strcmp(args[0],builtin_comm[i])==0)
 			{
+				if(i==1)
+					return editfile(args);
 				if(i==4)
 				{
 					kill(0,SIGTERM);
