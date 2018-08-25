@@ -43,7 +43,7 @@
     <property name="geometry">
      <rect>
       <x>720</x>
-      <y>70</y>
+      <y>60</y>
       <width>111</width>
       <height>31</height>
      </rect>
@@ -59,7 +59,7 @@
     <property name="geometry">
      <rect>
       <x>720</x>
-      <y>50</y>
+      <y>40</y>
       <width>111</width>
       <height>20</height>
      </rect>
@@ -72,7 +72,7 @@
     <property name="geometry">
      <rect>
       <x>720</x>
-      <y>140</y>
+      <y>130</y>
       <width>111</width>
       <height>31</height>
      </rect>
@@ -88,7 +88,7 @@
     <property name="geometry">
      <rect>
       <x>730</x>
-      <y>120</y>
+      <y>110</y>
       <width>81</width>
       <height>20</height>
      </rect>
@@ -134,7 +134,7 @@ background-color: rgb(85, 255, 255);</string>
     <property name="geometry">
      <rect>
       <x>720</x>
-      <y>10</y>
+      <y>0</y>
       <width>91</width>
       <height>21</height>
      </rect>
@@ -147,7 +147,7 @@ background-color: rgb(85, 255, 255);</string>
     <property name="geometry">
      <rect>
       <x>710</x>
-      <y>290</y>
+      <y>280</y>
       <width>101</width>
       <height>41</height>
      </rect>
@@ -160,7 +160,7 @@ background-color: rgb(85, 255, 255);</string>
     <property name="geometry">
      <rect>
       <x>790</x>
-      <y>190</y>
+      <y>180</y>
       <width>46</width>
       <height>20</height>
      </rect>
@@ -170,7 +170,7 @@ background-color: rgb(85, 255, 255);</string>
     <property name="geometry">
      <rect>
       <x>710</x>
-      <y>190</y>
+      <y>180</y>
       <width>81</width>
       <height>17</height>
      </rect>
@@ -183,7 +183,7 @@ background-color: rgb(85, 255, 255);</string>
     <property name="geometry">
      <rect>
       <x>710</x>
-      <y>240</y>
+      <y>230</y>
       <width>77</width>
       <height>17</height>
      </rect>
@@ -196,7 +196,7 @@ background-color: rgb(85, 255, 255);</string>
     <property name="geometry">
      <rect>
       <x>790</x>
-      <y>240</y>
+      <y>230</y>
       <width>81</width>
       <height>23</height>
      </rect>
@@ -209,7 +209,7 @@ background-color: rgb(85, 255, 255);</string>
     <property name="geometry">
      <rect>
       <x>880</x>
-      <y>240</y>
+      <y>230</y>
       <width>81</width>
       <height>23</height>
      </rect>
@@ -222,7 +222,7 @@ background-color: rgb(85, 255, 255);</string>
     <property name="geometry">
      <rect>
       <x>710</x>
-      <y>340</y>
+      <y>330</y>
       <width>101</width>
       <height>41</height>
      </rect>
@@ -235,7 +235,7 @@ background-color: rgb(85, 255, 255);</string>
     <property name="geometry">
      <rect>
       <x>900</x>
-      <y>10</y>
+      <y>0</y>
       <width>61</width>
       <height>21</height>
      </rect>
@@ -248,7 +248,7 @@ background-color: rgb(85, 255, 255);</string>
     <property name="geometry">
      <rect>
       <x>850</x>
-      <y>10</y>
+      <y>0</y>
       <width>46</width>
       <height>13</height>
      </rect>
@@ -261,7 +261,7 @@ background-color: rgb(85, 255, 255);</string>
     <property name="geometry">
      <rect>
       <x>890</x>
-      <y>70</y>
+      <y>60</y>
       <width>81</width>
       <height>31</height>
      </rect>
@@ -274,7 +274,7 @@ background-color: rgb(85, 255, 255);</string>
     <property name="geometry">
      <rect>
       <x>710</x>
-      <y>390</y>
+      <y>380</y>
       <width>121</width>
       <height>16</height>
      </rect>
@@ -287,7 +287,7 @@ background-color: rgb(85, 255, 255);</string>
     <property name="geometry">
      <rect>
       <x>710</x>
-      <y>420</y>
+      <y>410</y>
       <width>75</width>
       <height>31</height>
      </rect>
@@ -300,7 +300,7 @@ background-color: rgb(85, 255, 255);</string>
     <property name="geometry">
      <rect>
       <x>800</x>
-      <y>420</y>
+      <y>410</y>
       <width>91</width>
       <height>31</height>
      </rect>
@@ -329,7 +329,7 @@ background-color: rgb(85, 255, 255);</string>
     <property name="geometry">
      <rect>
       <x>710</x>
-      <y>460</y>
+      <y>450</y>
       <width>91</width>
       <height>16</height>
      </rect>
@@ -342,13 +342,98 @@ background-color: rgb(85, 255, 255);</string>
     <property name="geometry">
      <rect>
       <x>710</x>
-      <y>480</y>
+      <y>470</y>
       <width>91</width>
       <height>31</height>
      </rect>
     </property>
     <property name="text">
      <string>Midpoint Circle</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="bress_circle">
+    <property name="geometry">
+     <rect>
+      <x>810</x>
+      <y>470</y>
+      <width>91</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Bressenham</string>
+    </property>
+   </widget>
+   <widget class="QRadioButton" name="draw_ellipse">
+    <property name="geometry">
+     <rect>
+      <x>710</x>
+      <y>520</y>
+      <width>81</width>
+      <height>17</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Draw Ellipse</string>
+    </property>
+   </widget>
+   <widget class="QSpinBox" name="ellipse_ry">
+    <property name="geometry">
+     <rect>
+      <x>930</x>
+      <y>520</y>
+      <width>46</width>
+      <height>20</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QSpinBox" name="ellipse_rx">
+    <property name="geometry">
+     <rect>
+      <x>840</x>
+      <y>520</y>
+      <width>46</width>
+      <height>20</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_6">
+    <property name="geometry">
+     <rect>
+      <x>810</x>
+      <y>520</y>
+      <width>46</width>
+      <height>13</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Rx:</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_7">
+    <property name="geometry">
+     <rect>
+      <x>900</x>
+      <y>520</y>
+      <width>46</width>
+      <height>13</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Ry:</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="ellipse">
+    <property name="geometry">
+     <rect>
+      <x>710</x>
+      <y>550</y>
+      <width>91</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Draw Ellipse</string>
     </property>
    </widget>
   </widget>

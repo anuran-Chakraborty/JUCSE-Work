@@ -331,3 +331,147 @@ void MainWindow::drawCircle(QPoint p1, int r0)
 
 
 }
+
+void MainWindow::on_bress_circle_clicked()
+{
+    //Get the radius
+    int r0=ui->circle_radius->value();
+
+    //Set the centre
+    if(ui->draw_circle->isChecked()){
+        p1.setX(ui->frame->x);
+        p1.setY(ui->frame->y);
+
+        drawCircleBress(p1,r0);
+    }
+}
+
+void MainWindow::drawCircleBress(QPoint p1, int r0)
+{
+    //Function to draw the circle
+    int x_centre=p1.x();
+    int y_centre=p1.y();
+
+    int k = ui->gridsize->value();//GridSize
+
+    x_centre=(x_centre/k)*k+k/2;
+    y_centre=(y_centre/k)*k+k/2;
+
+    int y=r0*k;
+    int x=0;
+
+    int d=(3-2*r0)*k;
+
+    while(y>=x)
+    {
+        point(x_centre+x,y_centre+y);
+        point(x_centre+x,y_centre-y);
+        point(x_centre-x,y_centre+y);
+        point(x_centre-x,y_centre-y);
+
+        point(x_centre+y,y_centre+x);
+        point(x_centre+y,y_centre-x);
+        point(x_centre-y,y_centre+x);
+        point(x_centre-y,y_centre-x);
+
+        x++;
+        if(d>0)
+        {
+            y--;
+            d=d+4*(x-y)+10;
+        }
+        else
+        {
+            d=d+4*x+6;
+        }
+    }
+}
+
+void MainWindow::on_ellipse_clicked()
+{
+    //Get the radius
+    int rx=ui->ellipse_rx->value();
+    int ry=ui->ellipse_ry->value();
+
+    //Set the centre
+    if(ui->draw_ellipse->isChecked()){
+        p1.setX(ui->frame->x);
+        p1.setY(ui->frame->y);
+
+        drawEllipse(p1,rx,ry);
+    }
+}
+
+void MainWindow::drawEllipse(QPoint p, int rx, int ry)
+{
+    //Function to draw the ellipse
+    //Get the centre
+    int x_centre=p.x();
+    int y_centre=p.y();
+    int k = ui->gridsize->value();//GridSize
+
+    int x=0;
+    int y=ry*k;
+
+    int rx2=rx*rx;
+    int ry2=ry*ry;
+    int tworx2=2*rx2;
+    int twory2=2*ry2;
+    int px=0;
+    int py=tworx2*y;
+
+
+    //For first region
+    int p1=ry2-rx2*ry+(1/4)*rx2; //Initial value of decision paramemter
+
+
+    while(px<py)
+    {
+        point(x_centre+x,y_centre+y);
+        point(x_centre-x,y_centre+y);
+        point(x_centre-x,y_centre-y);
+        point(x_centre+x,y_centre-y);
+
+        x++;
+        px+=twory2;
+
+        if(p1>0)
+        {
+            y--;
+            py-=tworx2;
+            p1=p1+ry2+px-py;
+
+        }
+        else
+        {
+            p1=p1+ry2+px;
+        }
+    }
+
+    //For second region
+    p1=ry2*(x+0.5)*(x+0.5)+rx2*(y-1)*(y-1)-rx2*ry2; //Initial value of decision paramemter
+
+
+    while(y>0)
+    {
+        point(x_centre+x,y_centre+y);
+        point(x_centre-x,y_centre+y);
+        point(x_centre-x,y_centre-y);
+        point(x_centre+x,y_centre-y);
+
+        y--;
+        if(p1<0)
+        {
+            x++;
+            px+=twory2;
+            p1=p1+rx2-py+px;
+
+        }
+        else
+        {
+            p1=p1+rx2-py;
+        }
+    }
+
+
+}

@@ -19,8 +19,8 @@
 
 QT_BEGIN_MOC_NAMESPACE
 struct qt_meta_stringdata_MainWindow_t {
-    QByteArrayData data[22];
-    char stringdata[266];
+    QByteArrayData data[28];
+    char stringdata[343];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -50,7 +50,13 @@ QT_MOC_LITERAL(17, 214, 16),
 QT_MOC_LITERAL(18, 231, 16),
 QT_MOC_LITERAL(19, 248, 10),
 QT_MOC_LITERAL(20, 259, 2),
-QT_MOC_LITERAL(21, 262, 2)
+QT_MOC_LITERAL(21, 262, 2),
+QT_MOC_LITERAL(22, 265, 23),
+QT_MOC_LITERAL(23, 289, 15),
+QT_MOC_LITERAL(24, 305, 18),
+QT_MOC_LITERAL(25, 324, 11),
+QT_MOC_LITERAL(26, 336, 2),
+QT_MOC_LITERAL(27, 339, 2)
     },
     "MainWindow\0Mouse_Pressed\0\0showMousePosition\0"
     "QPoint&\0pos\0on_show_axes_clicked\0"
@@ -59,6 +65,8 @@ QT_MOC_LITERAL(21, 262, 2)
     "changeX\0x\0changeY\0y\0on_showgrid_clicked\0"
     "on_dda_clicked\0on_bress_clicked\0"
     "on_midpt_clicked\0drawCircle\0p1\0r0\0"
+    "on_bress_circle_clicked\0drawCircleBress\0"
+    "on_ellipse_clicked\0drawEllipse\0rx\0ry\0"
 };
 #undef QT_MOC_LITERAL
 
@@ -68,7 +76,7 @@ static const uint qt_meta_data_MainWindow[] = {
        7,       // revision
        0,       // classname
        0,    0, // classinfo
-      14,   14, // methods
+      18,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -76,20 +84,24 @@ static const uint qt_meta_data_MainWindow[] = {
        0,       // signalCount
 
  // slots: name, argc, parameters, tag, flags
-       1,    0,   84,    2, 0x0a,
-       3,    1,   85,    2, 0x0a,
-       6,    0,   88,    2, 0x08,
-       7,    0,   89,    2, 0x08,
-       8,    0,   90,    2, 0x08,
-       9,    0,   91,    2, 0x08,
-      10,    0,   92,    2, 0x08,
-      11,    1,   93,    2, 0x08,
-      13,    1,   96,    2, 0x08,
-      15,    0,   99,    2, 0x08,
-      16,    0,  100,    2, 0x08,
-      17,    0,  101,    2, 0x08,
-      18,    0,  102,    2, 0x08,
-      19,    2,  103,    2, 0x08,
+       1,    0,  104,    2, 0x0a,
+       3,    1,  105,    2, 0x0a,
+       6,    0,  108,    2, 0x08,
+       7,    0,  109,    2, 0x08,
+       8,    0,  110,    2, 0x08,
+       9,    0,  111,    2, 0x08,
+      10,    0,  112,    2, 0x08,
+      11,    1,  113,    2, 0x08,
+      13,    1,  116,    2, 0x08,
+      15,    0,  119,    2, 0x08,
+      16,    0,  120,    2, 0x08,
+      17,    0,  121,    2, 0x08,
+      18,    0,  122,    2, 0x08,
+      19,    2,  123,    2, 0x08,
+      22,    0,  128,    2, 0x08,
+      23,    2,  129,    2, 0x08,
+      24,    0,  134,    2, 0x08,
+      25,    3,  135,    2, 0x08,
 
  // slots: parameters
     QMetaType::Void,
@@ -106,6 +118,10 @@ static const uint qt_meta_data_MainWindow[] = {
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void, QMetaType::QPoint, QMetaType::Int,   20,   21,
+    QMetaType::Void,
+    QMetaType::Void, QMetaType::QPoint, QMetaType::Int,   20,   21,
+    QMetaType::Void,
+    QMetaType::Void, QMetaType::QPoint, QMetaType::Int, QMetaType::Int,   20,   26,   27,
 
        0        // eod
 };
@@ -131,6 +147,10 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 11: _t->on_bress_clicked(); break;
         case 12: _t->on_midpt_clicked(); break;
         case 13: _t->drawCircle((*reinterpret_cast< QPoint(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2]))); break;
+        case 14: _t->on_bress_circle_clicked(); break;
+        case 15: _t->drawCircleBress((*reinterpret_cast< QPoint(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2]))); break;
+        case 16: _t->on_ellipse_clicked(); break;
+        case 17: _t->drawEllipse((*reinterpret_cast< QPoint(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2])),(*reinterpret_cast< int(*)>(_a[3]))); break;
         default: ;
         }
     }
@@ -161,13 +181,13 @@ int MainWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 14)
+        if (_id < 18)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 14;
+        _id -= 18;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 14)
+        if (_id < 18)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 14;
+        _id -= 18;
     }
     return _id;
 }

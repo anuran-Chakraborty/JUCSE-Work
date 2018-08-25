@@ -44,6 +44,14 @@ private slots:
 
     void drawCircle(QPoint p1,int r0);
 
+    void on_bress_circle_clicked();
+
+    void drawCircleBress(QPoint p1,int r0);
+
+    void on_ellipse_clicked();
+
+    void drawEllipse(QPoint p1,int rx,int ry);
+
 private:
     Ui::MainWindow *ui;
     QPoint p1,p2;
