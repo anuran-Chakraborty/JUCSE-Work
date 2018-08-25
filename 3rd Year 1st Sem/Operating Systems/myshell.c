@@ -7,6 +7,7 @@
 #include<sys/stat.h>
 #include<pwd.h>
 #include<time.h>
+#include<fcntl.h>
 
 #define TOK_BUFFSIZE 64
 #define TOK_DELIM " \t\r\n"
@@ -58,6 +59,7 @@ void sh_loop()
 	int status;
 	 //Get username
 	char* username=getenv("USER");
+
 	 //Get current working directory
 	char currdir[1024];
 	getcwd(currdir, sizeof(currdir));
@@ -66,7 +68,7 @@ void sh_loop()
 	do
 	{
 	 	//Print prompt
-		printf("%s:%s >> ",username,currdir);
+		printf("%s:%s $ ",username,currdir);
 
 	 	//Now read the line
 		line = sh_read_line();
@@ -133,11 +135,27 @@ char** sh_parse(char* line)
 	return tokens;
 }
 
-//Function to start a process
+//Function to start a builtin process
 int sh_launch(char** args)
 {
 	//Create a child process and call functions
 	pid_t pid=fork();
+	int background;
+	if(args[2]!=NULL && strcmp(args[2],"&")==0)
+	{
+		background=1;
+		args[2]=NULL;
+	}
+	else
+		background=0; //Sets the background flag
+	
+	if(background!=1 && args[1]!=NULL && strcmp(args[1],"&")==0)
+	{
+		background=1;
+		args[1]=NULL; 
+	}
+	else
+		background=0;
 
 	if(pid==-1)
 	{
@@ -146,8 +164,26 @@ int sh_launch(char** args)
 		return 0;
 	}
 	else
-		if(pid==0)
+	if(pid==0 && background==1)
+	{
+		//If it is the child process and is background
+		close(STDIN_FILENO);
+		close(STDOUT_FILENO);
+		close(STDERR_FILENO);
+	    int x = open("/dev/null", O_RDWR);   // Redirect input, output and stderr to /dev/null
+	    dup(x);
+	    dup(x);
+		//execute command
+		args[2]=NULL;
+		if(execvp(args[0],args)==-1)//For invalid command
 		{
+			printf("jubcseIII: no such file or command\n");
+			return 0;
+		}
+	}
+	else
+	if(pid==0 && background!=1)
+	{
 		//If it is the child process
 		//execute command
 		if(execvp(args[0],args)==-1)//For invalid command
@@ -157,6 +193,7 @@ int sh_launch(char** args)
 		}
 	}
 	else
+	if(background!=1)
 	{
 		//For parent process wait for child to terminate
 		wait(NULL);
@@ -164,6 +201,61 @@ int sh_launch(char** args)
 	}
 	return 1;
 }
+
+//Function to start a custom process will take the fucntion pointer
+int sh_launch_custom(char** args,int (*func)(char**))
+{
+	//Create a child process and call functions
+	pid_t pid=fork();
+	int background=(args[2]!=NULL && strcmp(args[2],"&")==0)?1:0; //Sets the background flag
+	background=(background!=1 && args[1]!=NULL && strcmp(args[1],"&")==0)?1:0;
+
+	if(pid==-1)
+	{
+		//In case of failure to fork a chaild
+		printf("forking child failed\n");
+		return 0;
+	}
+	else
+	if(pid==0 && background==1)
+	{
+		//If it is the child process and is background
+		close(STDIN_FILENO);
+		close(STDOUT_FILENO);
+		close(STDERR_FILENO);
+	    int x = open("/dev/null", O_RDWR);   // Redirect input, output and stderr to /dev/null
+	    dup(x);
+	    dup(x);
+		//execute command
+		if((*func)(args)==0)//For invalid command
+		{
+			printf("jubcseIII: error executing command\n");
+			return 0;
+		}
+	}
+	else
+	if(pid==0 && background!=1)
+	{
+		//If it is the child process
+		//execute command
+		if(func(args)==0)//For invalid command
+		{
+			printf("jubcseIII: error executing command\n");
+			return 0;
+		}
+	}
+	else
+	if(background!=1)
+	{
+		//For parent process wait for child to terminate
+		wait(NULL);
+		return 0;
+	}
+	return 1;
+}
+
+
+
 
 //Function to execute
 int sh_execute(char** args)
@@ -178,7 +270,12 @@ int sh_execute(char** args)
 		{
 			if(strcmp(args[0],builtin_comm[i])==0)
 			{
-				return (*builtin_func[i])(args);
+				if(i==4)
+				{
+					kill(0,SIGTERM);
+					exit(0);
+				}
+				return sh_launch_custom(args,builtin_func[i]);
 			}
 		}
 	}
@@ -210,7 +307,6 @@ int editfile(char** args)
 {
 	args[0]="vim";
 	//As a new process will run we have to fork it so call launch
-
 	return sh_launch(args);
 }
 
