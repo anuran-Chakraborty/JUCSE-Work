@@ -410,32 +410,37 @@ void MainWindow::drawEllipse(QPoint p, int rx, int ry)
     int y_centre=p.y();
     int k = ui->gridsize->value();//GridSize
 
+    x_centre=(x_centre/k)*k+k/2;
+    y_centre=(y_centre/k)*k+k/2;
+
     int x=0;
-    int y=ry*k;
+    int y=ry;
 
     int rx2=rx*rx;
     int ry2=ry*ry;
     int tworx2=2*rx2;
     int twory2=2*ry2;
-    int px=0;
+    int px=0.0;
     int py=tworx2*y;
 
 
     //For first region
-    int p1=ry2-rx2*ry+(1/4)*rx2; //Initial value of decision paramemter
+    int p1=ry2-rx2*ry+(0.25)*rx2; //Initial value of decision paramemter
+
+
 
 
     while(px<py)
     {
-        point(x_centre+x,y_centre+y);
-        point(x_centre-x,y_centre+y);
-        point(x_centre-x,y_centre-y);
-        point(x_centre+x,y_centre-y);
+        point(x_centre+x*k,y_centre+y*k);
+        point(x_centre-x*k,y_centre+y*k);
+        point(x_centre-x*k,y_centre-y*k);
+        point(x_centre+x*k,y_centre-y*k);
 
         x++;
         px+=twory2;
 
-        if(p1>0)
+        if(p1>=0)
         {
             y--;
             py-=tworx2;
@@ -449,18 +454,19 @@ void MainWindow::drawEllipse(QPoint p, int rx, int ry)
     }
 
     //For second region
-    p1=ry2*(x+0.5)*(x+0.5)+rx2*(y-1)*(y-1)-rx2*ry2; //Initial value of decision paramemter
+    p1=ry2*((double)x+0.5)*((double)x+0.5)+rx2*(y-1)*(y-1)-rx2*ry2; //Initial value of decision paramemter
 
 
-    while(y>0)
+    while(y>=0)
     {
-        point(x_centre+x,y_centre+y);
-        point(x_centre-x,y_centre+y);
-        point(x_centre-x,y_centre-y);
-        point(x_centre+x,y_centre-y);
+        point(x_centre+x*k,y_centre+y*k);
+        point(x_centre-x*k,y_centre+y*k);
+        point(x_centre-x*k,y_centre-y*k);
+        point(x_centre+x*k,y_centre-y*k);
 
         y--;
-        if(p1<0)
+        py-=tworx2;
+        if(p1<=0)
         {
             x++;
             px+=twory2;
@@ -471,6 +477,7 @@ void MainWindow::drawEllipse(QPoint p, int rx, int ry)
         {
             p1=p1+rx2-py;
         }
+
     }
 
 
