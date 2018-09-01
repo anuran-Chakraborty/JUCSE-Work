@@ -1,10 +1,10 @@
-; Write and test a MASM program to Convert a letter from uppercase to lowercase.
+; Write and test a MASM program to Take a character from keyboard and print it.
 .model small
 .stack 100h
 
 .data
 msg1 db 10,13,"Enter a character: $"
-msg2 db 10,13,"Lowercase character is: $"
+msg2 db 10,13,"The character is: $"
 
 .code
 
@@ -23,17 +23,6 @@ main proc
 	int 21h
 
 	;al has the character
-
-	;check if al is uppercase
-	cmp al,'A'
-	jl display
-
-	cmp al,'Z'
-	jg display
-
-	add al,32
-
-	display:
 	;display prompt
 	lea dx,msg2
 	mov ah,09h
