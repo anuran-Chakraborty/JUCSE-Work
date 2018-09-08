@@ -52,10 +52,18 @@ private slots:
 
     void drawEllipse(QPoint p1,int rx,int ry);
 
+    void on_flood_fill_clicked();
+
+    void flood_fill_util(int x1,int y1,int k,QRgb q1,int r,int g,int b);
+
+    void on_boundary_fill_clicked();
+
+    void boundary_fill_util(int x1,int y1,int k,QRgb edgecolor,int r,int g,int b);
+
 private:
     Ui::MainWindow *ui;
     QPoint p1,p2;
-    void point(int,int);
+    void point(int x,int y,int r=255,int g=255,int b=0);
 };
 
 #endif // MAINWINDOW_H

@@ -64,6 +64,9 @@ public:
     QLabel *label_6;
     QLabel *label_7;
     QPushButton *ellipse;
+    QFrame *line;
+    QPushButton *flood_fill;
+    QPushButton *boundary_fill;
     QMenuBar *menuBar;
     QToolBar *mainToolBar;
     QStatusBar *statusBar;
@@ -72,7 +75,7 @@ public:
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QStringLiteral("MainWindow"));
-        MainWindow->resize(999, 736);
+        MainWindow->resize(1303, 736);
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
         frame = new my_label(centralWidget);
@@ -183,10 +186,21 @@ public:
         ellipse = new QPushButton(centralWidget);
         ellipse->setObjectName(QStringLiteral("ellipse"));
         ellipse->setGeometry(QRect(710, 550, 91, 31));
+        line = new QFrame(centralWidget);
+        line->setObjectName(QStringLiteral("line"));
+        line->setGeometry(QRect(1020, -20, 20, 691));
+        line->setFrameShape(QFrame::VLine);
+        line->setFrameShadow(QFrame::Sunken);
+        flood_fill = new QPushButton(centralWidget);
+        flood_fill->setObjectName(QStringLiteral("flood_fill"));
+        flood_fill->setGeometry(QRect(1050, 10, 81, 41));
+        boundary_fill = new QPushButton(centralWidget);
+        boundary_fill->setObjectName(QStringLiteral("boundary_fill"));
+        boundary_fill->setGeometry(QRect(1170, 10, 81, 41));
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QStringLiteral("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 999, 21));
+        menuBar->setGeometry(QRect(0, 0, 1303, 21));
         MainWindow->setMenuBar(menuBar);
         mainToolBar = new QToolBar(MainWindow);
         mainToolBar->setObjectName(QStringLiteral("mainToolBar"));
@@ -228,6 +242,8 @@ public:
         label_6->setText(QApplication::translate("MainWindow", "Rx:", 0));
         label_7->setText(QApplication::translate("MainWindow", "Ry:", 0));
         ellipse->setText(QApplication::translate("MainWindow", "Draw Ellipse", 0));
+        flood_fill->setText(QApplication::translate("MainWindow", "Flood Fill", 0));
+        boundary_fill->setText(QApplication::translate("MainWindow", "Boundary fill", 0));
     } // retranslateUi
 
 };
