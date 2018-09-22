@@ -19,8 +19,8 @@
 
 QT_BEGIN_MOC_NAMESPACE
 struct qt_meta_stringdata_MainWindow_t {
-    QByteArrayData data[41];
-    char stringdata[457];
+    QByteArrayData data[70];
+    char stringdata[780];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -69,7 +69,36 @@ QT_MOC_LITERAL(36, 398, 1),
 QT_MOC_LITERAL(37, 400, 1),
 QT_MOC_LITERAL(38, 402, 24),
 QT_MOC_LITERAL(39, 427, 18),
-QT_MOC_LITERAL(40, 446, 9)
+QT_MOC_LITERAL(40, 446, 9),
+QT_MOC_LITERAL(41, 456, 19),
+QT_MOC_LITERAL(42, 476, 21),
+QT_MOC_LITERAL(43, 498, 20),
+QT_MOC_LITERAL(44, 519, 16),
+QT_MOC_LITERAL(45, 536, 2),
+QT_MOC_LITERAL(46, 539, 2),
+QT_MOC_LITERAL(47, 542, 16),
+QT_MOC_LITERAL(48, 559, 15),
+QT_MOC_LITERAL(49, 575, 8),
+QT_MOC_LITERAL(50, 584, 2),
+QT_MOC_LITERAL(51, 587, 2),
+QT_MOC_LITERAL(52, 590, 7),
+QT_MOC_LITERAL(53, 598, 13),
+QT_MOC_LITERAL(54, 612, 13),
+QT_MOC_LITERAL(55, 626, 3),
+QT_MOC_LITERAL(56, 630, 16),
+QT_MOC_LITERAL(57, 647, 3),
+QT_MOC_LITERAL(58, 651, 2),
+QT_MOC_LITERAL(59, 654, 17),
+QT_MOC_LITERAL(60, 672, 8),
+QT_MOC_LITERAL(61, 681, 9),
+QT_MOC_LITERAL(62, 691, 4),
+QT_MOC_LITERAL(63, 696, 9),
+QT_MOC_LITERAL(64, 706, 3),
+QT_MOC_LITERAL(65, 710, 6),
+QT_MOC_LITERAL(66, 717, 5),
+QT_MOC_LITERAL(67, 723, 20),
+QT_MOC_LITERAL(68, 744, 16),
+QT_MOC_LITERAL(69, 761, 17)
     },
     "MainWindow\0Mouse_Pressed\0\0showMousePosition\0"
     "QPoint&\0pos\0on_show_axes_clicked\0"
@@ -83,6 +112,15 @@ QT_MOC_LITERAL(40, 446, 9)
     "on_flood_fill_clicked\0flood_fill_util\0"
     "x1\0y1\0k\0QRgb\0q1\0r\0g\0b\0on_boundary_fill_clicked\0"
     "boundary_fill_util\0edgecolor\0"
+    "on_scanline_clicked\0on_set_vertex_clicked\0"
+    "on_fill_scan_clicked\0storeEdgeInTable\0"
+    "x2\0y2\0storeEdgeInTuple\0EdgeTableTuple*\0"
+    "receiver\0ym\0xm\0slopInv\0initEdgeTable\0"
+    "insertionSort\0ett\0removeEdgeByYmax\0"
+    "Tup\0yy\0updatexbyslopeinv\0drawPoly\0"
+    "matMul3x3\0int*\0int[3][3]\0mat\0int[3]\0"
+    "coord\0on_translate_clicked\0on_scale_clicked\0"
+    "on_rotate_clicked\0"
 };
 #undef QT_MOC_LITERAL
 
@@ -92,7 +130,7 @@ static const uint qt_meta_data_MainWindow[] = {
        7,       // revision
        0,       // classname
        0,    0, // classinfo
-      22,   14, // methods
+      36,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -100,28 +138,42 @@ static const uint qt_meta_data_MainWindow[] = {
        0,       // signalCount
 
  // slots: name, argc, parameters, tag, flags
-       1,    0,  124,    2, 0x0a,
-       3,    1,  125,    2, 0x0a,
-       6,    0,  128,    2, 0x08,
-       7,    0,  129,    2, 0x08,
-       8,    0,  130,    2, 0x08,
-       9,    0,  131,    2, 0x08,
-      10,    0,  132,    2, 0x08,
-      11,    1,  133,    2, 0x08,
-      13,    1,  136,    2, 0x08,
-      15,    0,  139,    2, 0x08,
-      16,    0,  140,    2, 0x08,
-      17,    0,  141,    2, 0x08,
-      18,    0,  142,    2, 0x08,
-      19,    2,  143,    2, 0x08,
-      22,    0,  148,    2, 0x08,
-      23,    2,  149,    2, 0x08,
-      24,    0,  154,    2, 0x08,
-      25,    3,  155,    2, 0x08,
-      28,    0,  162,    2, 0x08,
-      29,    7,  163,    2, 0x08,
-      38,    0,  178,    2, 0x08,
-      39,    7,  179,    2, 0x08,
+       1,    0,  194,    2, 0x0a,
+       3,    1,  195,    2, 0x0a,
+       6,    0,  198,    2, 0x08,
+       7,    0,  199,    2, 0x08,
+       8,    0,  200,    2, 0x08,
+       9,    0,  201,    2, 0x08,
+      10,    0,  202,    2, 0x08,
+      11,    1,  203,    2, 0x08,
+      13,    1,  206,    2, 0x08,
+      15,    0,  209,    2, 0x08,
+      16,    0,  210,    2, 0x08,
+      17,    0,  211,    2, 0x08,
+      18,    0,  212,    2, 0x08,
+      19,    2,  213,    2, 0x08,
+      22,    0,  218,    2, 0x08,
+      23,    2,  219,    2, 0x08,
+      24,    0,  224,    2, 0x08,
+      25,    3,  225,    2, 0x08,
+      28,    0,  232,    2, 0x08,
+      29,    7,  233,    2, 0x08,
+      38,    0,  248,    2, 0x08,
+      39,    7,  249,    2, 0x08,
+      41,    0,  264,    2, 0x08,
+      42,    0,  265,    2, 0x08,
+      43,    0,  266,    2, 0x08,
+      44,    4,  267,    2, 0x08,
+      47,    4,  276,    2, 0x08,
+      53,    0,  285,    2, 0x08,
+      54,    1,  286,    2, 0x08,
+      56,    2,  289,    2, 0x08,
+      59,    1,  294,    2, 0x08,
+      60,    0,  297,    2, 0x08,
+      61,    2,  298,    2, 0x08,
+      67,    0,  303,    2, 0x08,
+      68,    0,  304,    2, 0x08,
+      69,    0,  305,    2, 0x08,
 
  // slots: parameters
     QMetaType::Void,
@@ -146,6 +198,20 @@ static const uint qt_meta_data_MainWindow[] = {
     QMetaType::Void, QMetaType::Int, QMetaType::Int, QMetaType::Int, 0x80000000 | 33, QMetaType::Int, QMetaType::Int, QMetaType::Int,   30,   31,   32,   34,   35,   36,   37,
     QMetaType::Void,
     QMetaType::Void, QMetaType::Int, QMetaType::Int, QMetaType::Int, 0x80000000 | 33, QMetaType::Int, QMetaType::Int, QMetaType::Int,   30,   31,   32,   40,   35,   36,   37,
+    QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void, QMetaType::Int, QMetaType::Int, QMetaType::Int, QMetaType::Int,   30,   31,   45,   46,
+    QMetaType::Void, 0x80000000 | 48, QMetaType::Int, QMetaType::Int, QMetaType::Float,   49,   50,   51,   52,
+    QMetaType::Void,
+    QMetaType::Void, 0x80000000 | 48,   55,
+    QMetaType::Void, 0x80000000 | 48, QMetaType::Int,   57,   58,
+    QMetaType::Void, 0x80000000 | 48,   57,
+    QMetaType::Void,
+    0x80000000 | 62, 0x80000000 | 63, 0x80000000 | 65,   64,   66,
+    QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void,
 
        0        // eod
 };
@@ -179,6 +245,21 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 19: _t->flood_fill_util((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2])),(*reinterpret_cast< int(*)>(_a[3])),(*reinterpret_cast< QRgb(*)>(_a[4])),(*reinterpret_cast< int(*)>(_a[5])),(*reinterpret_cast< int(*)>(_a[6])),(*reinterpret_cast< int(*)>(_a[7]))); break;
         case 20: _t->on_boundary_fill_clicked(); break;
         case 21: _t->boundary_fill_util((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2])),(*reinterpret_cast< int(*)>(_a[3])),(*reinterpret_cast< QRgb(*)>(_a[4])),(*reinterpret_cast< int(*)>(_a[5])),(*reinterpret_cast< int(*)>(_a[6])),(*reinterpret_cast< int(*)>(_a[7]))); break;
+        case 22: _t->on_scanline_clicked(); break;
+        case 23: _t->on_set_vertex_clicked(); break;
+        case 24: _t->on_fill_scan_clicked(); break;
+        case 25: _t->storeEdgeInTable((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2])),(*reinterpret_cast< int(*)>(_a[3])),(*reinterpret_cast< int(*)>(_a[4]))); break;
+        case 26: _t->storeEdgeInTuple((*reinterpret_cast< EdgeTableTuple*(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2])),(*reinterpret_cast< int(*)>(_a[3])),(*reinterpret_cast< float(*)>(_a[4]))); break;
+        case 27: _t->initEdgeTable(); break;
+        case 28: _t->insertionSort((*reinterpret_cast< EdgeTableTuple*(*)>(_a[1]))); break;
+        case 29: _t->removeEdgeByYmax((*reinterpret_cast< EdgeTableTuple*(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2]))); break;
+        case 30: _t->updatexbyslopeinv((*reinterpret_cast< EdgeTableTuple*(*)>(_a[1]))); break;
+        case 31: _t->drawPoly(); break;
+        case 32: { int* _r = _t->matMul3x3((*reinterpret_cast< int(*)[3][3]>(_a[1])),(*reinterpret_cast< int(*)[3]>(_a[2])));
+            if (_a[0]) *reinterpret_cast< int**>(_a[0]) = _r; }  break;
+        case 33: _t->on_translate_clicked(); break;
+        case 34: _t->on_scale_clicked(); break;
+        case 35: _t->on_rotate_clicked(); break;
         default: ;
         }
     }
@@ -209,13 +290,13 @@ int MainWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 22)
+        if (_id < 36)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 22;
+        _id -= 36;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 22)
+        if (_id < 36)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 22;
+        _id -= 36;
     }
     return _id;
 }

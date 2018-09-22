@@ -9,6 +9,8 @@
 #include <QPaintDevice>
 #include <QPoint>
 #include <unistd.h>
+#include <vector>
+
 using namespace std;
 QImage img=QImage(700,700,QImage::Format_RGB888);
 
@@ -30,10 +32,6 @@ MainWindow::~MainWindow()
 
 void MainWindow::point(int x,int y,int r,int g,int b)
 {
-
-    //    img.setPixel(x,y,qRgb(255,255,0));
-
-
     int k = ui->gridsize->value();//GridSize
     if(k>1)
     {
@@ -246,7 +244,7 @@ void MainWindow::on_bress_clicked()
         int p=2*(dy)-dx;
         int y=y1;
 
-        for(int x=x1; x<x2+xinc; x+=xinc)
+        for(int x=x1; x!=x2; x+=xinc)
         {
             point(x,y);
             if(p>=0)
@@ -263,7 +261,7 @@ void MainWindow::on_bress_clicked()
         int p=2*(dx)-dy;
         int x=x1;
 
-        for(int y=y1; y<y2+yinc; y+=yinc)
+        for(int y=y1; y!=y2; y+=yinc)
         {
             point(x,y);
             if(p>=0)
@@ -560,3 +558,357 @@ void MainWindow::boundary_fill_util(int x1, int y1, int k, QRgb edgecolor, int r
         boundary_fill_util(x1,y1-k,k,edgecolor,r,g,b);
     }
 }
+
+
+
+void MainWindow::on_scanline_clicked()
+{
+    // for initialising
+    EdgeList.clear();
+    initEdgeTable();
+}
+
+void MainWindow::on_set_vertex_clicked()
+{
+    int k=ui->gridsize->value();
+    int x=((ui->frame->x)/k)*k+k/2;
+    int y=((ui->frame->y)/k)*k+k/2;
+    EdgeList.push_back(make_pair(x,y));
+
+    int i=EdgeList.size();
+
+    if(EdgeList.size()>1)
+    {
+        storeEdgeInTable(EdgeList[i-2].first, EdgeList[i-2].second, EdgeList[i-1].first, EdgeList[i-1].second);//storage of edges in edge table.
+
+        p1.setX(EdgeList[EdgeList.size()-1].first);
+        p2.setX(EdgeList[EdgeList.size()-2].first);
+
+        p1.setY(EdgeList[EdgeList.size()-1].second);
+        p2.setY(EdgeList[EdgeList.size()-2].second);
+
+        on_bress_clicked();
+
+    }
+
+}
+
+void MainWindow::initEdgeTable()
+{
+    int i;
+    for (i=0; i<maxHt; i++)
+    {
+        EdgeTable[i].countEdgeBucket = 0;
+    }
+
+    ActiveEdgeTuple.countEdgeBucket = 0;
+}
+
+void MainWindow::insertionSort(EdgeTableTuple *ett)
+{
+    int i,j;
+    EdgeBucket temp;
+
+    for (i = 1; i < ett->countEdgeBucket; i++)
+    {
+        temp.ymax = ett->buckets[i].ymax;
+        temp.xofymin = ett->buckets[i].xofymin;
+        temp.slopeinverse = ett->buckets[i].slopeinverse;
+        j = i - 1;
+
+    while ((temp.xofymin < ett->buckets[j].xofymin) && (j >= 0))
+    {
+        ett->buckets[j + 1].ymax = ett->buckets[j].ymax;
+        ett->buckets[j + 1].xofymin = ett->buckets[j].xofymin;
+        ett->buckets[j + 1].slopeinverse = ett->buckets[j].slopeinverse;
+        j = j - 1;
+    }
+    ett->buckets[j + 1].ymax = temp.ymax;
+    ett->buckets[j + 1].xofymin = temp.xofymin;
+    ett->buckets[j + 1].slopeinverse = temp.slopeinverse;
+    }
+}
+
+
+void MainWindow::storeEdgeInTuple (EdgeTableTuple *receiver,int ym,int xm,float slopInv)
+{
+    (receiver->buckets[(receiver)->countEdgeBucket]).ymax = ym;
+    (receiver->buckets[(receiver)->countEdgeBucket]).xofymin = (float)xm;
+    (receiver->buckets[(receiver)->countEdgeBucket]).slopeinverse = slopInv;
+
+    insertionSort(receiver);
+
+    (receiver->countEdgeBucket)++;
+
+
+}
+
+void MainWindow::storeEdgeInTable (int x1,int y1, int x2, int y2)
+{
+    float m,minv;
+    int ymaxTS,xwithyminTS, scanline;
+
+    if (x2==x1)
+    {
+        minv=0.000000;
+    }
+    else
+    {
+    m = ((float)(y2-y1))/((float)(x2-x1));
+
+    if (y2==y1)
+        return;
+
+    minv = (float)1.0/m;
+    }
+
+    if (y1>y2)
+    {
+        scanline=y2;
+        ymaxTS=y1;
+        xwithyminTS=x2;
+    }
+    else
+    {
+        scanline=y1;
+        ymaxTS=y2;
+        xwithyminTS=x1;
+    }
+    storeEdgeInTuple(&EdgeTable[scanline],ymaxTS,xwithyminTS,minv);
+
+
+}
+
+void MainWindow::removeEdgeByYmax(EdgeTableTuple *Tup,int yy)
+{
+    int i,j;
+    for (i=0; i< Tup->countEdgeBucket; i++)
+    {
+        if (Tup->buckets[i].ymax == yy)
+        {
+            for ( j = i ; j < Tup->countEdgeBucket -1 ; j++ )
+                {
+                Tup->buckets[j].ymax =Tup->buckets[j+1].ymax;
+                Tup->buckets[j].xofymin =Tup->buckets[j+1].xofymin;
+                Tup->buckets[j].slopeinverse = Tup->buckets[j+1].slopeinverse;
+                }
+                Tup->countEdgeBucket--;
+            i--;
+        }
+    }
+}
+
+
+void MainWindow::updatexbyslopeinv(EdgeTableTuple *Tup)
+{
+    int i;
+
+    for (i=0; i<Tup->countEdgeBucket; i++)
+    {
+        (Tup->buckets[i]).xofymin =(Tup->buckets[i]).xofymin + (Tup->buckets[i]).slopeinverse;
+    }
+}
+
+
+void MainWindow::on_fill_scan_clicked()
+{
+        int i, j, x1, ymax1, x2, ymax2, FillFlag = 0, coordCount;
+
+        for (i=0; i<maxHt; i++)
+        {
+            for (j=0; j<EdgeTable[i].countEdgeBucket; j++)
+            {
+                storeEdgeInTuple(&ActiveEdgeTuple,EdgeTable[i].buckets[j].
+                         ymax,EdgeTable[i].buckets[j].xofymin,
+                        EdgeTable[i].buckets[j].slopeinverse);
+            }
+
+            removeEdgeByYmax(&ActiveEdgeTuple, i);
+
+            insertionSort(&ActiveEdgeTuple);
+
+            j = 0;
+            FillFlag = 0;
+            coordCount = 0;
+            x1 = 0;
+            x2 = 0;
+            ymax1 = 0;
+            ymax2 = 0;
+            while (j<ActiveEdgeTuple.countEdgeBucket)
+            {
+                if (coordCount%2==0)
+                {
+                    x1 = (int)(ActiveEdgeTuple.buckets[j].xofymin);
+                    ymax1 = ActiveEdgeTuple.buckets[j].ymax;
+                    if (x1==x2)
+                    {
+                        if (((x1==ymax1)&&(x2!=ymax2))||((x1!=ymax1)&&(x2==ymax2)))
+                        {
+                            x2 = x1;
+                            ymax2 = ymax1;
+                        }
+
+                        else
+                        {
+                            coordCount++;
+                        }
+                    }
+
+                    else
+                    {
+                            coordCount++;
+                    }
+                }
+                else
+                {
+                    x2 = (int)ActiveEdgeTuple.buckets[j].xofymin;
+                    ymax2 = ActiveEdgeTuple.buckets[j].ymax;
+
+                    FillFlag = 0;
+                    if (x1==x2)
+                    {
+                        if (((x1==ymax1)&&(x2!=ymax2))||((x1!=ymax1)&&(x2==ymax2)))
+                        {
+                            x1 = x2;
+                            ymax1 = ymax2;
+                        }
+                        else
+                        {
+                            coordCount++;
+                            FillFlag = 1;
+                        }
+                    }
+                    else
+                    {
+                        coordCount++;
+                        FillFlag = 1;
+                    }
+
+                if(FillFlag)
+                {
+                    p1.setX(x1);p1.setY(i);
+                    p2.setX(x2);p2.setY(i);
+                    on_bress_clicked();
+                }
+
+            }
+
+            j++;
+        }
+        updatexbyslopeinv(&ActiveEdgeTuple);
+    }
+
+        EdgeList.clear();
+}
+
+//============================ TRANSFORMATIONS ===========================================================
+int* MainWindow::matMul3x3(int mat[3][3],int coord[3])
+{
+    int i,k,res[3];
+    for (i = 0; i < 3; i++)
+    {
+            res[i]= 0;
+            for (k = 0; k < 3; k++)
+                res[i] += mat[i][k]*coord[k];
+
+    }
+    return res;
+}
+
+void MainWindow::on_translate_clicked()
+{
+    int k=ui->gridsize->value();
+    int tx=ui->trans_x->value();
+    int ty=ui->trans_y->value();
+    tx*=k;
+    ty*=k;
+    ty=-ty;
+    int i,len=EdgeList.size();
+
+    // matrix for translation
+    int mat[3][3]={{1,0,tx},{0,1,ty},{0,0,1}};
+
+    for(i=0;i<len;i++)
+    {
+        int* coord=(int*)malloc(3*sizeof(int));
+        coord[0]=EdgeList[i].first;
+        coord[1]=EdgeList[i].second;
+        coord[2]=1;
+        coord=matMul3x3(mat,coord);
+        EdgeList[i].first=coord[0]/coord[2];
+        EdgeList[i].second=coord[1]/coord[2];
+    }
+    drawPoly();
+}
+
+void MainWindow::on_scale_clicked()
+{
+    int sx=ui->scl_x->value();
+    int sy=ui->scl_y->value();
+
+    int i,len=EdgeList.size();
+
+    // matrix for scaling
+    int mat[3][3]={{sx,0,0},{0,sy,0},{0,0,1}};
+
+    for(i=0;i<len;i++)
+    {
+        int* coord=(int*)malloc(3*sizeof(int));
+        coord[0]=EdgeList[i].first;
+        coord[1]=EdgeList[i].second;
+        coord[2]=1;
+        coord=matMul3x3(mat,coord);
+        EdgeList[i].first=coord[0]/coord[2];
+        EdgeList[i].second=coord[1]/coord[2];
+    }
+    drawPoly();
+}
+
+void MainWindow::on_rotate_clicked()
+{
+    int angle=ui->rot->value();
+    double dang=(double)angle*M_PI/180.0;
+    double sinang=sin(dang);
+    double cosang=cos(dang);
+    int i,len=EdgeList.size();
+
+    // matrix for rotation
+    int mat[3][3]={{(int)cosang,(int)-sinang,0},{(int)sinang,(int)cosang,0},{0,0,1}};
+
+    for(i=0;i<len;i++)
+    {
+        int* coord=(int*)malloc(3*sizeof(int));
+        coord[0]=EdgeList[i].first;
+        coord[1]=EdgeList[i].second;
+        coord[2]=1;
+        coord=matMul3x3(mat,coord);
+        EdgeList[i].first=coord[0]/coord[2];
+        EdgeList[i].second=coord[1]/coord[2];
+    }
+    drawPoly();
+}
+
+//=========================================================================================================
+void MainWindow::drawPoly()
+{
+    int i,len=EdgeList.size()-1;
+    //Reset the screen and draw the grid
+    on_showgrid_clicked();
+
+    // Draw the polygon
+    for(i=0;i<len;i++)
+    {
+        p1.setX(EdgeList[i].first);
+        p2.setX(EdgeList[(i+1)%len].first);
+
+        p1.setY(EdgeList[i].second);
+        p2.setY(EdgeList[(i+1)%len].second);
+
+        on_bress_clicked();
+    }
+}
+
+
+
+
+

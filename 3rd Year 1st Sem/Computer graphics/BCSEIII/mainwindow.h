@@ -4,6 +4,11 @@
 #include <QMainWindow>
 #include <QtGui>
 #include <QtCore>
+#include <vector>
+#include <algorithm>
+#define maxVer 50
+#define maxHt 1000
+#define maxWd 800
 
 namespace Ui {
 class MainWindow;
@@ -15,6 +20,34 @@ class MainWindow : public QMainWindow
 public slots:
     void Mouse_Pressed();
     void showMousePosition(QPoint& pos);
+
+private:
+    Ui::MainWindow *ui;
+    QPoint p1,p2;
+
+    typedef struct edgebucket
+    {
+        int ymax;   //max y-coordinate of edge
+        float xofymin;  //x-coordinate of lowest edge point updated only in aet
+        float slopeinverse;
+    }EdgeBucket;
+
+    typedef struct edgetabletup
+    {
+        // the array will give the scanline number
+        // The edge table (ET) with edges entries sorted
+        // in increasing y and x of the lower end
+
+        int countEdgeBucket;    //no. of edgebuckets
+        EdgeBucket buckets[maxVer];
+    }EdgeTableTuple;
+
+    EdgeTableTuple EdgeTable[maxHt], ActiveEdgeTuple;
+
+    std::vector<std::pair<int,int> > EdgeList;
+
+    void point(int x,int y,int r=255,int g=255,int b=0);
+
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
@@ -60,10 +93,31 @@ private slots:
 
     void boundary_fill_util(int x1,int y1,int k,QRgb edgecolor,int r,int g,int b);
 
-private:
-    Ui::MainWindow *ui;
-    QPoint p1,p2;
-    void point(int x,int y,int r=255,int g=255,int b=0);
+    void on_scanline_clicked();
+
+    void on_set_vertex_clicked();
+
+    void on_fill_scan_clicked();
+
+    void storeEdgeInTable (int x1,int y1, int x2, int y2);
+
+    void storeEdgeInTuple (EdgeTableTuple *receiver,int ym,int xm,float slopInv);
+
+    void initEdgeTable();
+
+    void insertionSort(EdgeTableTuple *ett);
+
+    void removeEdgeByYmax(EdgeTableTuple *Tup,int yy);
+
+    void updatexbyslopeinv(EdgeTableTuple *Tup);
+
+    void drawPoly();
+
+    int* matMul3x3(int mat[3][3],int coord[3]);
+
+    void on_translate_clicked();
+    void on_scale_clicked();
+    void on_rotate_clicked();
 };
 
 #endif // MAINWINDOW_H
