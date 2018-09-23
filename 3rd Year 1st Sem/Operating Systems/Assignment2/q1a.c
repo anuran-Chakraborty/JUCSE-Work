@@ -1,12 +1,10 @@
 #include<stdio.h>
-#define LIMIT 10000000
+#include<time.h>
 int main()
 {
 	//Program to run for 30s
 	int i,j,k;
-
-	for(i=0;i<LIMIT;i++)
-		for(j=0;j<LIMIT;j++)
-			for(k=0;k<LIMIT;k++);
+	clock_t goal = 30000000 + clock();
+    while (goal > clock());
 	return 0;
 }
