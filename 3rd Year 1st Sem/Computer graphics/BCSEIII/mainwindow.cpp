@@ -559,7 +559,7 @@ void MainWindow::boundary_fill_util(int x1, int y1, int k, QRgb edgecolor, int r
     }
 }
 
-
+// ============================== SCAN LINE FILL =================================
 
 void MainWindow::on_scanline_clicked()
 {
@@ -800,20 +800,41 @@ void MainWindow::on_fill_scan_clicked()
 
         EdgeList.clear();
 }
-
+//============================ SCAN LINE END =============================================================
 //============================ TRANSFORMATIONS ===========================================================
-int* MainWindow::matMul3x3(int mat[3][3],int coord[3])
+int* MainWindow::matMul3x3(double mat[3][3],int coord[3])
 {
     int i,k,res[3];
     for (i = 0; i < 3; i++)
     {
             res[i]= 0;
             for (k = 0; k < 3; k++)
-                res[i] += mat[i][k]*coord[k];
+                res[i] += (int)(mat[i][k]*(double)coord[k]);
 
     }
     return res;
 }
+
+//========= Function for translation ==================================
+void MainWindow::translate(int tx,int ty)
+{
+    int i,len=EdgeList.size();
+    // matrix for translation
+    double mat[3][3]={{1,0,tx},{0,1,ty},{0,0,1}};
+
+    for(i=0;i<len;i++)
+    {
+        int* coord=(int*)malloc(3*sizeof(int));
+        coord[0]=EdgeList[i].first;
+        coord[1]=EdgeList[i].second;
+        coord[2]=1;
+        coord=matMul3x3(mat,coord);
+        EdgeList[i].first=coord[0]/coord[2];
+        EdgeList[i].second=coord[1]/coord[2];
+    }
+}
+
+
 
 void MainWindow::on_translate_clicked()
 {
@@ -823,21 +844,9 @@ void MainWindow::on_translate_clicked()
     tx*=k;
     ty*=k;
     ty=-ty;
-    int i,len=EdgeList.size();
 
-    // matrix for translation
-    int mat[3][3]={{1,0,tx},{0,1,ty},{0,0,1}};
+    translate(tx,ty);
 
-    for(i=0;i<len;i++)
-    {
-        int* coord=(int*)malloc(3*sizeof(int));
-        coord[0]=EdgeList[i].first;
-        coord[1]=EdgeList[i].second;
-        coord[2]=1;
-        coord=matMul3x3(mat,coord);
-        EdgeList[i].first=coord[0]/coord[2];
-        EdgeList[i].second=coord[1]/coord[2];
-    }
     drawPoly();
 }
 
@@ -845,11 +854,17 @@ void MainWindow::on_scale_clicked()
 {
     int sx=ui->scl_x->value();
     int sy=ui->scl_y->value();
+    //Point about which to be scaled
+    int piv_x=p1.x();
+    int piv_y=p1.y();
 
+    int del_x=piv_x-img.width()/2;
+    int del_y=piv_y-img.height()/2;
     int i,len=EdgeList.size();
 
+    translate(-del_x,-del_y);
     // matrix for scaling
-    int mat[3][3]={{sx,0,0},{0,sy,0},{0,0,1}};
+    double mat[3][3]={{sx,0,0},{0,sy,0},{0,0,1}};
 
     for(i=0;i<len;i++)
     {
@@ -860,7 +875,11 @@ void MainWindow::on_scale_clicked()
         coord=matMul3x3(mat,coord);
         EdgeList[i].first=coord[0]/coord[2];
         EdgeList[i].second=coord[1]/coord[2];
+
+//        EdgeList[i].first=changeX(EdgeList[i].first);
+//        EdgeList[i].second=changeY(EdgeList[i].second);
     }
+    translate(del_x,del_y);
     drawPoly();
 }
 
@@ -870,10 +889,19 @@ void MainWindow::on_rotate_clicked()
     double dang=(double)angle*M_PI/180.0;
     double sinang=sin(dang);
     double cosang=cos(dang);
+
+    //Point about which to be scaled
+    int piv_x=p1.x();
+    int piv_y=p1.y();
+
+    int del_x=-(piv_x-img.width()/2);
+    int del_y=(piv_y-img.height()/2);
+
+    translate(del_x,del_y);
     int i,len=EdgeList.size();
 
     // matrix for rotation
-    int mat[3][3]={{(int)cosang,(int)-sinang,0},{(int)sinang,(int)cosang,0},{0,0,1}};
+    double mat[3][3]={{cosang,-sinang,0},{sinang,cosang,0},{0,0,1}};
 
     for(i=0;i<len;i++)
     {
@@ -885,6 +913,7 @@ void MainWindow::on_rotate_clicked()
         EdgeList[i].first=coord[0]/coord[2];
         EdgeList[i].second=coord[1]/coord[2];
     }
+    translate(-del_x,-del_y);
     drawPoly();
 }
 

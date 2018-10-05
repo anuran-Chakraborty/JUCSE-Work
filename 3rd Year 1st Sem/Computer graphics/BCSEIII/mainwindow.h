@@ -113,7 +113,9 @@ private slots:
 
     void drawPoly();
 
-    int* matMul3x3(int mat[3][3],int coord[3]);
+    int* matMul3x3(double mat[3][3],int coord[3]);
+
+    void translate(int tx,int ty);
 
     void on_translate_clicked();
     void on_scale_clicked();
