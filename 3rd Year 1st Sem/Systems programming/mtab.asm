@@ -239,6 +239,105 @@ hex_output macro
 	loop display_loop
 endm
 
+dec_input_with_neg macro
+   local @read,@error,@minus,@plus,@inpit,@end,@exit
+   jmp @read                      ; jump to label @read
+
+   @error:                        ; jump label
+   lea dx, illegal                ; load and display the string illegal
+   mov ah, 9                        
+   int 21h
+
+   @read:                         ; jump label
+   xor bx, bx                     ; clear bx
+   xor cx, cx                     ; clear cx
+
+   mov ah, 1                      ; set input function
+   int 21h                        ; read a character
+
+   cmp al, "-"                    ; compare al with "-"
+   je @minus                      ; jump to label @minus if al="-"
+
+   cmp al, "+"                    ; compare al with "+"
+   je @plus                       ; jump to label @plus if al="+"
+   jmp @input                     ; jump to label @input
+
+   @minus:                        ; jump label
+   mov cx, 1                      ; set cx=1
+
+   @plus:                         ; jump label
+   int 21h                        ; read a character
+   cmp al, 0dh                    ; compare al with cr
+   je @end                        ; jump to label @end if al=cr
+
+   @input:                        ; jump label
+     cmp al, 30h                  ; compare al with 0
+     jl @error                    ; jump to label @error if al<0
+
+     cmp al, 39h                  ; compare al with 9
+     jg @error                    ; jump to label @error if al>9
+
+     and ax, 000fh                ; convert ascii to decimal code
+
+     push ax                      ; push ax onto the stack
+
+     mov ax, 10                   ; set ax=10
+     mul bx                       ; set ax=ax*bx
+     mov bx, ax                   ; set bx=ax
+
+     pop ax                       ; pop a value from stack into ax
+
+     add bx, ax                   ; set bx=ax+bx
+
+     mov ah, 1                    ; set input function
+     int 21h                      ; read a character
+
+     cmp al, 0dh                  ; compare al with cr
+     jne @input                   ; jump to label if al!=cr
+                                   
+   @end:                          ; jump label
+
+   or cx, cx                      ; check cx is 0 or not
+   je @exit                       ; jump to label @exit if cx=0
+   neg bx
+
+   @exit:
+
+endm
+
+dec_output_with_neg macro
+	
+   cmp bx, 0                      ; compare bx with 0
+   jge @start                     ; jump to label @start if bx>=0
+   mov ah, 2                      ; set output function
+   mov dl, "-"                    ; set dl='-'
+   int 21h                        ; print the character
+
+   neg bx                         ; take 2's complement of bx
+
+   @start:                        ; jump label
+
+   mov ax, bx                     ; set ax=bx
+   xor cx, cx                     ; clear cx
+   mov bx, 10                     ; set bx=10
+
+   @repeat:                       ; loop label
+     xor dx, dx                   ; clear dx
+     div bx                       ; divide ax by bx
+     push dx                      ; push dx onto the stack
+     inc cx                       ; increment cx
+     or ax, ax                    ; take or of ax with ax
+   jne @repeat                    ; jump to label @repeat if zf=0
+
+   mov ah, 2                      ; set output function
+
+   @display:                      ; loop label
+     pop dx                       ; pop a value from stack to dx
+     or dl, 30h                   ; convert decimal to ascii code
+     int 21h                      ; print a character
+   loop @display                  ; jump to label @display if cx!=0
+
+endm
 
 pushall macro
 	push ax

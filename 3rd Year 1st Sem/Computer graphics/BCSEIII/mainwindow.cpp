@@ -940,4 +940,349 @@ void MainWindow::drawPoly()
 
 
 
+// ======================== CLIPPING ====================================================
+// ======================== BOUNDARY SETTING ============================================
+
+void MainWindow::on_clr_bound_clicked()
+{
+    // for initialising
+    // BoundList.clear();
+}
+
+void MainWindow::on_set_bound_clicked()
+{
+    int k=ui->gridsize->value();
+    x_max=ui->x_max->value();
+    x_min=ui->x_min->value();
+    y_max=ui->y_max->value();
+    y_min=ui->y_min->value();
+
+    x_max*=k;
+    x_max+=img.width()/2;
+
+    x_min*=k;
+    x_min+=img.width()/2;
+
+    y_max*=k;
+    y_max=img.height()/2-y_max;
+
+    y_min*=k;
+    y_min=img.height()/2-y_min;
+
+
+    drawBound();
+}
+
+void MainWindow::drawBound()
+{
+    //Reset the screen and draw the grid
+    //on_showgrid_clicked();
+
+    // Draw the boundary
+
+    p1.setX(x_min);
+    p2.setX(x_min);
+
+    p1.setY(y_max);
+    p2.setY(y_min);
+
+    on_bress_clicked();
+
+    //===========
+    p1.setX(x_min);
+    p2.setX(x_max);
+
+    p1.setY(y_min);
+    p2.setY(y_min);
+
+    on_bress_clicked();
+
+    //================
+    p1.setX(x_max);
+    p2.setX(x_max);
+
+    p1.setY(y_min);
+    p2.setY(y_max);
+
+    on_bress_clicked();
+
+    //=================
+    p1.setX(x_max);
+    p2.setX(x_min);
+
+    p1.setY(y_max);
+    p2.setY(y_max);
+
+    on_bress_clicked();
+}
+
+
+//========================================================================================
+
+// =================== LINE CLIPPING =====================================================
+// Defining region codes
+const int INSIDE = 0; // 0000
+const int LEFT = 1;   // 0001
+const int RIGHT = 2;  // 0010
+const int BOTTOM = 4; // 0100
+const int TOP = 8;    // 1000
+
+
+// Function to compute region code for a point(x, y)
+int MainWindow::computeCode(int x, int y)
+{
+    // initialized as being inside
+    int code = INSIDE;
+    if (x < x_min)       // to the left of rectangle
+        code |= LEFT;
+    else if (x > x_max)  // to the right of rectangle
+        code |= RIGHT;
+    if (y > y_min)       // below the rectangle
+        code |= BOTTOM;
+    else if (y < y_max)  // above the rectangle
+        code |= TOP;
+
+    return code;
+}
+// Implementing Cohen-Sutherland algorithm
+// Clipping a line from P1 = (x2, y2) to P2 = (x2, y2)
+void MainWindow::cohenSutherlandClip(int x1, int y1,int x2, int y2)
+{
+    // Compute region codes for P1, P2
+    int code1 = computeCode(x1, y1);
+    int code2 = computeCode(x2, y2);
+
+
+    // Initialize line as outside the rectangular window
+    bool accept = false;
+
+    while (true)
+    {
+
+        if ((code1 == 0) && (code2 == 0))
+        {
+            // If both endpoints lie within rectangle
+            accept = true;
+            break;
+        }
+        else if (code1 & code2)
+        {
+            // If both endpoints are outside rectangle,
+            // in same region
+            break;
+        }
+        else
+        {
+            // Some segment of line lies within the
+            // rectangle
+            int code_out;
+            int x, y;
+
+            // At least one endpoint is outside the
+            // rectangle, pick it.
+            if (code1 != 0)
+                code_out = code1;
+            else
+                code_out = code2;
+
+            // Find intersection point;
+            // using formulas y = y1 + slope * (x - x1),
+            // x = x1 + (1 / slope) * (y - y1)
+            if (code_out & TOP)
+            {
+                // point is above the clip rectangle
+                x = x1 + (int)((double)(x2 - x1) *(double)(y_max - y1) /(double)(y2 - y1));
+                y = y_max;
+            }
+            else if (code_out & BOTTOM)
+            {
+                // point is below the rectangle
+                x = x1 + (int)((double)(x2 - x1) * (double)(y_min - y1) / (double)(y2 - y1));
+                y = y_min;
+            }
+            else if (code_out & RIGHT)
+            {
+                // point is to the right of rectangle
+                y = y1 + (int)((double)(y2 - y1) * (double)(x_max - x1) / (double)(x2 - x1));
+                x = x_max;
+            }
+            else if (code_out & LEFT)
+            {
+                // point is to the left of rectangle
+                y = y1 + (int)((double)(y2 - y1) * (double)(x_min - x1) / (double)(x2 - x1));
+                x = x_min;
+            }
+
+            // Now intersection point x,y is found
+            // We replace point outside rectangle
+            // by intersection point
+            if (code_out == code1)
+            {
+                x1 = x;
+                y1 = y;
+                code1 = computeCode(x1, y1);
+            }
+            else
+            {
+                x2 = x;
+                y2 = y;
+                code2 = computeCode(x2, y2);
+            }
+        }
+    }
+    if (accept)
+    {
+        //If accepted
+        //Just reset and draw the boundary and the line
+        //Reset the screen and draw the grid
+        on_showgrid_clicked();
+        drawBound();
+
+        string s=to_string((x1))+","+to_string((y1))+" "+to_string((x2))+","+to_string((y2));
+        ui->debugger->setText(s.c_str());
+
+        p1.setX(x1);
+        p1.setY(y1);
+
+        p2.setX(x2);
+        p2.setY(y2);
+
+        on_bress_clicked();
+    }
+    else
+    {
+        //If not accepted
+        //Just reset and draw the boundary
+        //Reset the screen and draw the grid
+        on_showgrid_clicked();
+        drawBound();
+
+        string s=to_string(changeX(x1))+","+to_string(changeY(y1))+" "+to_string(changeX(x2))+","+to_string(changeY(y2));
+        ui->debugger->setText(s.c_str());
+    }
+
+}
+
+void MainWindow::on_clip_line_clicked()
+{
+    cohenSutherlandClip(p1.x(),p1.y(),p2.x(),p2.y());
+}
+
+//========================================================================================
+
+// =================== POLYGON CLIPPING ==================================================
+// Returns x-value of point of intersectipn of two
+// lines
+int MainWindow::x_intersect(int x1, int y1, int x2, int y2,int x3, int y3, int x4, int y4)
+{
+    int num = (x1*y2 - y1*x2) * (x3-x4) -(x1-x2) * (x3*y4 - y3*x4);
+    int den = (x1-x2) * (y3-y4) - (y1-y2) * (x3-x4);
+    return num/den;
+}
+
+// Returns y-value of point of intersectipn of
+// two lines
+int MainWindow::y_intersect(int x1, int y1, int x2, int y2,int x3, int y3, int x4, int y4)
+{
+    int num = (x1*y2 - y1*x2) * (y3-y4) -(y1-y2) * (x3*y4 - y3*x4);
+    int den = (x1-x2) * (y3-y4) - (y1-y2) * (x3-x4);
+    return num/den;
+}
+
+// This functions clips all the edges w.r.t one clip
+// edge of clipping area
+void MainWindow::clip(int x1, int y1, int x2, int y2)
+{
+    std::vector< std::pair<int,int> > new_points;
+    int poly_size=EdgeList.size()-1;
+    // (ix,iy),(kx,ky) are the co-ordinate values of
+    // the points
+    for (int i = 0; i < poly_size; i++)
+    {
+        // i and k form a line in polygon
+        int k = (i+1) % poly_size;
+        int ix = EdgeList[i].first, iy = EdgeList[i].second;
+        int kx = EdgeList[k].first, ky = EdgeList[k].second;
+
+        // Calculating position of first point
+        // w.r.t. clipper line
+        int i_pos = (x2-x1) * (iy-y1) - (y2-y1) * (ix-x1);
+
+        // Calculating position of second point
+        // w.r.t. clipper line
+        int k_pos = (x2-x1) * (ky-y1) - (y2-y1) * (kx-x1);
+
+        // Case 1 : When both points are inside
+        if (i_pos < 0  && k_pos < 0)
+        {
+            //Only second point is added
+            new_points.push_back(make_pair(kx,ky));
+        }
+
+        // Case 2: When only first point is outside
+        else if (i_pos >= 0  && k_pos < 0)
+        {
+            // Point of intersection with edge
+            // and the second point is added
+            int temp_x = x_intersect(x1,y1, x2, y2, ix, iy, kx, ky);
+            int temp_y = y_intersect(x1,y1, x2, y2, ix, iy, kx, ky);
+
+            new_points.push_back(make_pair(temp_x,temp_y));
+            new_points.push_back(make_pair(kx,ky));
+        }
+
+        // Case 3: When only second point is outside
+        else if (i_pos < 0  && k_pos >= 0)
+        {
+            int temp_x = x_intersect(x1,y1, x2, y2, ix, iy, kx, ky);
+            int temp_y = y_intersect(x1,y1, x2, y2, ix, iy, kx, ky);
+
+            new_points.push_back(make_pair(temp_x,temp_y));
+        }
+
+        // Case 4: When both points are outside
+        else
+        {
+            //No points are added
+        }
+    }
+
+//    // Copying new points into original array
+//    // and changing the no. of vertices
+//    poly_size = new_poly_size;
+//    for (int i = 0; i < poly_size; i++)
+//    {
+//        poly_points[i][0] = new_points[i][0];
+//        poly_points[i][1] = new_points[i][1];
+//    }
+    EdgeList=new_points;
+}
+
+// Implements Sutherland–Hodgman algorithm
+void MainWindow::suthHodgClip()
+{
+    //i and k are two consecutive indexes
+    clip(x_min,y_max,x_min,y_min); //Left
+    clip(x_min,y_min,x_max,y_min); //Bottom
+    clip(x_max,y_min,x_max,y_max); //Right
+    clip(x_max,y_max,x_min,y_max); //Top
+
+
+    drawPoly();
+    //drawBound();
+}
+
+void MainWindow::on_clip_poly_clicked()
+{
+    suthHodgClip();
+}
+//========================================================================================
+
+
+//========================================================================================
+
+
+
+
+
 

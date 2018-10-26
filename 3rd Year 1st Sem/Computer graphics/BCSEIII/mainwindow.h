@@ -24,6 +24,7 @@ public slots:
 private:
     Ui::MainWindow *ui;
     QPoint p1,p2;
+    int x_max,x_min,y_max,y_min;
 
     typedef struct edgebucket
     {
@@ -120,6 +121,20 @@ private slots:
     void on_translate_clicked();
     void on_scale_clicked();
     void on_rotate_clicked();
+    void on_clr_bound_clicked();
+    void on_set_bound_clicked();
+
+    void drawBound();
+    void cohenSutherlandClip(int x1, int y1,int x2, int y2);
+    int computeCode(int x, int y);
+
+    void on_clip_line_clicked();
+
+    int x_intersect(int x1, int y1, int x2, int y2,int x3, int y3, int x4, int y4);
+    int y_intersect(int x1, int y1, int x2, int y2,int x3, int y3, int x4, int y4);
+    void clip(int x1, int y1, int x2, int y2);
+    void suthHodgClip();
+    void on_clip_poly_clicked();
 };
 
 #endif // MAINWINDOW_H
