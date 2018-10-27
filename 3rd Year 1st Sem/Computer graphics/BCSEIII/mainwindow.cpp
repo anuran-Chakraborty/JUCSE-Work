@@ -858,28 +858,24 @@ void MainWindow::on_scale_clicked()
     int piv_x=p1.x();
     int piv_y=p1.y();
 
-    int del_x=piv_x-img.width()/2;
-    int del_y=piv_y-img.height()/2;
     int i,len=EdgeList.size();
 
-    translate(-del_x,-del_y);
     // matrix for scaling
     double mat[3][3]={{sx,0,0},{0,sy,0},{0,0,1}};
 
     for(i=0;i<len;i++)
     {
         int* coord=(int*)malloc(3*sizeof(int));
-        coord[0]=EdgeList[i].first;
-        coord[1]=EdgeList[i].second;
+        coord[0]=EdgeList[i].first-piv_x;
+        coord[1]=piv_y-EdgeList[i].second;
         coord[2]=1;
         coord=matMul3x3(mat,coord);
-        EdgeList[i].first=coord[0]/coord[2];
-        EdgeList[i].second=coord[1]/coord[2];
+        EdgeList[i].first=coord[0]/coord[2]+piv_x;
+        EdgeList[i].second=piv_y-coord[1]/coord[2];
 
 //        EdgeList[i].first=changeX(EdgeList[i].first);
 //        EdgeList[i].second=changeY(EdgeList[i].second);
     }
-    translate(del_x,del_y);
     drawPoly();
 }
 
@@ -894,10 +890,6 @@ void MainWindow::on_rotate_clicked()
     int piv_x=p1.x();
     int piv_y=p1.y();
 
-    int del_x=-(piv_x-img.width()/2);
-    int del_y=(piv_y-img.height()/2);
-
-    translate(del_x,del_y);
     int i,len=EdgeList.size();
 
     // matrix for rotation
@@ -906,14 +898,45 @@ void MainWindow::on_rotate_clicked()
     for(i=0;i<len;i++)
     {
         int* coord=(int*)malloc(3*sizeof(int));
-        coord[0]=EdgeList[i].first;
-        coord[1]=EdgeList[i].second;
+        coord[0]=EdgeList[i].first-piv_x;
+        coord[1]=piv_y-EdgeList[i].second;
         coord[2]=1;
         coord=matMul3x3(mat,coord);
-        EdgeList[i].first=coord[0]/coord[2];
-        EdgeList[i].second=coord[1]/coord[2];
+
+        EdgeList[i].first=coord[0]/coord[2]+piv_x;
+        EdgeList[i].second=piv_y-coord[1]/coord[2];
     }
-    translate(-del_x,-del_y);
+
+    drawPoly();
+}
+
+
+void MainWindow::on_shear_clicked()
+{
+    int shx=ui->shr_x->value();
+    int shy=ui->shr_y->value();
+    //Point about which to be scaled
+    int piv_x=p1.x();
+    int piv_y=p1.y();
+
+    int i,len=EdgeList.size();
+
+    // matrix for scaling
+    double mat[3][3]={{1,shx,0},{shy,1,0},{0,0,1}};
+
+    for(i=0;i<len;i++)
+    {
+        int* coord=(int*)malloc(3*sizeof(int));
+        coord[0]=EdgeList[i].first-piv_x;
+        coord[1]=piv_y-EdgeList[i].second;
+        coord[2]=1;
+        coord=matMul3x3(mat,coord);
+        EdgeList[i].first=coord[0]/coord[2]+piv_x;
+        EdgeList[i].second=piv_y-coord[1]/coord[2];
+
+//        EdgeList[i].first=changeX(EdgeList[i].first);
+//        EdgeList[i].second=changeY(EdgeList[i].second);
+    }
     drawPoly();
 }
 
@@ -922,7 +945,7 @@ void MainWindow::drawPoly()
 {
     int i,len=EdgeList.size()-1;
     //Reset the screen and draw the grid
-    on_showgrid_clicked();
+    //on_showgrid_clicked();
 
     // Draw the polygon
     for(i=0;i<len;i++)
@@ -1213,14 +1236,14 @@ void MainWindow::clip(int x1, int y1, int x2, int y2)
         int k_pos = (x2-x1) * (ky-y1) - (y2-y1) * (kx-x1);
 
         // Case 1 : When both points are inside
-        if (i_pos < 0  && k_pos < 0)
+        if (i_pos > 0  && k_pos > 0)
         {
             //Only second point is added
             new_points.push_back(make_pair(kx,ky));
         }
 
         // Case 2: When only first point is outside
-        else if (i_pos >= 0  && k_pos < 0)
+        else if (i_pos <= 0  && k_pos > 0)
         {
             // Point of intersection with edge
             // and the second point is added
@@ -1232,7 +1255,7 @@ void MainWindow::clip(int x1, int y1, int x2, int y2)
         }
 
         // Case 3: When only second point is outside
-        else if (i_pos < 0  && k_pos >= 0)
+        else if (i_pos > 0  && k_pos <= 0)
         {
             int temp_x = x_intersect(x1,y1, x2, y2, ix, iy, kx, ky);
             int temp_y = y_intersect(x1,y1, x2, y2, ix, iy, kx, ky);
@@ -1246,15 +1269,6 @@ void MainWindow::clip(int x1, int y1, int x2, int y2)
             //No points are added
         }
     }
-
-//    // Copying new points into original array
-//    // and changing the no. of vertices
-//    poly_size = new_poly_size;
-//    for (int i = 0; i < poly_size; i++)
-//    {
-//        poly_points[i][0] = new_points[i][0];
-//        poly_points[i][1] = new_points[i][1];
-//    }
     EdgeList=new_points;
 }
 
@@ -1267,9 +1281,10 @@ void MainWindow::suthHodgClip()
     clip(x_max,y_min,x_max,y_max); //Right
     clip(x_max,y_max,x_min,y_max); //Top
 
-
+    on_showgrid_clicked();
+    drawBound();
     drawPoly();
-    //drawBound();
+
 }
 
 void MainWindow::on_clip_poly_clicked()
@@ -1278,11 +1293,4 @@ void MainWindow::on_clip_poly_clicked()
 }
 //========================================================================================
 
-
 //========================================================================================
-
-
-
-
-
-

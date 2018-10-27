@@ -135,6 +135,7 @@ private slots:
     void clip(int x1, int y1, int x2, int y2);
     void suthHodgClip();
     void on_clip_poly_clicked();
+    void on_shear_clicked();
 };
 
 #endif // MAINWINDOW_H
