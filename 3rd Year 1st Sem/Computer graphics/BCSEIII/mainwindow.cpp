@@ -616,16 +616,16 @@ void MainWindow::insertionSort(EdgeTableTuple *ett)
         temp.slopeinverse = ett->buckets[i].slopeinverse;
         j = i - 1;
 
-    while ((temp.xofymin < ett->buckets[j].xofymin) && (j >= 0))
-    {
-        ett->buckets[j + 1].ymax = ett->buckets[j].ymax;
-        ett->buckets[j + 1].xofymin = ett->buckets[j].xofymin;
-        ett->buckets[j + 1].slopeinverse = ett->buckets[j].slopeinverse;
-        j = j - 1;
-    }
-    ett->buckets[j + 1].ymax = temp.ymax;
-    ett->buckets[j + 1].xofymin = temp.xofymin;
-    ett->buckets[j + 1].slopeinverse = temp.slopeinverse;
+        while ((temp.xofymin < ett->buckets[j].xofymin) && (j >= 0))
+        {
+            ett->buckets[j + 1].ymax = ett->buckets[j].ymax;
+            ett->buckets[j + 1].xofymin = ett->buckets[j].xofymin;
+            ett->buckets[j + 1].slopeinverse = ett->buckets[j].slopeinverse;
+            j = j - 1;
+        }
+        ett->buckets[j + 1].ymax = temp.ymax;
+        ett->buckets[j + 1].xofymin = temp.xofymin;
+        ett->buckets[j + 1].slopeinverse = temp.slopeinverse;
     }
 }
 
@@ -654,12 +654,12 @@ void MainWindow::storeEdgeInTable (int x1,int y1, int x2, int y2)
     }
     else
     {
-    m = ((float)(y2-y1))/((float)(x2-x1));
+        m = ((float)(y2-y1))/((float)(x2-x1));
 
-    if (y2==y1)
-        return;
+        if (y2==y1)
+            return;
 
-    minv = (float)1.0/m;
+        minv = (float)1.0/m;
     }
 
     if (y1>y2)
@@ -687,12 +687,12 @@ void MainWindow::removeEdgeByYmax(EdgeTableTuple *Tup,int yy)
         if (Tup->buckets[i].ymax == yy)
         {
             for ( j = i ; j < Tup->countEdgeBucket -1 ; j++ )
-                {
+            {
                 Tup->buckets[j].ymax =Tup->buckets[j+1].ymax;
                 Tup->buckets[j].xofymin =Tup->buckets[j+1].xofymin;
                 Tup->buckets[j].slopeinverse = Tup->buckets[j+1].slopeinverse;
-                }
-                Tup->countEdgeBucket--;
+            }
+            Tup->countEdgeBucket--;
             i--;
         }
     }
@@ -712,77 +712,77 @@ void MainWindow::updatexbyslopeinv(EdgeTableTuple *Tup)
 
 void MainWindow::on_fill_scan_clicked()
 {
-        int i, j, x1, ymax1, x2, ymax2, FillFlag = 0, coordCount;
+    int i, j, x1, ymax1, x2, ymax2, FillFlag = 0, coordCount;
 
-        for (i=0; i<maxHt; i++)
+    for (i=0; i<maxHt; i++)
+    {
+        for (j=0; j<EdgeTable[i].countEdgeBucket; j++)
         {
-            for (j=0; j<EdgeTable[i].countEdgeBucket; j++)
+            storeEdgeInTuple(&ActiveEdgeTuple,EdgeTable[i].buckets[j].
+                             ymax,EdgeTable[i].buckets[j].xofymin,
+                             EdgeTable[i].buckets[j].slopeinverse);
+        }
+
+        removeEdgeByYmax(&ActiveEdgeTuple, i);
+
+        insertionSort(&ActiveEdgeTuple);
+
+        j = 0;
+        FillFlag = 0;
+        coordCount = 0;
+        x1 = 0;
+        x2 = 0;
+        ymax1 = 0;
+        ymax2 = 0;
+        while (j<ActiveEdgeTuple.countEdgeBucket)
+        {
+            if (coordCount%2==0)
             {
-                storeEdgeInTuple(&ActiveEdgeTuple,EdgeTable[i].buckets[j].
-                         ymax,EdgeTable[i].buckets[j].xofymin,
-                        EdgeTable[i].buckets[j].slopeinverse);
-            }
-
-            removeEdgeByYmax(&ActiveEdgeTuple, i);
-
-            insertionSort(&ActiveEdgeTuple);
-
-            j = 0;
-            FillFlag = 0;
-            coordCount = 0;
-            x1 = 0;
-            x2 = 0;
-            ymax1 = 0;
-            ymax2 = 0;
-            while (j<ActiveEdgeTuple.countEdgeBucket)
-            {
-                if (coordCount%2==0)
+                x1 = (int)(ActiveEdgeTuple.buckets[j].xofymin);
+                ymax1 = ActiveEdgeTuple.buckets[j].ymax;
+                if (x1==x2)
                 {
-                    x1 = (int)(ActiveEdgeTuple.buckets[j].xofymin);
-                    ymax1 = ActiveEdgeTuple.buckets[j].ymax;
-                    if (x1==x2)
+                    if (((x1==ymax1)&&(x2!=ymax2))||((x1!=ymax1)&&(x2==ymax2)))
                     {
-                        if (((x1==ymax1)&&(x2!=ymax2))||((x1!=ymax1)&&(x2==ymax2)))
-                        {
-                            x2 = x1;
-                            ymax2 = ymax1;
-                        }
-
-                        else
-                        {
-                            coordCount++;
-                        }
+                        x2 = x1;
+                        ymax2 = ymax1;
                     }
 
                     else
                     {
-                            coordCount++;
+                        coordCount++;
                     }
                 }
+
                 else
                 {
-                    x2 = (int)ActiveEdgeTuple.buckets[j].xofymin;
-                    ymax2 = ActiveEdgeTuple.buckets[j].ymax;
+                    coordCount++;
+                }
+            }
+            else
+            {
+                x2 = (int)ActiveEdgeTuple.buckets[j].xofymin;
+                ymax2 = ActiveEdgeTuple.buckets[j].ymax;
 
-                    FillFlag = 0;
-                    if (x1==x2)
+                FillFlag = 0;
+                if (x1==x2)
+                {
+                    if (((x1==ymax1)&&(x2!=ymax2))||((x1!=ymax1)&&(x2==ymax2)))
                     {
-                        if (((x1==ymax1)&&(x2!=ymax2))||((x1!=ymax1)&&(x2==ymax2)))
-                        {
-                            x1 = x2;
-                            ymax1 = ymax2;
-                        }
-                        else
-                        {
-                            coordCount++;
-                            FillFlag = 1;
-                        }
+                        x1 = x2;
+                        ymax1 = ymax2;
                     }
                     else
                     {
                         coordCount++;
                         FillFlag = 1;
                     }
+                }
+                else
+                {
+                    coordCount++;
+                    FillFlag = 1;
+                }
 
                 if(FillFlag)
                 {
@@ -798,7 +798,7 @@ void MainWindow::on_fill_scan_clicked()
         updatexbyslopeinv(&ActiveEdgeTuple);
     }
 
-        EdgeList.clear();
+    EdgeList.clear();
 }
 //============================ SCAN LINE END =============================================================
 //============================ TRANSFORMATIONS ===========================================================
@@ -807,9 +807,9 @@ int* MainWindow::matMul3x3(double mat[3][3],int coord[3])
     int i,k,res[3];
     for (i = 0; i < 3; i++)
     {
-            res[i]= 0;
-            for (k = 0; k < 3; k++)
-                res[i] += (int)(mat[i][k]*(double)coord[k]);
+        res[i]= 0;
+        for (k = 0; k < 3; k++)
+            res[i] += (int)(mat[i][k]*(double)coord[k]);
 
     }
     return res;
@@ -872,23 +872,18 @@ void MainWindow::on_scale_clicked()
         coord=matMul3x3(mat,coord);
         EdgeList[i].first=coord[0]/coord[2]+piv_x;
         EdgeList[i].second=piv_y-coord[1]/coord[2];
-
-//        EdgeList[i].first=changeX(EdgeList[i].first);
-//        EdgeList[i].second=changeY(EdgeList[i].second);
     }
     drawPoly();
 }
 
-void MainWindow::on_rotate_clicked()
+void MainWindow::rotate(int angle,int piv_x,int piv_y)
 {
-    int angle=ui->rot->value();
     double dang=(double)angle*M_PI/180.0;
     double sinang=sin(dang);
     double cosang=cos(dang);
 
     //Point about which to be scaled
-    int piv_x=p1.x();
-    int piv_y=p1.y();
+
 
     int i,len=EdgeList.size();
 
@@ -907,6 +902,15 @@ void MainWindow::on_rotate_clicked()
         EdgeList[i].second=piv_y-coord[1]/coord[2];
     }
 
+
+}
+
+void MainWindow::on_rotate_clicked()
+{
+    int angle=ui->rot->value();
+    int piv_x=p1.x();
+    int piv_y=p1.y();
+    rotate(angle,piv_x,piv_y);
     drawPoly();
 }
 
@@ -934,11 +938,72 @@ void MainWindow::on_shear_clicked()
         EdgeList[i].first=coord[0]/coord[2]+piv_x;
         EdgeList[i].second=piv_y-coord[1]/coord[2];
 
-//        EdgeList[i].first=changeX(EdgeList[i].first);
-//        EdgeList[i].second=changeY(EdgeList[i].second);
+        //        EdgeList[i].first=changeX(EdgeList[i].first);
+        //        EdgeList[i].second=changeY(EdgeList[i].second);
     }
     drawPoly();
 }
+
+void MainWindow::reflect_x()
+{
+    int i,len=EdgeList.size();
+
+    // matrix for reflection
+    double mat[3][3]={{1,0,0},{0,-1,0},{0,0,1}};
+
+    for(i=0;i<len;i++)
+    {
+        int* coord=(int*)malloc(3*sizeof(int));
+        coord[0]=EdgeList[i].first;
+        coord[1]=EdgeList[i].second;
+        coord[2]=1;
+        coord=matMul3x3(mat,coord);
+        EdgeList[i].first=coord[0]/coord[2];
+//        EdgeList[i].first-=img.width()/2;
+        EdgeList[i].second=coord[1]/coord[2];
+        EdgeList[i].second=img.height()/2-EdgeList[i].second;
+    }
+}
+
+void MainWindow::on_reflect_clicked()
+{
+    int x1=p1.x();
+    int y1=p1.y();
+
+    int x2=p2.x();
+    int y2=p2.y();
+
+//    double m=(double)(y2-y1)/(double)(x2-x1);
+//    double b=-m*x1+y1;
+////    b=img.height()/2-b;
+
+//    translate(0,-b);
+//    int ang=(int)(atan(m));
+//    rotate(-ang,img.width()/2,img.height()/2);
+//    reflect_x();
+//    rotate(ang,img.width()/2,img.height()/2);
+//    translate(0,b);
+
+//    drawPoly();
+
+    int a=(y2-y1);
+    int b=(x1-x2);
+    int c=-y1*b-x1*a;
+
+    int i,len=EdgeList.size();
+    for(i=0;i<len;i++)
+    {
+        int num=-2*(a*EdgeList[i].first+b*EdgeList[i].second+c);
+        int den=a*a+b*b;
+        double temp_x=a*(double)num/(double)den+EdgeList[i].first;
+        double temp_y=b*(double)num/(double)den+EdgeList[i].second;
+
+        EdgeList[i].first=(int)temp_x;
+        EdgeList[i].second=(int)temp_y;
+    }
+    drawPoly();
+}
+
 
 //=========================================================================================================
 void MainWindow::drawPoly()
@@ -1198,70 +1263,97 @@ void MainWindow::on_clip_line_clicked()
 // lines
 int MainWindow::x_intersect(int x1, int y1, int x2, int y2,int x3, int y3, int x4, int y4)
 {
+    y1=ui->frame->height()-y1+1;
+    y2=ui->frame->height()-y2+1;
+    y3=ui->frame->height()-y3+1;
+    y4=ui->frame->height()-y4+1;
     int num = (x1*y2 - y1*x2) * (x3-x4) -(x1-x2) * (x3*y4 - y3*x4);
     int den = (x1-x2) * (y3-y4) - (y1-y2) * (x3-x4);
-    return num/den;
+    int retx=num/den;
+    return retx;
 }
 
 // Returns y-value of point of intersectipn of
 // two lines
 int MainWindow::y_intersect(int x1, int y1, int x2, int y2,int x3, int y3, int x4, int y4)
 {
+    y1=ui->frame->height()-y1+1;
+    y2=ui->frame->height()-y2+1;
+    y3=ui->frame->height()-y3+1;
+    y4=ui->frame->height()-y4+1;
     int num = (x1*y2 - y1*x2) * (y3-y4) -(y1-y2) * (x3*y4 - y3*x4);
     int den = (x1-x2) * (y3-y4) - (y1-y2) * (x3-x4);
-    return num/den;
+    int rety= (ui->frame->height()-num/den+1);
+    return rety;
 }
 
 // This functions clips all the edges w.r.t one clip
 // edge of clipping area
 void MainWindow::clip(int x1, int y1, int x2, int y2)
 {
-    std::vector< std::pair<int,int> > new_points;
+    int poly_size=EdgeList.size()-1;
+    int new_poly_size = 0;
+
+    std::vector<std::pair<int,int> > new_points;
 
     // (ix,iy),(kx,ky) are the co-ordinate values of
     // the points
-    for (int i = 0; i < EdgeList.size()-1; i++)
+    for (int i = 0; i < poly_size; i++)
     {
         // i and k form a line in polygon
-        int k = (i+1) % (EdgeList.size()-1);
+        int k = (i+1) % poly_size;
         int ix = EdgeList[i].first, iy = EdgeList[i].second;
         int kx = EdgeList[k].first, ky = EdgeList[k].second;
 
-        // Calculating position of first point
-        // w.r.t. clipper line
-        int i_pos = (x2-x1) * (iy-y1) - (y2-y1) * (ix-x1);
+        // Calculating position of first and second point
 
-        // Calculating position of second point
-        // w.r.t. clipper line
-        int k_pos = (x2-x1) * (ky-y1) - (y2-y1) * (kx-x1);
+        int i_pos,k_pos;
+        if(x2==x1 && ix>x1) i_pos=1;
+        else if(x2==x1 && ix<x1) i_pos=-1;
+        else if(y2==y1 && iy<y1) i_pos=1;
+        else i_pos=-1;
+
+        if(x2==x1 && kx>x1) k_pos=1;
+        else if(x2==x1 && kx<x1) k_pos=-1;
+        else if(y2==y1 && ky<y1) k_pos=1;
+        else k_pos=-1;
+
+        if(y1>y2||x1>x2)
+        {
+            i_pos=(-1)*i_pos;
+            k_pos=(-1)*k_pos;
+        }
 
         // Case 1 : When both points are inside
-        if (i_pos < 0  && k_pos < 0)
+        if (i_pos >= 0  && k_pos >= 0)
         {
             //Only second point is added
-            new_points.push_back(make_pair(kx,ky));
-
+            //            new_points[new_poly_size][0] = kx;
+            //            new_points[new_poly_size][1] = ky;
+            new_points.push_back(std::make_pair(kx,ky));
+            new_poly_size++;
         }
 
         // Case 2: When only first point is outside
-        else if (i_pos >= 0  && k_pos < 0)
+        else if (i_pos < 0  && k_pos >= 0)
         {
             // Point of intersection with edge
             // and the second point is added
-            int temp_x = x_intersect(x1,y1, x2, y2, ix, iy, kx, ky);
-            int temp_y = y_intersect(x1,y1, x2, y2, ix, iy, kx, ky);
 
-            new_points.push_back(make_pair(temp_x,temp_y));
-            new_points.push_back(make_pair(kx,ky));
+            new_points.push_back(std::make_pair(x_intersect(x1,y1, x2, y2, ix, iy, kx, ky),y_intersect(x1,y1, x2, y2, ix, iy, kx, ky)));
+            new_poly_size++;
+
+            new_points.push_back(std::make_pair(kx,ky));
+            new_poly_size++;
         }
 
         // Case 3: When only second point is outside
-        else if (i_pos < 0  && k_pos >= 0)
+        else if (i_pos >= 0  && k_pos < 0)
         {
-            int temp_x = x_intersect(x1,y1, x2, y2, ix, iy, kx, ky);
-            int temp_y = y_intersect(x1,y1, x2, y2, ix, iy, kx, ky);
+            //Only point of intersection with edge is added
 
-            new_points.push_back(make_pair(temp_x,temp_y));
+            new_points.push_back(std::make_pair(x_intersect(x1,y1, x2, y2, ix, iy, kx, ky),y_intersect(x1,y1, x2, y2, ix, iy, kx, ky)));
+            new_poly_size++;
         }
 
         // Case 4: When both points are outside
@@ -1269,9 +1361,18 @@ void MainWindow::clip(int x1, int y1, int x2, int y2)
         {
             //No points are added
         }
-        EdgeList=new_points;
-        new_points.clear();
     }
+
+    // Copying new points into original array
+    // and changing the no. of vertices
+    poly_size = new_poly_size;
+    EdgeList.clear();
+    for (int i = 0; i < new_points.size(); i++)
+    {
+        EdgeList.push_back(new_points[i]);
+    }
+    if(poly_size>0)
+        EdgeList.push_back(new_points[0]);
 
 }
 
@@ -1279,14 +1380,19 @@ void MainWindow::clip(int x1, int y1, int x2, int y2)
 void MainWindow::suthHodgClip()
 {
     //i and k are two consecutive indexes
-    clip(x_min,-y_max,x_min,-y_min); //Left
-    clip(x_min,-y_min,x_max,-y_min); //Bottom
-    clip(x_max,-y_min,x_max,-y_max); //Right
-    clip(x_max,-y_max,x_min,-y_max); //Top
+    clip(x_min,y_max,x_min,y_min); //Left
+    if(EdgeList.size()>0)
+        clip(x_min,y_min,x_max,y_min); //Bottom
+    if(EdgeList.size()>1)
+        clip(x_max,y_min,x_max,y_max); //Right
+    if(EdgeList.size()>1)
+        clip(x_max,y_max,x_min,y_max); //Top
 
     on_showgrid_clicked();
     drawBound();
-    drawPoly();
+
+    if(EdgeList.size()>1)
+        drawPoly();
 
 }
 

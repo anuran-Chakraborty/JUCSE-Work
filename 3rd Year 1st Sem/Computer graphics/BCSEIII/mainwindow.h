@@ -121,8 +121,10 @@ private slots:
 
     void on_translate_clicked();
     void on_scale_clicked();
+    void rotate(int angle,int piv_x,int piv_y);
     void on_rotate_clicked();
     void on_clr_bound_clicked();
+    void reflect_x();
     void on_set_bound_clicked();
 
     void drawBound();
@@ -142,6 +144,7 @@ private slots:
     void on_draw_bez_clicked();
 
     void bezierCurve();
+    void on_reflect_clicked();
 };
 
 #endif // MAINWINDOW_H
