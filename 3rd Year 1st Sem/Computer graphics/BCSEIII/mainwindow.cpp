@@ -1217,13 +1217,13 @@ int MainWindow::y_intersect(int x1, int y1, int x2, int y2,int x3, int y3, int x
 void MainWindow::clip(int x1, int y1, int x2, int y2)
 {
     std::vector< std::pair<int,int> > new_points;
-    int poly_size=EdgeList.size()-1;
+
     // (ix,iy),(kx,ky) are the co-ordinate values of
     // the points
-    for (int i = 0; i < poly_size; i++)
+    for (int i = 0; i < EdgeList.size()-1; i++)
     {
         // i and k form a line in polygon
-        int k = (i+1) % poly_size;
+        int k = (i+1) % (EdgeList.size()-1);
         int ix = EdgeList[i].first, iy = EdgeList[i].second;
         int kx = EdgeList[k].first, ky = EdgeList[k].second;
 
@@ -1236,14 +1236,15 @@ void MainWindow::clip(int x1, int y1, int x2, int y2)
         int k_pos = (x2-x1) * (ky-y1) - (y2-y1) * (kx-x1);
 
         // Case 1 : When both points are inside
-        if (i_pos > 0  && k_pos > 0)
+        if (i_pos < 0  && k_pos < 0)
         {
             //Only second point is added
             new_points.push_back(make_pair(kx,ky));
+
         }
 
         // Case 2: When only first point is outside
-        else if (i_pos <= 0  && k_pos > 0)
+        else if (i_pos >= 0  && k_pos < 0)
         {
             // Point of intersection with edge
             // and the second point is added
@@ -1255,7 +1256,7 @@ void MainWindow::clip(int x1, int y1, int x2, int y2)
         }
 
         // Case 3: When only second point is outside
-        else if (i_pos > 0  && k_pos <= 0)
+        else if (i_pos < 0  && k_pos >= 0)
         {
             int temp_x = x_intersect(x1,y1, x2, y2, ix, iy, kx, ky);
             int temp_y = y_intersect(x1,y1, x2, y2, ix, iy, kx, ky);
@@ -1268,18 +1269,20 @@ void MainWindow::clip(int x1, int y1, int x2, int y2)
         {
             //No points are added
         }
+        EdgeList=new_points;
+        new_points.clear();
     }
-    EdgeList=new_points;
+
 }
 
 // Implements Sutherland–Hodgman algorithm
 void MainWindow::suthHodgClip()
 {
     //i and k are two consecutive indexes
-    clip(x_min,y_max,x_min,y_min); //Left
-    clip(x_min,y_min,x_max,y_min); //Bottom
-    clip(x_max,y_min,x_max,y_max); //Right
-    clip(x_max,y_max,x_min,y_max); //Top
+    clip(x_min,-y_max,x_min,-y_min); //Left
+    clip(x_min,-y_min,x_max,-y_min); //Bottom
+    clip(x_max,-y_min,x_max,-y_max); //Right
+    clip(x_max,-y_max,x_min,-y_max); //Top
 
     on_showgrid_clicked();
     drawBound();
@@ -1294,3 +1297,52 @@ void MainWindow::on_clip_poly_clicked()
 //========================================================================================
 
 //========================================================================================
+//======================== BEZIER CURVE ==================================================
+
+void MainWindow::on_bez_init_clicked()
+{
+    int k=ui->gridsize->value();
+    int x=((ui->frame->x)/k)*k+k/2;
+    int y=((ui->frame->y)/k)*k+k/2;
+    BezList.push_back(make_pair(x,y));
+
+    int i=BezList.size();
+
+    if(BezList.size()>1)
+    {
+        storeEdgeInTable(BezList[i-2].first, BezList[i-2].second, BezList[i-1].first, BezList[i-1].second);//storage of edges in edge table.
+
+        p1.setX(BezList[BezList.size()-1].first);
+        p2.setX(BezList[BezList.size()-2].first);
+
+        p1.setY(BezList[BezList.size()-1].second);
+        p2.setY(BezList[BezList.size()-2].second);
+
+        on_bress_clicked();
+
+    }
+}
+
+void MainWindow::on_bez_clear_clicked()
+{
+    BezList.clear();
+}
+
+void MainWindow::bezierCurve()
+{
+    double xu = 0.0 , yu = 0.0 , u = 0.0 ;
+    int i = 0 ;
+    for(u = 0.0 ; u <= 1.0 ; u += 0.0001)
+    {
+        xu = pow(1-u,3)*BezList[0].first+3*u*pow(1-u,2)*BezList[1].first+3*pow(u,2)*(1-u)*BezList[2].first+pow(u,3)*BezList[3].first;
+        yu = pow(1-u,3)*BezList[0].second+3*u*pow(1-u,2)*BezList[1].second+3*pow(u,2)*(1-u)*BezList[2].second+pow(u,3)*BezList[3].second;
+        point((int)xu , (int)yu,255,0,0) ;
+    }
+}
+
+
+
+void MainWindow::on_draw_bez_clicked()
+{
+    bezierCurve();
+}

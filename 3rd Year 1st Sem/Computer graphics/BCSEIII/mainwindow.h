@@ -46,6 +46,7 @@ private:
     EdgeTableTuple EdgeTable[maxHt], ActiveEdgeTuple;
 
     std::vector<std::pair<int,int> > EdgeList;
+    std::vector<std::pair<int,int> > BezList;
 
     void point(int x,int y,int r=255,int g=255,int b=0);
 
@@ -136,6 +137,11 @@ private slots:
     void suthHodgClip();
     void on_clip_poly_clicked();
     void on_shear_clicked();
+    void on_bez_init_clicked();
+    void on_bez_clear_clicked();
+    void on_draw_bez_clicked();
+
+    void bezierCurve();
 };
 
 #endif // MAINWINDOW_H
