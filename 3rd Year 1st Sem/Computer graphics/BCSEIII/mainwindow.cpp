@@ -529,7 +529,7 @@ void MainWindow::flood_fill_util(int x1, int y1,int k, QRgb q1, int r,int g,int 
 
 void MainWindow::on_boundary_fill_clicked()
 {
-    //Function to implement flood fill
+    //Function to implement boundary fill
     int x1=p1.x();
     int y1=p1.y();
     int k = ui->gridsize->value();
