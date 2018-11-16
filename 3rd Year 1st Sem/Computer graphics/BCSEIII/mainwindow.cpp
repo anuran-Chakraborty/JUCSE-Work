@@ -937,9 +937,6 @@ void MainWindow::on_shear_clicked()
         coord=matMul3x3(mat,coord);
         EdgeList[i].first=coord[0]/coord[2]+piv_x;
         EdgeList[i].second=piv_y-coord[1]/coord[2];
-
-        //        EdgeList[i].first=changeX(EdgeList[i].first);
-        //        EdgeList[i].second=changeY(EdgeList[i].second);
     }
     drawPoly();
 }

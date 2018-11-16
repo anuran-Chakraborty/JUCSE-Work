@@ -9,6 +9,7 @@ typedef struct mem_elem
 } mem;
 mem arr[5];
 int count=0;
+int pgfaults=0;
 
 // Function to insert a new page in the array
 void insert(mem ele,int pos,int max_frames)
@@ -17,11 +18,15 @@ void insert(mem ele,int pos,int max_frames)
 	if(count<max_frames)
 	{
 		arr[count++]=ele;
+		pgfaults++;
 	}
 	else
 	{
 		if(pos==-1)
+		{
 			pos=0;
+			pgfaults++;
+		}
 		for(i=pos;i<count-1;i++)
 			arr[i]=arr[i+1];
 		arr[count-1]=ele;
@@ -69,6 +74,7 @@ int main()
 			printArr();
 		}
 		printf("=============================================\n");
+		printf("Page faults %d\n",pgfaults);
 	}
 	return 0;
 }
