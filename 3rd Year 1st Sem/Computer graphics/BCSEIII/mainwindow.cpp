@@ -438,9 +438,7 @@ void MainWindow::drawEllipse(QPoint p, int rx, int ry)
 
 
     //For first region
-    int p1=ry2-rx2*ry+(0.25)*rx2; //Initial value of decision paramemter
-
-
+    int p1=ry2-rx2*ry+(0.25)*rx2; //Initial value of decision parameter
 
 
     while(px<py)
@@ -1134,8 +1132,8 @@ int MainWindow::computeCode(int x, int y)
 void MainWindow::cohenSutherlandClip(int x1, int y1,int x2, int y2)
 {
     // Compute region codes for P1, P2
-    int code1 = computeCode(x1, y1);
-    int code2 = computeCode(x2, y2);
+    int code1 = computeCode(x1, y1);    //Region code for P1
+    int code2 = computeCode(x2, y2);    //Region code for P2
 
 
     // Initialize line as outside the rectangular window
@@ -1256,7 +1254,7 @@ void MainWindow::on_clip_line_clicked()
 //========================================================================================
 
 // =================== POLYGON CLIPPING ==================================================
-// Returns x-value of point of intersectipn of two
+// Returns x-value of point of intersection of two
 // lines
 int MainWindow::x_intersect(int x1, int y1, int x2, int y2,int x3, int y3, int x4, int y4)
 {
@@ -1270,7 +1268,7 @@ int MainWindow::x_intersect(int x1, int y1, int x2, int y2,int x3, int y3, int x
     return retx;
 }
 
-// Returns y-value of point of intersectipn of
+// Returns y-value of point of intersection of
 // two lines
 int MainWindow::y_intersect(int x1, int y1, int x2, int y2,int x3, int y3, int x4, int y4)
 {

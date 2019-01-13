@@ -62,6 +62,7 @@ int main()
 
 	for(j=4;j<=5;j++)
 	{
+		pgfaults=0;
 		printf("=============================================\n");
 		count=0;
 		printf("For %d frames\n",j);
