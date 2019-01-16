@@ -1,3 +1,7 @@
+# Customisable parameters
+no_of_bits=4
+generator_poly='1001'
+
 # Function to find checksum of a number of frames
 def checksum(list_of_frames, no_of_bits):
 	chksum=0
@@ -25,7 +29,7 @@ def checksum(list_of_frames, no_of_bits):
 		else:
 			chksum+='0'
 		
-	return int(chksum,2)
+	return chksum
 
 # Function to generate the LRC code for a list of frames
 def lrc(list_of_frames, no_of_bits):
@@ -38,15 +42,6 @@ def lrc(list_of_frames, no_of_bits):
 	# Stuffing
 	while(len(lsum)<no_of_bits):
 		lsum='0'+lsum
-	# # Perform 2s complement
-	# lrcsum=''
-	# for i in range(len(lsum)):
-	# 	if(lsum[i]=='0'):
-	# 		lrcsum+='1'
-	# 	else:
-	# 		lrcsum+='0'
-	# lrcsum=int(lrcsum,2)+1
-	# lrcsum=bin(lrcsum)[2:]
 	return lsum
 
 # Returns codeword for each dataword using vrc
@@ -85,7 +80,9 @@ def modulo2div(dataword, generator):
 			tmp=xor(generator,tmp)+dataword[l_xor]
 		else:
 			# If leftmost bit is 0 then use all 0 divisor
-			tmp=xor('0'*l_xor,tmp)+dataword[l_xor]
+			tmp=xor('0'*len(generator),tmp)+dataword[l_xor]
+		tmp='0'*(len(generator)-len(tmp))+tmp
+
 		l_xor+=1
 
 	# For the last bit
@@ -93,13 +90,13 @@ def modulo2div(dataword, generator):
 		tmp=xor(generator,tmp)
 	else:
 		tmp=xor('0'*len(generator),tmp)
+	tmp='0'*(len(generator)-len(tmp)-1)+tmp
 	checkword=tmp
 	return checkword
 
 
-
 # Return the codeword for crc
-def crc(list_of_frames, generator, no_of_bits=8):
+def crc(list_of_frames, generator, no_of_bits):
 
 	codewords=[]
 	for i in range(len(list_of_frames)):
@@ -107,6 +104,7 @@ def crc(list_of_frames, generator, no_of_bits=8):
 		dataword=list_of_frames[i]
 		# Append length of generator-1 bits to dataword
 		aug_dataword=dataword+'0'*(len(generator)-1)
+
 		# Now perform the modulo 2 division
 		checkword=modulo2div(aug_dataword,generator)
 		# Append the remainder
@@ -114,6 +112,3 @@ def crc(list_of_frames, generator, no_of_bits=8):
 		codewords.append(codeword)
 
 	return codewords
-		
-
-print(crc(['1001'],'1011',4))
