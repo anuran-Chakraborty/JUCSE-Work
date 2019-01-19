@@ -1,6 +1,7 @@
 # Customisable parameters
-no_of_bits=4
-generator_poly='1001'
+
+generator_poly='111010101'
+no_of_bits=len(generator_poly)-1
 
 # Function to find checksum of a number of frames
 def checksum(list_of_frames, no_of_bits):

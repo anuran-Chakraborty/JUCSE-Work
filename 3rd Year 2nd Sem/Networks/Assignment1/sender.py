@@ -43,9 +43,14 @@ def write_chksum(list_of_frames, no_of_bits):
 
 	list_of_frames2=list_of_frames[:]
 	list_of_frames2.append(chksum)
-	list_of_frames2=insert_error(list_of_frames2, no_of_errors)
+
+	# Inserting error
+	list_of_frames2=ins_error(list_of_frames2, 0, [7])
+	list_of_frames2=ins_error(list_of_frames2, 2, [3])
+
 	with open('csum_op.txt', 'w') as f:
 		for item in list_of_frames2:
+			item=item='0'*(len(err.generator_poly)-1)+item
 			f.write("%s\n" % item)
 
 def write_lrc(list_of_frames, no_of_bits):
@@ -54,23 +59,38 @@ def write_lrc(list_of_frames, no_of_bits):
 
 	list_of_frames2=list_of_frames[:]
 	list_of_frames2.append(lrcval)
-	list_of_frames2=insert_error(list_of_frames2, no_of_errors)
+	
+	# Inserting error
+	list_of_frames2=ins_error(list_of_frames2, 0, [7])
+	list_of_frames2=ins_error(list_of_frames2, 2, [3])
+
+
 	with open('lrc_op.txt', 'w') as f:
 		for item in list_of_frames2:
+			item='0'*(len(err.generator_poly)-1)+item
 			f.write("%s\n" % item)
 
 def write_vrc(list_of_frames):
 
 	list_of_frames2=err.vrc(list_of_frames=list_of_frames)[:]
-	list_of_frames2=insert_error(list_of_frames2, no_of_errors)
+	
+	# Inserting error
+	list_of_frames2=ins_error(list_of_frames2, 0, [7])
+	list_of_frames2=ins_error(list_of_frames2, 2, [3])
+
 	with open('vrc_op.txt', 'w') as f:
 		for item in list_of_frames2:
+			item='0'*(len(err.generator_poly)-2)+item
 			f.write("%s\n" % item)
 
 def write_crc(list_of_frames, generator):
 
 	list_of_frames2=err.crc(list_of_frames=list_of_frames, generator=err.generator_poly, no_of_bits=err.no_of_bits)[:]
-	list_of_frames2=insert_error(list_of_frames2, no_of_errors)
+	
+	# Inserting error
+	list_of_frames2=ins_error(list_of_frames2, 0, [7])
+	list_of_frames2=ins_error(list_of_frames2, 2, [3])
+	
 	with open('crc_op.txt', 'w') as f:
 		for item in list_of_frames2:
 			f.write("%s\n" % item)
@@ -89,6 +109,19 @@ def insert_error(list_of_frames, number_of_errors):
 		list_of_frames[index]=andop(list_of_frames[index],num)
 
 	return list_of_frames
+
+def ins_error(list_of_frames, frame_no, list_of_bit):
+
+	list_of_frames2=list_of_frames[:]
+	for i in range(len(list_of_bit)):
+		frame=list_of_frames[frame_no]
+		new=list(frame)
+		if(new[list_of_bit[i]]=='0'):
+			new[list_of_bit[i]]='1'
+		else:
+			new[list_of_bit[i]]='0'
+	list_of_frames2[frame_no]=''.join(new)
+	return list_of_frames2
 
 
 list_of_frames=(readfile('input.txt',no_of_bits=err.no_of_bits))

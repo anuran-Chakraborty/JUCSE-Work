@@ -16,6 +16,8 @@ def readfile(filename, no_of_bits):
 # Check for error by checksum
 def check_checksum(list_of_frames, no_of_bits):
 
+	list_of_frames=[list_of_frames[i][len(err.generator_poly)-1:] for i in range(len(list_of_frames))]
+	
 	chksum=err.checksum(list_of_frames=list_of_frames, no_of_bits=no_of_bits)
 	if(int(chksum,2)==0):
 		print('No error in data detected by checksum')
