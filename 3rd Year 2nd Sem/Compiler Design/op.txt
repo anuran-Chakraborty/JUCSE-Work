@@ -1,0 +1,43 @@
+Reading file keywords.txt
+Reading file punctuations.txt
+Reading file operators.txt
+Printing tokens
+Row: 1, Col: 1		int : keyword
+Row: 1, Col: 5		main : identifier
+Row: 1, Col: 9		( : punctuation
+Row: 1, Col: 10		) : punctuation
+Row: 2, Col: 1		{ : punctuation
+Row: 3, Col: 5		printf : identifier
+Row: 3, Col: 11		( : punctuation
+Row: 3, Col: 12		" : punctuation
+Row: 3, Col: 13		Hello : literal
+Row: 3, Col: 18		" : punctuation
+Row: 3, Col: 19		) : punctuation
+Row: 3, Col: 20		; : punctuation
+Row: 4, Col: 5		int : keyword
+Row: 4, Col: 9		a : identifier
+Row: 4, Col: 10		= : operator
+Row: 4, Col: 11		0 : constant
+Row: 4, Col: 12		; : punctuation
+Row: 5, Col: 5		double : keyword
+Row: 5, Col: 12		b : identifier
+Row: 5, Col: 13		= : operator
+Row: 5, Col: 14		3.4 : constant
+Row: 5, Col: 17		; : punctuation
+Row: 7, Col: 5		if : keyword
+Row: 7, Col: 8		( : punctuation
+Row: 7, Col: 10		a : identifier
+Row: 7, Col: 11		== : operator
+Row: 7, Col: 13		0 : constant
+Row: 7, Col: 14		) : punctuation
+Row: 9, Col: 9		printf : identifier
+Row: 9, Col: 15		( : punctuation
+Row: 9, Col: 16		" : punctuation
+Row: 9, Col: 17		Hi : literal
+Row: 9, Col: 19		" : punctuation
+Row: 9, Col: 20		) : punctuation
+Row: 9, Col: 21		; : punctuation
+Row: 10, Col: 5		return : keyword
+Row: 10, Col: 12		0 : constant
+Row: 10, Col: 13		; : punctuation
+Row: 11, Col: 1		} : punctuation

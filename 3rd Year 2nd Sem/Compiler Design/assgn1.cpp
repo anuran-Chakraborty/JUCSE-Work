@@ -6,8 +6,10 @@ set<string> loadTokenTypes(string filename);
 void tokenize(string line);
 void printTokenAndTypes();
 void readFileAndTokenize(string filename);
+bool isConstant(string word);
 
 vector<pair<string, string> > tokens_list;
+vector<pair<int, int> > row_col_list;
 set<string> keywords;	// Set of all keywords
 set<string> punc;		// Set of all punctuations
 set<string> operators;	// Set of all operators
@@ -36,6 +38,27 @@ int main(int argc, char const *argv[])
 	return 0;
 }
 
+// Check if a string is a constant
+bool isConstant(string word)
+{
+	int countdec=0; // Number of decimal points
+	bool cons=true;
+	int i;
+
+	for(i=0;i<word.length();i++)
+	{
+		if(word[i]=='.')
+			countdec++;
+		else
+		if(word[i]<'0' || word[i]>'9')
+		{
+			cons=false;
+			break;
+		}
+	}
+	return ((countdec<=1) && cons);
+}
+
 // Function to read the keywords, etc. form a file and return a set
 set<string> loadTokenTypes(string filename)
 {
@@ -54,11 +77,11 @@ set<string> loadTokenTypes(string filename)
 		exit(0);
 	}
 	// Read the file
-	while(fio)
+	while(!fio.eof())
 	{
 		getline(fio, line);
-		if(line=="EOF")
-			break;
+		// if(fio.eof())
+		// 	break;
 		// Add to the set
 		// cout<<line<<endl;
 		tokens.insert(line);
@@ -67,10 +90,12 @@ set<string> loadTokenTypes(string filename)
 }
 
 // Function to tokenize every line
-void tokenize(string line)
+void tokenize(string line, int rownum)
 {
-	int i;
+	int i, colnum=1;	// colnum stores the current column number
 	string word="";
+	bool isLiteral=false;
+	bool isCharConst=false;
 	for(i=0;i<line.length();i++)
 	{
 		string character(1,line[i]);
@@ -86,33 +111,80 @@ void tokenize(string line)
 					// cout<<"Inserting into keyword"<<endl;
 					tokens_list.push_back(make_pair(word, "keyword"));
 				}
+				// Check if word is a constant
+				else
+				if(isConstant(word))
+					// Insert it as constant
+					tokens_list.push_back(make_pair(word, "constant"));
 				else
 				{
 					// Insert it
 					// cout<<"Inserting into identifier"<<endl;
 					tokens_list.push_back(make_pair(word, "identifier"));
 				}
+				row_col_list.push_back(make_pair(rownum, colnum-word.length()));
 				word="";
 			}
 		}
 		else
 		if(punc.count(character)!=0) //Means it is a punctuation
 		{
-			// cout<<"Punctuation encountered"<<endl;
 			// Insert the previously acquired word if it is not null
+			if(!isLiteral && character=="\"")	// Case for beginning of literal
+			{
+				// Start the literal
+				tokens_list.push_back(make_pair(character, "punctuation"));
+				row_col_list.push_back(make_pair(rownum, colnum));
+				isLiteral=true;
+			}
+			else
+			if(!isCharConst && character=="\'")
+			{
+				tokens_list.push_back(make_pair(character, "punctuation"));
+				row_col_list.push_back(make_pair(rownum, colnum));
+				isCharConst=true;
+			}
 			if(word!="")
 			{
 				// Check if word is in any of the predefined symbols
 				if(keywords.count(word)!=0) // Means it is a keyword
 					// Insert it as keyword
 					tokens_list.push_back(make_pair(word, "keyword"));
+				// Check if word is a literal
+				else
+				if(isLiteral && character=="\"")
+				{
+					// Then it is end of literal
+					isLiteral=false;
+					// Insert it as literal
+					tokens_list.push_back(make_pair(word, "literal"));
+				}
+				else
+				if(isCharConst && character=="\'")
+				{
+					// Then it is end of literal
+					isCharConst=false;
+					// Insert it as literal
+					tokens_list.push_back(make_pair(word, "character constant"));
+				}
+				// Check if word is a constant
+				else
+				if(isConstant(word))
+					// Insert it as constant
+					tokens_list.push_back(make_pair(word, "constant"));
 				else
 					// Insert it as identifier
 					tokens_list.push_back(make_pair(word, "identifier"));
+				row_col_list.push_back(make_pair(rownum, colnum-word.length()));
 				word="";
 			}
-			// Also insert the punctuation
-			tokens_list.push_back(make_pair(character, "punctuation"));
+			// If punctuation is within the literal then make sure it is not inserted
+			if(!isLiteral && !isCharConst)
+			{
+				// Also insert the punctuation
+				tokens_list.push_back(make_pair(character, "punctuation"));
+				row_col_list.push_back(make_pair(rownum, colnum));
+			}
 
 		}
 		else
@@ -126,16 +198,33 @@ void tokenize(string line)
 				if(keywords.count(word)!=0) // Means it is a keyword
 					// Insert it as keyword
 					tokens_list.push_back(make_pair(word, "keyword"));
+				// Check if word is a constant
+				else
+				if(isConstant(word))
+					// Insert it as constant
+					tokens_list.push_back(make_pair(word, "constant"));
 				else
 					// Insert it as identifier
 					tokens_list.push_back(make_pair(word, "identifier"));
+				row_col_list.push_back(make_pair(rownum, colnum-word.length()));
 				word="";
+			}
+			// Check case for ==
+			if(line[i+1]=='=')
+			{
+				character+=line[i+1];
+				colnum++;
+				i++;
 			}
 			// Also insert the punctuation
 			tokens_list.push_back(make_pair(character, "operator"));
+			row_col_list.push_back(make_pair(rownum, colnum-character.length()+1));
 		}
 		else
 			word+=line[i];
+		colnum++;
+		if(line[i]=='\t')
+			colnum+=3;
 	}
 }
 
@@ -146,17 +235,14 @@ void readFileAndTokenize(string filename)
 	// Open and read file
 	fstream fio;
 	string line;
-
+	int i=1;
 	fio.open(file, ios::in);
 	// Read the file
-	while(fio)
+	while(!fio.eof())
 	{
 		getline(fio, line);
-		if(line=="EOF")
-			break;
-		// Add to the set
-		// cout<<line<<endl;
-		tokenize(line);
+		tokenize(line,i);
+		i++;
 	}
 }
 // Function to print the tokens and types
@@ -166,6 +252,6 @@ void printTokenAndTypes()
 	int i;
 	for(i=0;i<tokens_list.size();i++)
 	{
-		cout<<tokens_list[i].first<<" : "<<tokens_list[i].second<<endl;
+		cout<<"Row: "<<row_col_list[i].first<<", Col: "<<row_col_list[i].second<<"\t\t"<<tokens_list[i].first<<" : "<<tokens_list[i].second<<endl;
 	}
 }
