@@ -44,6 +44,10 @@ def write_chksum(list_of_frames, no_of_bits, error_list_frames, error_bit_list):
 	list_of_frames2=list_of_frames[:]
 	list_of_frames2.append(chksum)
 
+	# Printing the frames
+	print('Codeword frames sent:')
+	print(list_of_frames2)
+
 	# Inserting error
 	for i in range(len(error_list_frames)):
 		list_of_frames2=ins_error(list_of_frames2, error_list_frames[i], error_bit_list[i])
@@ -60,6 +64,10 @@ def write_lrc(list_of_frames, no_of_bits, error_list_frames, error_bit_list):
 
 	list_of_frames2=list_of_frames[:]
 	list_of_frames2.append(lrcval)
+
+	# Printing the frames
+	print('Codeword frames sent:')
+	print(list_of_frames2)
 	
 	# Inserting error
 	for i in range(len(error_list_frames)):
@@ -75,6 +83,10 @@ def write_lrc(list_of_frames, no_of_bits, error_list_frames, error_bit_list):
 def write_vrc(list_of_frames, no_of_bits, error_list_frames, error_bit_list):
 
 	list_of_frames2=err.vrc(list_of_frames=list_of_frames)[:]
+
+	# Printing the frames
+	print('Codeword frames sent:')
+	print(list_of_frames2)
 	
 	# Inserting error
 	for i in range(len(error_list_frames)):
@@ -89,6 +101,10 @@ def write_vrc(list_of_frames, no_of_bits, error_list_frames, error_bit_list):
 def write_crc(list_of_frames, generator, error_list_frames, error_bit_list):
 
 	list_of_frames2=err.crc(list_of_frames=list_of_frames, generator=err.generator_poly, no_of_bits=err.no_of_bits)[:]
+
+	# Printing the frames
+	print('Codeword frames sent:')
+	print(list_of_frames2)
 	
 	# Inserting error
 	for i in range(len(error_list_frames)):

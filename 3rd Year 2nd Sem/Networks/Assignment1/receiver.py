@@ -9,6 +9,11 @@ def readfile(filename, no_of_bits):
 
 	# Now split the data into frames
 	list_of_frames=[data[i:i+no_of_bits] for i in range(0, len(data), no_of_bits)]
+
+	# Printing the frames
+	print('Codeword frames received:')
+	print(list_of_frames)
+
 	# list_of_frames=data.split('\n')
 	# list_of_frames=list_of_frames[0:-1]
 	return list_of_frames
@@ -16,27 +21,40 @@ def readfile(filename, no_of_bits):
 # Check for error by checksum
 def check_checksum(list_of_frames, no_of_bits):
 
+	# Removing padding
 	list_of_frames=[list_of_frames[i][len(err.generator_poly)-1:] for i in range(len(list_of_frames))]
 	
 	chksum=err.checksum(list_of_frames=list_of_frames, no_of_bits=no_of_bits)
+
 	if(int(chksum,2)==0):
+		# Case of no error extract dataword
 		print('No error in data detected by checksum')
+		print('Dataword frames are')
+		print(list_of_frames[0:-1])
+
 	else:
 		print('*** Error detected by checksum')
 
 # Check for error by lrc
 def check_lrc(list_of_frames, no_of_bits):
 
+	# Removing padding
+	list_of_frames=[list_of_frames[i][len(err.generator_poly)-1:] for i in range(len(list_of_frames))]
 	lrcval=err.lrc(list_of_frames=list_of_frames, no_of_bits=no_of_bits)
 
 	if(int(lrcval,2)==0):
 		print('No error in data detected by LRC')
+		print('Dataword frames are')
+		print(list_of_frames[0:-1])
+
 	else:
 		print('*** Error detected by LRC')
 
 # Check for error by vrc
 def check_vrc(list_of_frames):
 
+	# Removing padding
+	list_of_frames=[list_of_frames[i][len(err.generator_poly)-2:] for i in range(len(list_of_frames))]
 	flag=True
 	
 	for i in range(len(list_of_frames)):
@@ -45,7 +63,12 @@ def check_vrc(list_of_frames):
 			flag=False
 
 	if(flag):
+		# No error extract dataword
 		print("No error detected in data by VRC")
+		list_of_frames=[list_of_frames[i][0:-1] for i in range(len(list_of_frames))]
+		print('Dataword frames are')
+		print(list_of_frames)
+
 
 # Check for error by crc
 def check_crc(list_of_frames, generator):
@@ -57,12 +80,16 @@ def check_crc(list_of_frames, generator):
 			flag=False
 
 	if(flag):
+		list_of_frames=[list_of_frames[i][0:err.no_of_bits] for i in range(len(list_of_frames))]
+		print('Dataword frames are')
+		print(list_of_frames)
 		print("No error detected in data by CRC")
 
 # Function which combines all module
 def combiner():
 	no_of_bits=err.no_of_bits
 
+	print('===========================================================')
 	list_of_frames=readfile('csum_op.txt',no_of_bits+len(err.generator_poly)-1)
 	check_checksum(list_of_frames, no_of_bits)
 
