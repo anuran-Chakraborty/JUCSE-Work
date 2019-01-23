@@ -209,8 +209,9 @@ void tokenize(string line, int rownum)
 				row_col_list.push_back(make_pair(rownum, colnum-word.length()));
 				word="";
 			}
+			string tempchar=character+line[i+1];
 			// Check case for ==
-			if(line[i+1]=='=')
+			if(operators.count(tempchar)!=0) // If it is a two character operator
 			{
 				character+=line[i+1];
 				colnum++;

@@ -22,7 +22,7 @@ def check_checksum(list_of_frames, no_of_bits):
 	if(int(chksum,2)==0):
 		print('No error in data detected by checksum')
 	else:
-		print('Error detected by checksum')
+		print('*** Error detected by checksum')
 
 # Check for error by lrc
 def check_lrc(list_of_frames, no_of_bits):
@@ -32,7 +32,7 @@ def check_lrc(list_of_frames, no_of_bits):
 	if(int(lrcval,2)==0):
 		print('No error in data detected by LRC')
 	else:
-		print('Error detected by LRC')
+		print('*** Error detected by LRC')
 
 # Check for error by vrc
 def check_vrc(list_of_frames):
@@ -41,7 +41,7 @@ def check_vrc(list_of_frames):
 	
 	for i in range(len(list_of_frames)):
 		if(list_of_frames[i].count('1')%2!=0):
-			print('Error detected in frame '+str(i+1)+' by VRC')
+			print('*** Error detected in frame '+str(i+1)+' by VRC')
 			flag=False
 
 	if(flag):
@@ -53,22 +53,24 @@ def check_crc(list_of_frames, generator):
 	flag=True
 	for i in range(len(list_of_frames)):
 		if(int(err.modulo2div(list_of_frames[i],err.generator_poly),2)!=0):
-			print('Error detected in frame '+str(i+1)+' by CRC')
+			print('*** Error detected in frame '+str(i+1)+' by CRC')
 			flag=False
 
 	if(flag):
 		print("No error detected in data by CRC")
 
-no_of_bits=err.no_of_bits
+# Function which combines all module
+def combiner():
+	no_of_bits=err.no_of_bits
 
-list_of_frames=readfile('csum_op.txt',no_of_bits)
-check_checksum(list_of_frames, no_of_bits)
+	list_of_frames=readfile('csum_op.txt',no_of_bits+len(err.generator_poly)-1)
+	check_checksum(list_of_frames, no_of_bits)
 
-list_of_frames=readfile('lrc_op.txt',no_of_bits)
-check_lrc(list_of_frames, no_of_bits)
+	list_of_frames=readfile('lrc_op.txt',no_of_bits+len(err.generator_poly)-1)
+	check_lrc(list_of_frames, no_of_bits)
 
-list_of_frames=readfile('vrc_op.txt',no_of_bits+1)
-check_vrc(list_of_frames)
+	list_of_frames=readfile('vrc_op.txt',no_of_bits+len(err.generator_poly)-1)
+	check_vrc(list_of_frames)
 
-list_of_frames=readfile('crc_op.txt',no_of_bits=no_of_bits+len(err.generator_poly)-1)
-check_crc(list_of_frames,generator=err.generator_poly)
+	list_of_frames=readfile('crc_op.txt',no_of_bits=no_of_bits+len(err.generator_poly)-1)
+	check_crc(list_of_frames,generator=err.generator_poly)

@@ -23,37 +23,38 @@ def readfile(filename, no_of_bits):
 	return list_of_frames
 
 # Coverts dataword to codeword and wrote to the appropriate file
-def dataword_to_codeword(list_of_frames, no_of_bits):
+def dataword_to_codeword(list_of_frames, no_of_bits, error_list_frames, error_bit_list):
 	global no_of_errors
-	no_of_errors=int(input('Enter number of errors\n'))
 
 	print('Writing to checksum file')
-	write_chksum(list_of_frames, no_of_bits)
+	write_chksum(list_of_frames, no_of_bits, error_list_frames, error_bit_list)
 	print('Writing to lrc file')
-	write_lrc(list_of_frames, no_of_bits)
+	write_lrc(list_of_frames, no_of_bits, error_list_frames, error_bit_list)
 	print('Writing to vrc file')
-	write_vrc(list_of_frames)
+	write_vrc(list_of_frames, no_of_bits, error_list_frames, error_bit_list)
 	print('Writing to crc file')
-	write_crc(list_of_frames, no_of_bits)
+	write_crc(list_of_frames, no_of_bits, error_list_frames, error_bit_list)
 
-
-def write_chksum(list_of_frames, no_of_bits):
-	
+# Function to write the checksum frames to file
+def write_chksum(list_of_frames, no_of_bits, error_list_frames, error_bit_list):
+	# error_list_frames contains the list of frames to introduce the error into
+	# error_bit_list is a list of lists containing bit posiiton of errrors in each frame
 	chksum=err.checksum(list_of_frames=list_of_frames, no_of_bits=no_of_bits)
 
 	list_of_frames2=list_of_frames[:]
 	list_of_frames2.append(chksum)
 
 	# Inserting error
-	list_of_frames2=ins_error(list_of_frames2, 0, [7])
-	list_of_frames2=ins_error(list_of_frames2, 2, [3])
+	for i in range(len(error_list_frames)):
+		list_of_frames2=ins_error(list_of_frames2, error_list_frames[i], error_bit_list[i])
 
 	with open('csum_op.txt', 'w') as f:
 		for item in list_of_frames2:
 			item=item='0'*(len(err.generator_poly)-1)+item
 			f.write("%s\n" % item)
 
-def write_lrc(list_of_frames, no_of_bits):
+# Function to write the lrc frames to file
+def write_lrc(list_of_frames, no_of_bits, error_list_frames, error_bit_list):
 	
 	lrcval=err.lrc(list_of_frames=list_of_frames, no_of_bits=no_of_bits)
 
@@ -61,8 +62,8 @@ def write_lrc(list_of_frames, no_of_bits):
 	list_of_frames2.append(lrcval)
 	
 	# Inserting error
-	list_of_frames2=ins_error(list_of_frames2, 0, [7])
-	list_of_frames2=ins_error(list_of_frames2, 2, [3])
+	for i in range(len(error_list_frames)):
+		list_of_frames2=ins_error(list_of_frames2, error_list_frames[i], error_bit_list[i])
 
 
 	with open('lrc_op.txt', 'w') as f:
@@ -70,26 +71,28 @@ def write_lrc(list_of_frames, no_of_bits):
 			item='0'*(len(err.generator_poly)-1)+item
 			f.write("%s\n" % item)
 
-def write_vrc(list_of_frames):
+# Function to write the vrc frames to file
+def write_vrc(list_of_frames, no_of_bits, error_list_frames, error_bit_list):
 
 	list_of_frames2=err.vrc(list_of_frames=list_of_frames)[:]
 	
 	# Inserting error
-	list_of_frames2=ins_error(list_of_frames2, 0, [7])
-	list_of_frames2=ins_error(list_of_frames2, 2, [3])
+	for i in range(len(error_list_frames)):
+		list_of_frames2=ins_error(list_of_frames2, error_list_frames[i], error_bit_list[i])
 
 	with open('vrc_op.txt', 'w') as f:
 		for item in list_of_frames2:
 			item='0'*(len(err.generator_poly)-2)+item
 			f.write("%s\n" % item)
 
-def write_crc(list_of_frames, generator):
+# Function to write the crc frames to file
+def write_crc(list_of_frames, generator, error_list_frames, error_bit_list):
 
 	list_of_frames2=err.crc(list_of_frames=list_of_frames, generator=err.generator_poly, no_of_bits=err.no_of_bits)[:]
 	
 	# Inserting error
-	list_of_frames2=ins_error(list_of_frames2, 0, [7])
-	list_of_frames2=ins_error(list_of_frames2, 2, [3])
+	for i in range(len(error_list_frames)):
+		list_of_frames2=ins_error(list_of_frames2, error_list_frames[i], error_bit_list[i])
 	
 	with open('crc_op.txt', 'w') as f:
 		for item in list_of_frames2:
@@ -113,16 +116,17 @@ def insert_error(list_of_frames, number_of_errors):
 def ins_error(list_of_frames, frame_no, list_of_bit):
 
 	list_of_frames2=list_of_frames[:]
+	frame=list_of_frames2[frame_no]
+	new=list(frame)
+
+	# Inserting error in the given bit position here
 	for i in range(len(list_of_bit)):
-		frame=list_of_frames[frame_no]
-		new=list(frame)
+		
 		if(new[list_of_bit[i]]=='0'):
 			new[list_of_bit[i]]='1'
-		else:
+		elif (new[list_of_bit[i]]=='1'):
 			new[list_of_bit[i]]='0'
 	list_of_frames2[frame_no]=''.join(new)
+
 	return list_of_frames2
 
-
-list_of_frames=(readfile('input.txt',no_of_bits=err.no_of_bits))
-dataword_to_codeword(list_of_frames,no_of_bits=err.no_of_bits)
