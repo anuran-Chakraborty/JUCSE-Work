@@ -51,7 +51,7 @@ def write_chksum(list_of_frames, no_of_bits, error_list_frames, error_bit_list):
 	with open('csum_op.txt', 'w') as f:
 		for item in list_of_frames2:
 			item=item='0'*(len(err.generator_poly)-1)+item
-			f.write("%s\n" % item)
+			f.write("%s" % item)
 
 # Function to write the lrc frames to file
 def write_lrc(list_of_frames, no_of_bits, error_list_frames, error_bit_list):
@@ -69,7 +69,7 @@ def write_lrc(list_of_frames, no_of_bits, error_list_frames, error_bit_list):
 	with open('lrc_op.txt', 'w') as f:
 		for item in list_of_frames2:
 			item='0'*(len(err.generator_poly)-1)+item
-			f.write("%s\n" % item)
+			f.write("%s" % item)
 
 # Function to write the vrc frames to file
 def write_vrc(list_of_frames, no_of_bits, error_list_frames, error_bit_list):
@@ -83,7 +83,7 @@ def write_vrc(list_of_frames, no_of_bits, error_list_frames, error_bit_list):
 	with open('vrc_op.txt', 'w') as f:
 		for item in list_of_frames2:
 			item='0'*(len(err.generator_poly)-2)+item
-			f.write("%s\n" % item)
+			f.write("%s" % item)
 
 # Function to write the crc frames to file
 def write_crc(list_of_frames, generator, error_list_frames, error_bit_list):
@@ -96,7 +96,7 @@ def write_crc(list_of_frames, generator, error_list_frames, error_bit_list):
 	
 	with open('crc_op.txt', 'w') as f:
 		for item in list_of_frames2:
-			f.write("%s\n" % item)
+			f.write("%s" % item)
 
 # Function to insert an error
 def insert_error(list_of_frames, number_of_errors):

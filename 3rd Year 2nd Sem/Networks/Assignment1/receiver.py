@@ -8,9 +8,9 @@ def readfile(filename, no_of_bits):
 	data=f.read()
 
 	# Now split the data into frames
-	# list_of_frames=[data[i:i+no_of_bits] for i in range(0, len(data), no_of_bits)]
-	list_of_frames=data.split('\n')
-	list_of_frames=list_of_frames[0:-1]
+	list_of_frames=[data[i:i+no_of_bits] for i in range(0, len(data), no_of_bits)]
+	# list_of_frames=data.split('\n')
+	# list_of_frames=list_of_frames[0:-1]
 	return list_of_frames
 
 # Check for error by checksum
