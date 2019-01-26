@@ -20,14 +20,15 @@ int prec(char c);
 Tree* construct_syntax_tree(string postfix);
 void PrintVec(vector<int> vec);
 bool isOp(char c);
-map< pair<char, char>, pair<char, int> > dfa_from_tree(Tree* root);
-
+map< pair<char, char>, char > dfa_from_tree(Tree* root);
+bool is_valid_string(string str, map< pair<char, char>, char > dfa);
 
 int gpos, fl_pos, index_of_sentinel; // For index of follow pos
 map<int, char> alpha_int; // Mapping of position with alpha
 set<char> symbols; // Set of all input symbols
 map<int, vector<int> > followpos; // Stores followpos correspoding to every node no
-
+set<char> final_states;
+char start_state;
 
 
 // For union of vectors
@@ -42,7 +43,7 @@ vector<int> operator +(vector<int> a, vector<int> b)
 
 int main()
 {
-	string regex, post_regex;
+	string regex, post_regex, str;
 	printf("Enter a regular expression\n");
 	getline(cin, regex); //Regex contains the regular expression
 	regex=preprocess(regex); // Remove spaces from regex if it contains any
@@ -63,8 +64,20 @@ int main()
 		cout<<endl;
 	}
 	// Construct dfa from the tree
-	dfa_from_tree(node);
-	// Print the dfa
+	map< pair<char, char>, char > dfa=dfa_from_tree(node);
+	// Simulate the dfa on a string
+	do
+	{
+		cout<<"Enter a string to check if it matches the regular expression... press enter to exit"<<endl;
+		getline(cin,str);
+		if(str=="" || str=="\n")
+			break;
+		if(is_valid_string(str,dfa))
+			cout<<"String is accepted"<<endl;
+		else
+			cout<<"String is rejected"<<endl;
+	}
+	while(1);
 	return 0;
 }
 
@@ -301,15 +314,15 @@ Tree* construct_syntax_tree(string postfix)
 }
 
 // Construct dfa from syntax tree
-map< pair<char, char>, pair<char, int> > dfa_from_tree(Tree* root)
+map< pair<char, char>, char > dfa_from_tree(Tree* root)
 {
 	// Keep a map for set of position to states
-	map<vector<int>, pair<char, int> > dStates; // The int value indicates start(1) final(2) or intermediate(0) state
-	map<vector<int>, pair<char, int> >::iterator dsit;
+	map<vector<int>, char > dStates; // The int value indicates start(1) final(2) or intermediate(0) state
+	map<vector<int>, char >::iterator dsit;
 
 	// Dfa can be a map of state and symbol with next state
-	map< pair<char, char>, pair<char, int> > dfa;
-	map< pair<char, char>, pair<char, int> >::iterator dfait;
+	map< pair<char, char>, char > dfa;
+	map< pair<char, char>, char >::iterator dfait;
 
 	map<int, char>::iterator it;
 	vector<int> mu;
@@ -318,8 +331,9 @@ map< pair<char, char>, pair<char, int> > dfa_from_tree(Tree* root)
 	set<char>::iterator symit;
 
 	char ch='A';
-	int i,j, p, curr_state, num_states;
-	dStates[root->firstpos]=make_pair(ch++,1); // 1 indicates start state
+	int i,j, p;
+	dStates[root->firstpos]=ch++; // 1 indicates start state
+	start_state=dStates[root->firstpos];
 
 	for(dsit=dStates.begin(); dsit!=dStates.end(); dsit++)
 	{
@@ -350,32 +364,60 @@ map< pair<char, char>, pair<char, int> > dfa_from_tree(Tree* root)
 						break;
 					}
 
-				dStates[mu]=make_pair(ch++,final_st);
+				dStates[mu]=ch++;
+				if(final_st==2)
+					final_states.insert(dStates[mu]);
 			}
 			// Add the transition
-			dfa[make_pair(dsit->second.first, *symit)]=dStates[mu];
+			dfa[make_pair(dsit->second, *symit)]=dStates[mu];
 		}
 	}
 	cout<< "The states are"<<endl;
 	for(dsit=dStates.begin(); dsit!=dStates.end(); dsit++)
 	{
 		PrintVec(dsit->first);
-		cout<<"\t"<<dsit->second.first<<endl;
+		cout<<"\t"<<dsit->second<<endl;
 	}
+
+	cout<< "The set of final states are"<<endl;
+	for(symit=final_states.begin(); symit!=final_states.end(); symit++)
+	{
+		cout<<*symit<<endl;
+	}
+
+	cout<<"The start state is: "<<start_state<<endl;
 
 	cout<<"The dfa is"<<endl;
 	// Print the dfa
+	cout<<"--------------------------------------------------\n";
+	cout<<"|\tFrom\t|\tSymbol\t|\tTo\t|\n";
+	cout<<"--------------------------------------------------\n";
 	for(dfait=dfa.begin(); dfait!=dfa.end(); dfait++)
 	{
-		if(dfait->second.second==1)
-			cout<<dfait->first.first<<"(start)"<<"\t"<<dfait->first.second<<"\t"<<dfait->second.first<<endl;
-		else
-		if(dfait->second.second==2)
-			cout<<dfait->first.first<<"(final)"<<"\t"<<dfait->first.second<<"\t"<<dfait->second.first<<endl;
-		else
-			cout<<dfait->first.first<<"\t"<<dfait->first.second<<"\t"<<dfait->second.first<<endl;
+		cout<<"|\t"<<dfait->first.first<<"\t|\t"<<dfait->first.second<<"\t|\t"<<dfait->second<<"\t|"<<endl;
 	}
+	cout<<"--------------------------------------------------\n";
 	return dfa;
+}
+
+// Function to simulate action of string on a dfa
+bool is_valid_string(string str, map< pair<char, char>, char > dfa)
+{
+	char curr_state=start_state; // Start from the start state
+	int i=0;
+	for(;i<str.length();i++)
+	{
+		// First check if input is in alphabet
+		if(symbols.count(str[i])==0)//Invalid input alphabet
+			return false;
+		cout<<"DFA moves from state "<<curr_state<<" to ";
+		// Move to next state
+		curr_state=dfa[make_pair(curr_state,str[i])];
+		cout<<"state "<<curr_state<<" with input symbol "<<str[i]<<endl;
+	}
+	if(final_states.count(curr_state)!=0)// If current state is final state 
+		return true;
+	return false;
 }
 // Fucntion to print a vector
 void PrintVec(vector<int> vec)
