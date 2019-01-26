@@ -1,5 +1,4 @@
 # Customisable parameters
-
 generator_poly='10001001'
 no_of_bits=len(generator_poly)
 

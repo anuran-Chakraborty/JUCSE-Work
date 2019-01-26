@@ -2,7 +2,7 @@ import errorchecker as err
 import random
 
 no_of_errors=0
-# Function to ad two numbers
+# Function to and two numbers
 def andop(a,b):
 	andstr=''
 	for i in range(len(a)):
@@ -129,6 +129,7 @@ def insert_error(list_of_frames, number_of_errors):
 
 	return list_of_frames
 
+# Function to introduce error
 def ins_error(list_of_frames, frame_no, list_of_bit):
 
 	list_of_frames2=list_of_frames[:]

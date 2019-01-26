@@ -292,7 +292,7 @@ Tree* construct_syntax_tree(string postfix)
 			}
 
 		}
-		// case for union
+		// case for or
 		else
 		if(postfix[i]=='|')
 		{
@@ -307,7 +307,6 @@ Tree* construct_syntax_tree(string postfix)
 
 			root->lastpos=root->left->lastpos+root->right->lastpos;
 		}
-		// For all other cases
 		s.push(root);
 	}
 	return root;
