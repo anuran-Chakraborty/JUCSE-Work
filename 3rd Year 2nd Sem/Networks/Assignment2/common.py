@@ -1,4 +1,5 @@
 import socket
+import errorchecker as err
 
 portSend=12245
 portRec=12395
@@ -17,6 +18,30 @@ def ins_error(frame, list_of_bit):
 			new[list_of_bit[i]]='0'
 	new=''.join(new)
 	return new
+
+# Function to read the file and split into frames
+def readfile(filename, frame_size):
+	# Open the file for reading
+	f=open(filename,'r')
+	data=f.read()
+
+	# Now split the data into frames
+	list_of_frames=[data[i:i+frame_size] for i in range(0, len(data), frame_size)]
+	return list_of_frames
+
+# Function to prepare a frame
+def prepare_frame(frame,sn):
+	frame=str(sn)+frame
+	# CRC application
+	crcframe=err.crc([frame], err.generator_poly, frame_size)
+	return crcframe[0]
+
+# Function to generate ack
+def generateAck(rn):
+	# Generate crc appended code
+	ack=bin(rn)[2:]
+	crcframe=err.crc([ack], err.generator_poly, frame_size)
+	return crcframe[0]
 
 # Function to create a socket and bind it to a port
 def createSocket(port):

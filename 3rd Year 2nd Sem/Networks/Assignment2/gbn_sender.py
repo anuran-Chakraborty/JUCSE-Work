@@ -80,6 +80,6 @@ def send_all(list_of_frames):
 	sockSend.close()
 	sockRec.close()
 
-print('Demonstrating STOP AND WAIT ARQ')
+print('Demonstrating GO BACK N ARQ')
 list_of_frames=co.readfile('input.txt', frame_size)
 send_all(list_of_frames)

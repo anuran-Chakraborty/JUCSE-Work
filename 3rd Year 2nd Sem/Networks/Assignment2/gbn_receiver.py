@@ -60,5 +60,5 @@ def receive():
 	sockSend.close()
 	sockRec.close()
 
-print('Demonstrating STOP AND WAIT ARQ')
+print('Demonstrating GO BACK N ARQ')
 receive()
