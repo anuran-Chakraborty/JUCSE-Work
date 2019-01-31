@@ -1,8 +1,12 @@
 import socket
 import errorchecker as err
 
-portSend=12245
-portRec=12395
+portSenderReceive=11000
+portSenderSend=11001
+
+portReceiverReceive=11002
+portReceiverSend=11010
+
 frame_size=4
 
 # Function to introduce error

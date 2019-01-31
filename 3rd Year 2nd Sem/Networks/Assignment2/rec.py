@@ -4,57 +4,55 @@ import time
 import random
 import errorchecker as err
 
-probas=10
-rand=0
 
 # Function to check if frame is valid
 def isValid(frame, rn):
 	if(frame[0]!=str(rn)):
-		return False
+		return 0
 	# Now check CRC
 	if(int(err.modulo2div(frame,err.generator_poly),2)!=0):
-		return False
-	return True
+		return 1
+	return 2
 
 def receive():
 	# Establish connection
-	sockSend=co.createConn(co.portSend)
-	print('Connected to sender')
-	sockRec=co.createSocket(co.portRec)
+	sockRec=co.createSocket(co.portReceiverSend)
 	c, addr=co.allowConn(sockRec)
 
+	sockSend=co.createConn(co.portReceiverReceive)
+	print('Connected to channel')
 	
 	# Connection established
 	rn=0
 	while True:
 		# Wait till frame received
-		print(12*'-')
+		print(15*'-')
 		frame=sockSend.recv(1024).decode()
 		
 		print('Frame received '+frame)
 
-		if(not isValid(frame, rn)): # skip the iteration
+		if(isValid(frame, rn)==0): # wrong frame no received send ack for prev
 			print('Invalid frame')
+			print('Sending ack for previous frame')
+			ackno=(rn)%2
+
+		elif(isValid(frame, rn)==1):
+			print('Error in frame')
 			continue
+
+		else: # Valid frame
+			ackno=(rn+1)%2
 
 		# For valid data frame
 		rn=(rn+1)%2
 		# Send an acknowledgement
-		ack=co.generateAck(rn)
-		# Add sleep here
-		time.sleep(3)
-		# send the frame with a probability
-		p=random.randint(0,probas)
-		print(p)
-		if(p>=rand):
-			print('Sending ack '+ack)
-			co.send_frame(ack,c)
-		else:
-			print('Not sending acknowledgement')
+		ack=co.generateAck(ackno)
+		# Send the ack
+		co.send_frame(ack,c)
 
-		if(frame=='100100'):
+		if(len(frame)<8): # Means end frame
 			break
-		print(12*'-')
+		print(15*'-')
 
 	# Close the sockets
 	sockSend.close()

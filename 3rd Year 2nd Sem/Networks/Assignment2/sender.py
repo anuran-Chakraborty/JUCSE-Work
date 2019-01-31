@@ -6,8 +6,7 @@ import errorchecker as err
 
 timeoutTime=5
 frame_size=4
-probas=10
-rand=0
+
 
 # Check if ack is valid using crc
 def isValid(ack,sn):
@@ -21,43 +20,25 @@ def isValid(ack,sn):
 
 # Function to send all the frames
 def send_all(list_of_frames):
-	sockSend=co.createSocket(co.portSend) # sender socket
+	sockSend=co.createSocket(co.portSenderSend) # sender socket to send data to channel
 	c, addr=co.allowConn(sockSend)
 
-	sockRec=co.createConn(co.portRec)
+	sockRec=co.createConn(co.portSenderReceive)	# Socket to receive data from channel
 	sockRec.settimeout(timeoutTime)
 
-	print('Connected to recevier')
+	print('Connected to channel')
 	# implementing stop and wait arq
 	sn=0
 	i=0
 	while(i<(len(list_of_frames))): # While there are frames send
-		print(12*'-')
+		print(15*'-')
 		canSend=True
 		sn=(i)%2
 		stored_frame=co.prepare_frame(list_of_frames[i],sn)
-
-		# Send frame with a probability p
-		p=random.randint(0,probas)
-		print(p)
-		if(p>=rand and i<len(list_of_frames)-1):
-			print('Sending frame '+str(i)+' '+stored_frame)
-			
-			# Introduce error here with a probability
-			p=random.randint(0,probas)
-			if(p<=4 and i<len(list_of_frames)-1):
-				print("Introducing error")
-				stored_frame=co.ins_error(stored_frame,[0])
-				print('Sent frame '+stored_frame)
-
-			# Add sleep here
-			time.sleep(3)
-			# Send the frame
-			co.send_frame(stored_frame, c)		
-			canSend=False
-		else:
-			print('Not sending frame')
-
+		print('Sending frame '+str(i)+' '+stored_frame)
+		co.send_frame(stored_frame, c)		
+		canSend=False
+		
 		try:
 			ack=sockRec.recv(1024).decode()
 		except Exception as e:
@@ -74,7 +55,7 @@ def send_all(list_of_frames):
 			# invalid ack so resend
 			print('Wrong ack.. resending')
 
-		print(12*'-')
+		print(15*'-')
 
 	# Close the sockets
 	sockSend.close()
