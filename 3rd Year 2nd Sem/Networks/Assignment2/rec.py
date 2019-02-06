@@ -48,6 +48,7 @@ def receive():
 		# Send an acknowledgement
 		ack=co.generateAck(ackno)
 		# Send the ack
+		print('Sending ack '+ack)
 		co.send_frame(ack,c)
 
 		if(len(frame)<8): # Means end frame

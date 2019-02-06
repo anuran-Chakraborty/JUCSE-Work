@@ -22,6 +22,7 @@ void PrintVec(vector<int> vec);
 bool isOp(char c);
 map< pair<char, char>, char > dfa_from_tree(Tree* root);
 bool is_valid_string(string str, map< pair<char, char>, char > dfa);
+void printTree(Tree* root);
 
 int gpos, fl_pos, index_of_sentinel; // For index of follow pos
 map<int, char> alpha_int; // Mapping of position with alpha
@@ -48,12 +49,17 @@ int main()
 	getline(cin, regex); //Regex contains the regular expression
 	regex=preprocess(regex); // Remove spaces from regex if it contains any
 	regex=regex+".#"; // Add the sentinel
-	cout<<regex<<endl;
 	// Convert the regular expression from infix to postfix
 	post_regex=infix_to_postfix(regex);
-	cout<<post_regex<<endl;
 	//Construct syntax tree from the postfix expression of regex
 	Tree* node=construct_syntax_tree(post_regex);
+	//Printing the tree
+	cout<<"The syntax tree is"<<endl;
+	cout<<"-------------------------------------------------------------------------------------------------"<<endl;
+	cout<<"Parent\t\t|Left Child\t|Right Child\t|Nullable\t|First Pos\t|Last pos\t|"<<endl;
+	cout<<"-------------------------------------------------------------------------------------------------"<<endl;
+	printTree(node);
+	cout<<"-------------------------------------------------------------------------------------------------"<<endl;
 	// Printing the followpos
 	cout<<"Followpos"<<endl;
 	map<int, vector<int> >::iterator i;
@@ -86,6 +92,34 @@ bool isOp(char c)
 {
 	return (c=='|' || c=='*' || c=='(' || c==')' || c=='+' || c=='.');
 }
+
+//Function to print the tree
+void printTree(Tree* root)
+{
+	// Perform inorder traversal and pint parent and child
+	if(!root)
+		return;
+	
+	cout<<root->symbol<<"("<<root->pos<<")"<<"\t\t|";
+	
+	if(root->left)
+		cout<<root->left->symbol<<"("<<root->left->pos<<")"<<"\t\t|";
+	else
+		cout<<" NA\t\t|";
+	if(root->right)
+		cout<<root->right->symbol<<"("<<root->right->pos<<")"<<"\t\t|";
+	else
+		cout<<" NA\t\t|";
+	cout<<root->nullable<<"\t\t|";
+	PrintVec(root->firstpos);
+	cout<<"\t\t|";
+	PrintVec(root->lastpos);
+	cout<<"\t\t|"<<endl;
+
+	printTree(root->left);
+	printTree(root->right);
+}
+
 // Function to remove spaces and + and add . from regex
 string preprocess(string regex)
 {
@@ -423,5 +457,10 @@ void PrintVec(vector<int> vec)
 {
 	int i=0;
 	for(i=0;i<vec.size();i++)
-		cout<<vec[i]<<",";
+	{
+		if(i==vec.size()-1)
+			cout<<vec[i];
+		else
+			cout<<vec[i]<<",";
+	}
 }

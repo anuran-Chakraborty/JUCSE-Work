@@ -3,83 +3,114 @@ import time
 import common as co
 import random
 import errorchecker as err
-
-timeoutTime=5
-frame_size=4
-probas=10
-rand=0
+import threading
 
 # Check if ack is valid using crc
-def isValid(ack,sn):
-
-	if(ack[0]!=str((sn+1)%2)):
-		return False
+def isValid(ack):
 	# Now check CRC
 	if(int(err.modulo2div(ack,err.generator_poly),2)!=0):
 		return False
 	return True
 
-# Function to send all the frames
-def send_all(list_of_frames):
-	sockSend=co.createSocket(co.portSend) # sender socket
-	c, addr=co.allowConn(sockSend)
-
-	sockRec=co.createConn(co.portRec)
-	sockRec.settimeout(timeoutTime)
-
-	print('Connected to recevier')
-	# implementing stop and wait arq
-	sn=0
+# Function to send list of frames
+def sendFrame(list_of_frames):
+	global sn
 	i=0
-	while(i<(len(list_of_frames))): # While there are frames send
-		print(12*'-')
-		canSend=True
-		sn=(i)%2
-		stored_frame=co.prepare_frame(list_of_frames[i],sn)
+	while i<len(list_of_frames):
+		# Store_frame(sn)
+		stored_frame=list_of_frames[i]
 
-		# Send frame with a probability p
-		p=random.randint(0,probas)
-		print(p)
-		if(p>=rand and i<len(list_of_frames)-1):
+		if(stored_frame!='#'):
+			stored_frame=co.prepare_frame_gbn(list_of_frames[i],sn)
+		# Else send the blank frame
+		# If window size reached wait
+		if(sn-sf<sw):
+			# Sendframe(sn)
 			print('Sending frame '+str(i)+' '+stored_frame)
-			
-			# Introduce error here with a probability
-			p=random.randint(0,probas)
-			if(p<=4 and i<len(list_of_frames)-1):
-				print("Introducing error")
-				stored_frame=co.ins_error(stored_frame,[0])
-				print('Sent frame '+stored_frame)
+			co.send_frame(stored_frame, sender)
+			sn=sn+1
+			i=i+1
+		time.sleep(1)
 
-			# Add sleep here
-			time.sleep(3)
-			# Send the frame
-			co.send_frame(stored_frame, c)		
-			canSend=False
-		else:
-			print('Not sending frame')
+# Function to receive ack
+def receiveFrame():
+	global sf
+	resendThread=threading.Thread(target=resendFrameAfterTimeout, args=(list_of_frames,)) # create the sending thread
+	while True:
 
 		try:
 			ack=sockRec.recv(1024).decode()
 		except Exception as e:
 			# Resend so repeat this iteration of loop
 			print('Timeout.. Resending')
-			continue
-	
-		print('Ack received '+ack)
-		if(ack and isValid(ack,sn)): # Wrong acknowledgement 
+			resendThread.start()
+			resendThread.join()
+
+		print('Ack received '+str((ack[0:3])))
+		if(ack !='#' and isValid(ack)): # Correct acknowledgement 
 			print('Correct ack received')
-			canSend=True
-			i=i+1
-		elif(not isValid(ack,sn)):
+			ackno=int(ack[:-(len(err.generator_poly)-1)],2)
+			# Purge required frames
+			if(ackno>sf and ackno<=sn):
+				while(sf<=ackno):
+					print('Deleting frame '+str(sf))
+					sf=sf+1
+
+		elif(ack !='#' and not isValid(ack,sn)): # Wrong ack
 			# invalid ack so resend
 			print('Wrong ack.. resending')
 
-		print(12*'-')
+		elif(ack=='#'):
+			break
+
+# Function to resend frame after timeout
+def resendFrameAfterTimeout(list_of_frames):
+	global sn
+	global sf
+
+	# Resend frame
+	temp=sf
+
+	while(temp<sf):
+		print('Resending frame '+str(temp)+' '+stored_frame)
+		co.send_frame(list_of_frames[temp], sender)
+		temp=temp+1
+
+# Function to send all the frames
+def send_all(list_of_frames):
+	
+	sendThread=threading.Thread(target=sendFrame, args=(list_of_frames,)) # create the sending thread
+	receiveThread=threading.Thread(target=receiveFrame) # create the receiving thread
+
+	sendThread.start()
+	receiveThread.start()
+
+
+	sendThread.join()
+	print('Send thread end')
+	receiveThread.join()
 
 	# Close the sockets
 	sockSend.close()
 	sockRec.close()
 
-print('Demonstrating GO BACK N ARQ')
+timeoutTime=100
+frame_size=4
+sw=2**co.m-1
+sf=0
+sn=0
+
+print('Demonstrating Go Back N ARQ')
 list_of_frames=co.readfile('input.txt', frame_size)
+print(list_of_frames)
+list_of_frames.append('#') # Attach a blank frame
+
+sockSend=co.createSocket(co.portSenderSend) # sender socket to send data to channel
+sender, addr=co.allowConn(sockSend)
+
+sockRec=co.createConn(co.portSenderReceive)	# Socket to receive data from channel
+sockRec.settimeout(timeoutTime)
+
+print('Connected to channel')
+
 send_all(list_of_frames)

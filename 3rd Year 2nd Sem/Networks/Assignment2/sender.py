@@ -4,7 +4,7 @@ import common as co
 import random
 import errorchecker as err
 
-timeoutTime=5
+timeoutTime=21
 frame_size=4
 
 

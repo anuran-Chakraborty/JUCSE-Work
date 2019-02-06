@@ -1,13 +1,15 @@
 import socket
 import errorchecker as err
 
-portSenderReceive=11000
-portSenderSend=11001
+portSenderReceive=11005
+portSenderSend=11006
 
-portReceiverReceive=11002
-portReceiverSend=11010
+portReceiverReceive=11007
+portReceiverSend=11008
 
 frame_size=4
+m=3
+window_size=2**m-1
 
 # Function to introduce error
 def ins_error(frame, list_of_bit):
@@ -40,11 +42,26 @@ def prepare_frame(frame,sn):
 	crcframe=err.crc([frame], err.generator_poly, frame_size)
 	return crcframe[0]
 
+def prepare_frame_gbn(frame,sn):
+	sn=sn%(window_size+1)
+	sn=bin(sn)
+	sn=sn[2:].zfill(3)
+	frame=str(sn)+frame
+	# CRC application
+	crcframe=err.crc([frame], err.generator_poly, frame_size)
+	return crcframe[0]
+
 # Function to generate ack
 def generateAck(rn):
 	# Generate crc appended code
 	ack=bin(rn)[2:]
 	crcframe=err.crc([ack], err.generator_poly, frame_size)
+	return crcframe[0]
+
+# Function to generate ack
+def generateAck_gbn(ackno):
+	# Generate crc appended code
+	crcframe=err.crc([ackno], err.generator_poly, frame_size)
 	return crcframe[0]
 
 # Function to create a socket and bind it to a port
