@@ -3,12 +3,11 @@ import errorchecker as err
 
 portSenderReceive=11005
 portSenderSend=11006
-
 portReceiverReceive=11007
 portReceiverSend=11008
 
 frame_size=4
-m=3
+m=2
 window_size=2**m-1
 
 # Function to introduce error

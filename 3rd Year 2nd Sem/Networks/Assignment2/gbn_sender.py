@@ -15,27 +15,38 @@ def isValid(ack):
 # Function to send list of frames
 def sendFrame(list_of_frames):
 	global sn
+	global stored_buffer
+	global sw
 	i=0
-	while i<len(list_of_frames):
+	while True:
 		# Store_frame(sn)
 		stored_frame=list_of_frames[i]
-
+		print('sn: '+str(sn)+' sf: '+str(sf)+' sw: '+str(sw))
 		if(stored_frame!='#'):
-			stored_frame=co.prepare_frame_gbn(list_of_frames[i],sn)
+			stored_frame=co.prepare_frame_gbn(list_of_frames[i],(i%(co.window_size+1)))
 		# Else send the blank frame
 		# If window size reached wait
-		if(sn-sf<sw):
+		if((sn-sf)<sw):
 			# Sendframe(sn)
+			stored_buffer[sn%sw]=stored_frame
 			print('Sending frame '+str(i)+' '+stored_frame)
 			co.send_frame(stored_frame, sender)
-			sn=sn+1
-			i=i+1
-		time.sleep(1)
+			sn=(sn+1)
+
+			if (i<len(list_of_frames)-1):
+				i=i+1
+		else:
+			print('Window Size full')
+		print(stored_buffer)
+		time.sleep(5)
 
 # Function to receive ack
 def receiveFrame():
 	global sf
-	resendThread=threading.Thread(target=resendFrameAfterTimeout, args=(list_of_frames,)) # create the sending thread
+	global sn
+	global sw
+	global stored_buffer
+
 	while True:
 
 		try:
@@ -43,38 +54,42 @@ def receiveFrame():
 		except Exception as e:
 			# Resend so repeat this iteration of loop
 			print('Timeout.. Resending')
+			resendThread=threading.Thread(target=resendFrameAfterTimeout, args=(stored_buffer,)) # create the resending thread
 			resendThread.start()
 			resendThread.join()
+			continue
 
 		print('Ack received '+str((ack[0:3])))
 		if(ack !='#' and isValid(ack)): # Correct acknowledgement 
 			print('Correct ack received')
-			ackno=int(ack[:-(len(err.generator_poly)-1)],2)
+			ackno=int(ack[0:3],2)
+			print('Ackno '+str(ackno))
 			# Purge required frames
-			if(ackno>sf and ackno<=sn):
-				while(sf<=ackno):
-					print('Deleting frame '+str(sf))
-					sf=sf+1
+			if(ackno>=(sf%(sw+1)) and ackno<=(sn%(sw+1))):
+				while((sf%(sw+1))<=ackno):
+					print('Deleting frame '+str(sf%sw))
+					stored_buffer[sf%sw]=''
+					sf=(sf+1)
 
-		elif(ack !='#' and not isValid(ack,sn)): # Wrong ack
+		elif(ack !='#' and not isValid(ack)): # Wrong ack
 			# invalid ack so resend
 			print('Wrong ack.. resending')
-
-		elif(ack=='#'):
-			break
 
 # Function to resend frame after timeout
 def resendFrameAfterTimeout(list_of_frames):
 	global sn
 	global sf
+	global stored_buffer
 
 	# Resend frame
 	temp=sf
-
-	while(temp<sf):
-		print('Resending frame '+str(temp)+' '+stored_frame)
-		co.send_frame(list_of_frames[temp], sender)
-		temp=temp+1
+	print('Resending '+str(sf))
+	while(temp<sn):
+		if(stored_buffer[temp%sw]!=''):
+			print('Resending frame '+str(temp%(sw))+' '+stored_buffer[temp%sw])
+			co.send_frame(stored_buffer[temp%sw], sender)
+			time.sleep(5)
+		temp=(temp+1)
 
 # Function to send all the frames
 def send_all(list_of_frames):
@@ -94,12 +109,12 @@ def send_all(list_of_frames):
 	sockSend.close()
 	sockRec.close()
 
-timeoutTime=100
+timeoutTime=17
 frame_size=4
-sw=2**co.m-1
+sw=co.window_size
 sf=0
 sn=0
-
+stored_buffer=[ '' for i in range(sw)]
 print('Demonstrating Go Back N ARQ')
 list_of_frames=co.readfile('input.txt', frame_size)
 print(list_of_frames)

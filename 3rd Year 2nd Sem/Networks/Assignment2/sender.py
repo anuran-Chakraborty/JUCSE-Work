@@ -4,7 +4,7 @@ import common as co
 import random
 import errorchecker as err
 
-timeoutTime=21
+timeoutTime=5
 frame_size=4
 
 
@@ -62,5 +62,5 @@ def send_all(list_of_frames):
 	sockRec.close()
 
 print('Demonstrating STOP AND WAIT ARQ')
-list_of_frames=co.readfile('input.txt', frame_size)
+list_of_frames=co.readfile('input.txt', frame_size).append('#')
 send_all(list_of_frames)

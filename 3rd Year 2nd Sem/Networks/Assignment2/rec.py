@@ -51,7 +51,7 @@ def receive():
 		print('Sending ack '+ack)
 		co.send_frame(ack,c)
 
-		if(len(frame)<8): # Means end frame
+		if(frame=='#'): # Means end frame
 			break
 		print(15*'-')
 

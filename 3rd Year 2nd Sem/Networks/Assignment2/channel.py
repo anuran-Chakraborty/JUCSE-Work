@@ -5,10 +5,10 @@ import random
 import time
 
 probas=10
-randSendF=4 # Random probability of sending frame or not
-randSendAck=4
-randErrF=3
-randErrAck=3
+randSendF=2 # Random probability of sending frame or not
+randSendAck=2
+randErrF=1
+randErrAck=1
 
 # **************** SENDER *****************************
 sockSenderReceive=co.createConn(co.portSenderSend) # Socket to receive data from sender
@@ -20,7 +20,7 @@ print('Channel connected to sender')
 
 #****************** RECEIVER **************************
 sockReceiverReceive=co.createConn(co.portReceiverSend) # Socket to receive data from receiver
-sockReceiverReceive.settimeout(11)
+sockReceiverReceive.settimeout(3)
 
 sockReceiverSend=co.createSocket(co.portReceiverReceive)	# Socket to send data to receiver
 receiverSend, addr=co.allowConn(sockReceiverSend)
@@ -47,7 +47,7 @@ while True:
 		# Send the frame to the receiver
 		print('Sending frame to receiver '+stored_frame)
 		# Add sleep here
-		time.sleep(10)
+		time.sleep(2)
 		co.send_frame(stored_frame, receiverSend)
 		print('Sent frame '+stored_frame)
 
@@ -79,17 +79,18 @@ while True:
 
 		print('Sending ack to sender '+ack)
 		# Add sleep here
-		time.sleep(10)
+		time.sleep(2)
 		# Send the ack to the sender
 		co.send_frame(ack, senderSend)
+		if(stored_frame=='#'):
+			break
 	else:
 		print('Not sending acknowledgement')
 		continue
 	
 	print(15*'-')
 
-	if(len(stored_frame)<8):
-		break
+	
 
 sockSenderReceive.close()
 sockSenderSend.close()

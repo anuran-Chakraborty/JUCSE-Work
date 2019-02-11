@@ -6,9 +6,9 @@ import time
 import threading
 
 probas=10
-randSendF=-1 # Random probability of sending frame or not
-randSendAck=-1
-randErrF=-1
+randSendF=2 # Random probability of sending frame or not
+randSendAck=2
+randErrF=1
 randErrAck=-1
 
 # **************** SENDER *****************************
@@ -31,6 +31,7 @@ print('Channel connected to receiver')
 def receiveFromSender():
 
 	while True:
+		print(15*'-')
 		# Receive the frame from the sender
 		stored_frame=sockSenderReceive.recv(1024).decode()
 		print('Frame received from sender '+stored_frame)
@@ -56,10 +57,12 @@ def receiveFromSender():
 		# Dont Send the frame
 		else:
 			print('Not sending frame')
+		print(15*'-')
 
 def receiveAckFromReceiver():
 
 	while True:
+		print(15*'=')
 		# Wait ack from receiver
 		ack=sockReceiverReceive.recv(1024).decode()
 		print('Ack received from receiver '+ack)
@@ -83,7 +86,7 @@ def receiveAckFromReceiver():
 			co.send_frame(ack, senderSend)
 		else:
 			print('Not sending acknowledgement')
-
+		print(15*'=')		
 
 def mainChannel():
 
