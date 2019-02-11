@@ -65,7 +65,14 @@ def receiveFrame():
 			ackno=int(ack[0:3],2)
 			print('Ackno '+str(ackno))
 			# Purge required frames
-			if(ackno>=(sf%(sw+1)) and ackno<=(sn%(sw+1))):
+			if(sn%(sw+1)<sf%(sw+1) and ackno<sf%(sw+1)):
+				while((sf%(sw+1))>ackno):
+					print('Deleting frame '+str(sf%sw))
+					stored_buffer[sf%sw]=''
+					sf=(sf+1)
+				stored_buffer[sf%sw]=''
+
+			elif(ackno>=(sf%(sw+1)) and ackno<=(sn%(sw+1))):
 				while((sf%(sw+1))<=ackno):
 					print('Deleting frame '+str(sf%sw))
 					stored_buffer[sf%sw]=''
@@ -114,7 +121,9 @@ frame_size=4
 sw=co.window_size
 sf=0
 sn=0
-stored_buffer=[ '' for i in range(sw)]
+# stored_buffer=[ '' for i in range(sw)]
+stored_buffer={i:'' for i in range(sw)}
+
 print('Demonstrating Go Back N ARQ')
 list_of_frames=co.readfile('input.txt', frame_size)
 print(list_of_frames)
