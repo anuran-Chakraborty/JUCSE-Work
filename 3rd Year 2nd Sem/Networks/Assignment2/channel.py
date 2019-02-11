@@ -70,10 +70,10 @@ while True:
 	# send the frame with a probability
 	p=random.randint(0,probas)
 	print(p)
-	if(p>=randSendAck or len(stored_frame)<8):
+	if(p>=randSendAck or stored_frame=='#'):
 		# Introduce error here with a probability
 		p2=random.randint(0,probas)
-		if(p2<=randErrAck and len(stored_frame)>=8):
+		if(p2<=randErrAck and stored_frame=='#'):
 			print("Introducing error")
 			ack=co.ins_error(ack,[1])
 

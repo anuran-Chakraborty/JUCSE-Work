@@ -1,11 +1,10 @@
 import socket
 import errorchecker as err
 
-portSenderReceive=11005
-portSenderSend=11006
-portReceiverReceive=11007
-portReceiverSend=11008
-
+portSenderReceive=11001
+portSenderSend=11002
+portReceiverReceive=11003
+portReceiverSend=11004
 frame_size=4
 m=2
 window_size=2**m-1

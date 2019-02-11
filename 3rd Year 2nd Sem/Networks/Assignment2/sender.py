@@ -34,7 +34,9 @@ def send_all(list_of_frames):
 		print(15*'-')
 		canSend=True
 		sn=(i)%2
-		stored_frame=co.prepare_frame(list_of_frames[i],sn)
+		stored_frame=list_of_frames[i]
+		if(stored_frame!='#'):
+			stored_frame=co.prepare_frame(list_of_frames[i],sn)
 		print('Sending frame '+str(i)+' '+stored_frame)
 		co.send_frame(stored_frame, c)		
 		canSend=False
@@ -45,7 +47,9 @@ def send_all(list_of_frames):
 			# Resend so repeat this iteration of loop
 			print('Timeout.. Resending')
 			continue
-	
+		
+		if(ack=='#'):
+			break
 		print('Ack received '+ack)
 		if(ack and isValid(ack,sn)): # Wrong acknowledgement 
 			print('Correct ack received')
@@ -62,5 +66,7 @@ def send_all(list_of_frames):
 	sockRec.close()
 
 print('Demonstrating STOP AND WAIT ARQ')
-list_of_frames=co.readfile('input.txt', frame_size).append('#')
+list_of_frames=co.readfile('input.txt', frame_size)
+list_of_frames.append('#')
+print(list_of_frames)
 send_all(list_of_frames)

@@ -31,22 +31,25 @@ def receive():
 		
 		print('Frame received '+frame)
 
-		if(isValid(frame, rn)==0): # wrong frame no received send ack for prev
-			print('Invalid frame')
-			print('Sending ack for previous frame')
-			ackno=(rn)%2
+		if(frame=='#'):
+			ack='#'
+		else:
+			if(isValid(frame, rn)==0): # wrong frame no received send ack for prev
+				print('Invalid frame')
+				print('Sending ack for previous frame')
+				ackno=(rn)%2
 
-		elif(isValid(frame, rn)==1):
-			print('Error in frame')
-			continue
+			elif(isValid(frame, rn)==1):
+				print('Error in frame')
+				continue
 
-		else: # Valid frame
-			ackno=(rn+1)%2
+			else: # Valid frame
+				ackno=(rn+1)%2
 
-		# For valid data frame
-		rn=(rn+1)%2
-		# Send an acknowledgement
-		ack=co.generateAck(ackno)
+			# For valid data frame
+			rn=(rn+1)%2
+			# Send an acknowledgement
+			ack=co.generateAck(ackno)
 		# Send the ack
 		print('Sending ack '+ack)
 		co.send_frame(ack,c)
