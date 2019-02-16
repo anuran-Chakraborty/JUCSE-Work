@@ -72,11 +72,12 @@ def receiveFrame():
 					sf=(sf+1)
 				stored_buffer[sf%sw]=''
 
-			elif(ackno>=(sf%(sw+1)) and ackno<=(sn%(sw+1))):
-				while((sf%(sw+1))<=ackno):
+			if(ackno>=(sf%(sw+1)) and ackno<=(sn%(sw+1))):
+				while((sf%(sw+1))<ackno):
 					print('Deleting frame '+str(sf%sw))
 					stored_buffer[sf%sw]=''
 					sf=(sf+1)
+				sf=sf+1
 
 		elif(ack !='#' and not isValid(ack)): # Wrong ack
 			# invalid ack so resend

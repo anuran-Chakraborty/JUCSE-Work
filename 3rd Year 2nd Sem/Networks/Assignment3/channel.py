@@ -2,8 +2,9 @@ import socket
 import threading
 import common as co
 
+# shared_buffer=[]
 sockSenderRec=co.createSocket(co.portSenderReceive)
-
+sockSenderSignal=co.createSocket(co.portSenderSignal)
 sockReceiverSend=co.createSocket(co.portReceiverSend)
 
 def allow_new_conn():
@@ -17,9 +18,17 @@ def allow_new_conn():
 		# Wait for a connection
 		sockSenderRec.listen(5)
 		c, addr=sockSenderRec.accept()
+		print('Connected to sender')
+
+		sockSenderSignal.listen(5)
+		signal,addrsignal=sockSenderSignal.accept()
+
 		# Start a new thread for the sender
 		sendThread=threading.Thread(target=receive_from_sender, args=[c,addr])
 		sendThread.start()
+
+		signalThread=threading.Thread(target=send_signal, args=[signal, addrsignal])
+		signalThread.start()
 
 # Function to send to receiver
 def send_to_receiver(receive):
@@ -43,5 +52,17 @@ def receive_from_sender(c, addr):
 		# Receive data from sender
 		frame=c.recv(1024).decode()
 		co.shared_buffer.append(frame)
+
+def send_signal(s, saddr):
+	signal=0
+
+	while(True):
+		if(len(co.shared_buffer)>=1): # Channel is busy
+			signal=1
+		else: # Channel not busy
+			signal=0
+
+		# Send the signal via socket
+		co.send_frame(str(signal), s)
 
 allow_new_conn()

@@ -1,8 +1,8 @@
 import socket
 
-portSenderReceive=11005
-
-portReceiverSend=11006
+portSenderReceive=11001
+portSenderSignal=11002
+portReceiverSend=11003
 frame_size=4
 shared_buffer=[]
 
@@ -32,7 +32,6 @@ def allowConn(s):
 # Function to create a socket and connect to it
 def createConn(port):
 	sock=socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-	sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 	sock.connect(('',port))
 	return sock
 
