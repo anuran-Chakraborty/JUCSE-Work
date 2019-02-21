@@ -36,10 +36,9 @@ def send_to_receiver(receive):
 
 	while(True):
 		# If buffer not empty send the frame and clear buffer
-		if(len(co.shared_buffer)>0):
+		if(len(co.shared_buffer)==1):
 			# Send the frame
 			print('Sending frame to receiver ')
-			time.sleep(4)
 			co.send_frame(co.shared_buffer[0], receive)
 			del co.shared_buffer[0]
 		else:
@@ -56,6 +55,15 @@ def receive_from_sender(c, addr):
 		time.sleep(2)
 		co.shared_buffer.append(frame)
 		print(co.shared_buffer)
+
+		if(len(co.shared_buffer)>1):
+			# Channel is busy
+			co.send_frame('1',c)
+			# Clear the list
+			co.shared_buffer.clear()
+		else:
+			# Channel not busy
+			co.send_frame('0',c)
 
 
 def send_signal(s, saddr):
