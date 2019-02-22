@@ -4,24 +4,27 @@
 
 %%
 
-"else" {printf("<else>");}
-"if" {printf("<if>");}
-"for" {printf("<for>");}
-"int" {printf("<int>");}
-"float" {printf("<float>");}
-"void" {printf("<void>");}
-"return" {printf("<return>");}
+"else" {printf("else\tkeyword\n");}
+"if" {printf("if\tkeyword\n");}
+"for" {printf("for\tkeyword\n");}
+"int" {printf("int\tkeyword\n");}
+"float" {printf("float\tkeyword\n");}
+"void" {printf("void\tkeyword\n");}
+"return" {printf("return\tkeyword\n");}
+[ ] {}
+[+\-*/] {printf("%s\tarith-op\n",yytext);}
+[<>] {printf("%s\trelop\n",yytext);}
+[=] {printf("%s\tassignop\n",yytext);}
+[(){},;] {printf("%s\tspecial symbol\n",yytext);}
 
-[+\-*/] {printf("<arith-op>");}
-[<>] {printf("<relop>");}
-[=] {printf("<assignop>");}
 [/][/][^\n]* {}
+[\n\t] {}
 
-[_a-zA-Z]+[0-9]*[_a-zA-Z0-9]* {printf("<ID>");}
-[0-9]*[.]?[0-9]* {printf("<NUM>");}
+[_a-zA-Z]+[0-9]*[_a-zA-Z0-9]* {printf("%s\tID\n",yytext);}
+[0-9]+[.]?[0-9]* {printf("%s\tNUM\n",yytext);}
 
-[#][^\n]* {printf("<preprocessor>");}
-["][^\n]*["] {printf("<String literal>");}
+[#][^\n]* {printf("%s\tpreprocessor\n",yytext);}
+["][^\n]*["] {printf("%s\tString literal\n",yytext);}
 
 
 %%

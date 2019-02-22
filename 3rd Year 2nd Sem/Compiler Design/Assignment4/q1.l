@@ -6,6 +6,7 @@
 
 [A]*[B]* {printf("Correct\n");}
 
+
 %%
 
 int yywrap(void)

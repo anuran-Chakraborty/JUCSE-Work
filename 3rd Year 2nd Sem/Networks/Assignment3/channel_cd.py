@@ -8,6 +8,8 @@ sockSenderRec=co.createSocket(co.portSenderReceive)
 sockSenderSignal=co.createSocket(co.portSenderSignal)
 sockReceiverSend=co.createSocket(co.portReceiverSend)
 
+threadLock=threading.Lock()
+
 def allow_new_conn():
 	sockReceiverSend.listen(5)
 	receive, addrrec=sockReceiverSend.accept()
@@ -36,13 +38,15 @@ def send_to_receiver(receive):
 
 	while(True):
 		# If buffer not empty send the frame and clear buffer
-		if(len(co.shared_buffer)==1):
-			# Send the frame
-			print('Sending frame to receiver ')
-			co.send_frame(co.shared_buffer[0], receive)
-			del co.shared_buffer[0]
-		else:
-			continue
+		if(len(co.shared_buffer)>0):
+			time.sleep(10)
+			if(len(co.shared_buffer)==1):
+				# Send the frame
+				print('Sending frame to receiver ')
+				co.send_frame(co.shared_buffer[0], receive)
+				del co.shared_buffer[0]
+			else:
+				continue
 
 # Function to receive data from sender
 def receive_from_sender(c, addr):
@@ -53,8 +57,11 @@ def receive_from_sender(c, addr):
 		# Receive data from sender
 		frame=c.recv(1024).decode()
 		time.sleep(2)
+
+		threadLock.acquire()
 		co.shared_buffer.append(frame)
 		print(co.shared_buffer)
+		threadLock.release()
 
 		if(len(co.shared_buffer)>1):
 			# Channel is busy

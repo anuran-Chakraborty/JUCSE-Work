@@ -3,9 +3,9 @@
 %}
 
 %%
-
-[0-9]+[.]?[0-9]+ {yylval=atoi(yytest); return ID;}
-\n {return yytext[0];}
+[ ]
+[0-9]+ {yylval=atoi(yytext); return ID;}
+\n|. {return yytext[0];}
 
 %%
 

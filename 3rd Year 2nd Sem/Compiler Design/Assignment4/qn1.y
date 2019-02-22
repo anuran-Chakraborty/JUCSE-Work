@@ -14,7 +14,7 @@ D: B D|;
 int main(void)
 {
     printf ("Grammar to accept strings of the form A*B*\n");
-    printf("Enter the string to parse\n");
+    printf("Enter string to parse\n");
     yyparse();
     printf("Valid String\n");
 }
