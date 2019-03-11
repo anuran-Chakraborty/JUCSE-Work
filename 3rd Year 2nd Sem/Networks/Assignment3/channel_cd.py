@@ -56,12 +56,12 @@ def receive_from_sender(c, addr):
 	while(True):
 		# Receive data from sender
 		frame=c.recv(1024).decode()
-		time.sleep(2)
 
 		threadLock.acquire()
 		co.shared_buffer.append(frame)
 		print(co.shared_buffer)
 		threadLock.release()
+		time.sleep(10)
 
 		if(len(co.shared_buffer)>1):
 			# Channel is busy
