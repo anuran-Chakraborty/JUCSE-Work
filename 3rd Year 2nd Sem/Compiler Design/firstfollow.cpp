@@ -23,7 +23,7 @@ void removeLeftRecur()
 			newprod+=production[i][0];
 			newprod+='\'';
 			// For every produciton having X in the 2 index
-			for(j=i;j<noofProd;j++)
+			for(j=0;j<noofProd;j++)
 			{
 				if(production[j][0]==production[i][0] && production[j][0]!=production[j][2])
 				{
@@ -154,6 +154,76 @@ void follow(char c)
 	}
 }
 
+set<string> getClosure(char c)
+{
+	int i;
+	set<string> closure;
+	if(!isupper(c))// If non terminal return nothing
+	{
+		return closure;
+	}
+
+	for(i=0;i<noofProd;i++)
+	{
+		if(production[i][0]==c)// Then add this production
+		{
+			string aug=production[i].substr(0,2)+'.'+production[i].substr(2);
+			closure.insert(aug);
+			if(production[i][2]!=c)
+			{
+				set<string> temp=getClosure(production[i][2]);
+				closure.insert(temp.begin(),temp.end());
+			}
+		}
+	}
+	return closure;
+}
+
+// Function to calculate I0 itemset
+void calcI0()
+{
+	set<string> i0;
+	// Insert the augmented production
+	i0=getClosure(production[0][0]);
+
+	// Print the closure
+	set<string>::iterator it;
+	for(it=i0.begin();it!=i0.end();it++)
+		cout<<*it<<endl;
+}
+
+// Function to calculate goto
+void calcgoto(set<string> item, char c)
+{
+	set<string> gotoset;
+	set<string>::iterator it;
+	for(it=item.begin();it!=item.end();it++)
+	{
+		string st=*it;
+		
+		if(st[st.find('.')+1]==c)
+		{
+			// First shift the . and add
+			string temp;
+			if(st.find('.')!=(st.length()-1))
+			{
+				temp=st.substr(0,st.find('.'))+st[st.find('.')+1]+'.'+st.substr(st.find('.')+2);
+				gotoset.insert(temp);
+				// Then calculate closure
+				if((temp.find('.')+1)!=(temp.length()))
+				{
+					char s=temp[temp.find('.')+1];
+					set<string> t=getClosure(s);
+					gotoset.insert(t.begin(),t.end());
+				}
+			}
+		}
+	}
+
+	for(it=gotoset.begin();it!=gotoset.end();it++)
+		cout<<*it<<endl;
+}
+
 int main(int argc, char const *argv[])
 {
 	int i,j;
@@ -165,9 +235,9 @@ int main(int argc, char const *argv[])
 	for(i=0;i<noofProd;i++)
 		cin>>production[i];
 
-	removeLeftRecur();
-	for(i=0;i<prod.size();i++)
-		cout<<prod[i]<<endl;
+	// removeLeftRecur();
+	// for(i=0;i<prod.size();i++)
+	// 	cout<<prod[i]<<endl;
 
 	// // Insert first of terminals
 	// for(i=0;i<noofProd;i++)
@@ -203,6 +273,30 @@ int main(int argc, char const *argv[])
 	// 		cout<<*its<<" ";
 	// 	cout<<"}\n";
 	// }
+
+	// Print LR(0) itemset I0
+	// calcI0();
+
+
+	// Calculate goto
+	cout<<"Enter number of elements in itemset"<<endl;
+	int numitem;
+	cin>>numitem;
+
+	cout<<"Enter the itemset";
+	set<string> itemseti;
+	for(i=0;i<numitem;i++)
+	{
+		string str;
+		cin>>str;
+		itemseti.insert(str);
+	}
+
+	cout<<"Enter character to print goto of"<<endl;
+	char c;
+	cin>>c;
+
+	calcgoto(itemseti,c);
 
 	return 0;
 }
