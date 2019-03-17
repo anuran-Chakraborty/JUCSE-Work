@@ -50,9 +50,9 @@ void removeLeftRecur()
 }
 
 // Function to calculate first for a symbol
-void first(char c,int q1,int q2)
+void first(char c, int rule_no)
 {
-	int j;
+	int j,k;
 
 	// Case for terminal
 	if(!isupper(c))
@@ -60,26 +60,13 @@ void first(char c,int q1,int q2)
 		firstSet[c].insert(c);
 	}
 	// For all the productions
-	for(j=0;j<noofProd;j++)
+	for(j=rule_no;j<noofProd;j++)
 	{
 		if(production[j][0]==c)// If the production has c on LHS then only calclulate
 		{
 			if(production[j][2]=='#') // If production is epsilon then recur for the next symbol
 			{
-				if(production[q1][q2]=='\0')// If epsilon is the only symbol add epsilon
-				{
-					firstSet[c].insert('#');
-				}
-				else if(production[q1][q2]!='\0' && (q1!=0 || q2!=0))// If there are other symbols
-				{
-					first(production[q1][q2],q1,q2+1);
-					firstSet[c].insert(firstSet[production[q1][q2]].begin(),firstSet[production[q1][q2]].end());// Add to set
-				}
-				else
-				{
-					firstSet[c].insert('#');
-				}
-
+				firstSet[c].insert('#');
 			}
 			else if(!isupper(production[j][2])) // If start symbol is a terminal the first is the start symbol
 			{
@@ -87,8 +74,42 @@ void first(char c,int q1,int q2)
 			}
 			else // If it is a non-terminal then first calculate its firstset 
 			{
-				first(production[j][2],j,3);
-				firstSet[c].insert(firstSet[production[j][2]].begin(),firstSet[production[j][2]].end());// Add to set
+				for(k=2;k<production[j].length();k++)
+				{
+					// If it is a terminal simply add the terminal
+					if(!isupper(production[j][k]))
+					{
+						firstSet[c].insert(production[j][k]);
+						break;
+					}
+					else
+					{
+						if(production[j][k]!=c)
+						{
+							// If it is a nonterminal calculate its first
+							first(production[j][k],0);
+							// Add the first set to it
+							firstSet[c].insert(firstSet[production[j][k]].begin(),firstSet[production[j][k]].end());
+							// If epsilon not in this then break
+							if(firstSet[production[j][k]].find('#')==firstSet[production[j][k]].end())
+								break;
+							else
+								// remove #
+								firstSet[c].erase('#');
+						}
+						else
+						{
+							// Check if present symbol first has epsilon
+							first(production[j][k],j+1);
+							if(firstSet[production[j][k]].find('#')==firstSet[production[j][k]].end())
+								break;
+						}
+
+					}
+				}
+				// If last contains # add #
+				if(k==production[j].length())
+					firstSet[c].insert('#');
 			}
 		}
 	}
@@ -239,27 +260,27 @@ int main(int argc, char const *argv[])
 	// for(i=0;i<prod.size();i++)
 	// 	cout<<prod[i]<<endl;
 
-	// // Insert first of terminals
-	// for(i=0;i<noofProd;i++)
-	// 	for(j=0;j<production[i].length();j++)
-	// 		if(!isupper(production[i][j]))// Terminal
-	// 			firstSet[production[i][j]].insert(production[i][j]);
+	// Insert first of terminals
+	for(i=0;i<noofProd;i++)
+		for(j=0;j<production[i].length();j++)
+			if(!isupper(production[i][j]))// Terminal
+				firstSet[production[i][j]].insert(production[i][j]);
 
-	// for(i=0;i<noofProd;i++)
-	// 	first(production[i][0],0,0);
+	for(i=0;i<noofProd;i++)
+		first(production[i][0],0);
 
-	// map<char, set<char> >::iterator it;
-	// set<char>::iterator its;
+	map<char, set<char> >::iterator it;
+	set<char>::iterator its;
 
-	// // Printing first set
-	// for(it=firstSet.begin();it!=firstSet.end();it++)
-	// {
-	// 	cout<<"first("<<it->first<<") : {";
-	// 	for(its=it->second.begin();its!=it->second.end();its++)
-	// 		cout<<*its<<" ";
-	// 	cout<<"}\n";
-	// }
-	// cout<<"====================================\n";
+	// Printing first set
+	for(it=firstSet.begin();it!=firstSet.end();it++)
+	{
+		cout<<"first("<<it->first<<") : {";
+		for(its=it->second.begin();its!=it->second.end();its++)
+			cout<<*its<<" ";
+		cout<<"}\n";
+	}
+	cout<<"====================================\n";
 
 	// for(i=0;i<noofProd;i++)
 	// 	follow(production[i][0]);
@@ -279,24 +300,24 @@ int main(int argc, char const *argv[])
 
 
 	// Calculate goto
-	cout<<"Enter number of elements in itemset"<<endl;
-	int numitem;
-	cin>>numitem;
+	// cout<<"Enter number of elements in itemset"<<endl;
+	// int numitem;
+	// cin>>numitem;
 
-	cout<<"Enter the itemset";
-	set<string> itemseti;
-	for(i=0;i<numitem;i++)
-	{
-		string str;
-		cin>>str;
-		itemseti.insert(str);
-	}
+	// cout<<"Enter the itemset";
+	// set<string> itemseti;
+	// for(i=0;i<numitem;i++)
+	// {
+	// 	string str;
+	// 	cin>>str;
+	// 	itemseti.insert(str);
+	// }
 
-	cout<<"Enter character to print goto of"<<endl;
-	char c;
-	cin>>c;
+	// cout<<"Enter character to print goto of"<<endl;
+	// char c;
+	// cin>>c;
 
-	calcgoto(itemseti,c);
+	// calcgoto(itemseti,c);
 
 	return 0;
 }
