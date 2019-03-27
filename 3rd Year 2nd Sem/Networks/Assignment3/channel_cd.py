@@ -39,7 +39,7 @@ def send_to_receiver(receive):
 	while(True):
 		# If buffer not empty send the frame and clear buffer
 		if(len(co.shared_buffer)>0):
-			time.sleep(10)
+			time.sleep(5)
 			if(len(co.shared_buffer)==1):
 				# Send the frame
 				print('Sending frame to receiver ')
