@@ -282,21 +282,21 @@ int main(int argc, char const *argv[])
 	}
 	cout<<"====================================\n";
 
-	// for(i=0;i<noofProd;i++)
-	// 	follow(production[i][0]);
+	for(i=0;i<noofProd;i++)
+		follow(production[i][0]);
 
-	// // Printing first set
-	// for(it=followSet.begin();it!=followSet.end();it++)
-	// {
-	// 	cout<<"follow("<<it->first<<") : {";
-	// 	it->second.erase('#');
-	// 	for(its=it->second.begin();its!=it->second.end();its++)
-	// 		cout<<*its<<" ";
-	// 	cout<<"}\n";
-	// }
+	// Printing first set
+	for(it=followSet.begin();it!=followSet.end();it++)
+	{
+		cout<<"follow("<<it->first<<") : {";
+		it->second.erase('#');
+		for(its=it->second.begin();its!=it->second.end();its++)
+			cout<<*its<<" ";
+		cout<<"}\n";
+	}
 
-	// Print LR(0) itemset I0
-	// calcI0();
+	Print LR(0) itemset I0
+	calcI0();
 
 
 	// Calculate goto

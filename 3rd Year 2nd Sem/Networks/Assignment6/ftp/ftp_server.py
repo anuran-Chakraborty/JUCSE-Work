@@ -1,8 +1,5 @@
 import socket
 
-# Accept the name of the file
-filename=str(input("Enter name of file to transfer "))
-
 # Accept ip address 
 port=int(input("Enter port of server machine "))
 
@@ -12,6 +9,8 @@ sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 sock.bind(('', port))
 sock.listen(5)
 c, addr=sock.accept()
+
+filename=c.recv(1024).decode()
 
 with open(filename,'rb') as f:
 

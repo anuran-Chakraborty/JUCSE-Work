@@ -1,0 +1,75 @@
+start -> program id rest1 
+
+rest1 -> uses liblist rest2 | rest2 
+liblist -> liblist, id | id
+
+(liblist -> id liblist'
+liblist' -> ,id liblist' | epsilon)
+
+rest2 -> const const_list rest3 
+const_list -> const_list, id=num | id=num 
+
+(const_list -> id=num const_list'
+const_list' ->,id=num const_list' | epsilon)
+
+rest3 -> var varlist rest4 
+varlist -> varlist liblist=type; | liblist=type;
+
+(varlist -> liblist=type;varlist'
+varlist' -> liblist=type;liblist' | epsilon])
+
+type -> integer | real
+
+rest4 -> function id varlist rest_function rest4 | rest_main 
+
+rest_function -> begin statements end ; 
+rest_main -> begin statements end . 
+statements -> get id; statements | put id ; statements| id=exp statements | #
+
+exp -> exp op exp ; | exp?exp:exp ; | num ; | id ;
+
+(exp -> num ; exp' | id ; exp'
+exp' -> op exp ; exp'| ? exp : exp ; exp' | epsilon)
+
+op -> + | - | * | < | | > | z | y
+
+ID -> id
+
+U -> ;
+---------- NON_TERMINALS -------------------------------------------
+S=start
+A=rest1
+L=liblist
+I=liblist'
+B=rest2
+C=const_list
+Z=const_list'
+D=rest3
+V=varlist
+W=varlist'
+T=type
+E=rest4
+F=rest_function
+M=rest_main
+N=statements
+R=tern
+X=exp
+Y=exp'
+O=op
+Q=ID
+----------- TERMINALS -----------------------------------------
+p=program
+l=uses
+i=id
+c=const
+n=num
+v=var
+r=real
+u=integer
+f=function
+b=begin
+e=end
+g=get
+q=put
+z=>=
+y=<=

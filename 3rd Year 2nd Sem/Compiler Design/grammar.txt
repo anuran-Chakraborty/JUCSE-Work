@@ -1,0 +1,50 @@
+start -> program id rest1 
+
+rest1 -> uses liblist rest2 | rest2 
+lib_list -> id, liblist | id | # 
+
+rest2 -> const const_list rest3 
+const_list -> id=num, const_list | id=num | # 
+
+rest3 -> var varlist rest4 
+varlist -> lib_list=type;varlist | lib_list=type
+type -> integer | real
+
+rest4 -> function id varlist rest_function rest_main | rest_main 
+
+rest_function -> begin statements end ; 
+rest_main -> begin statements end ; 
+statements -> get id; statements | put id ; statements| exp ; statements | tern ; statements | #
+tern -> exp?exp:exp
+
+
+---------- NON_TERMINALS -------------------------------------------
+S=start
+A=rest1
+L=lib_list
+B=rest2
+C=const_list
+D=rest3
+V=varlist
+T=type
+E=rest4
+F=rest_function
+M=rest_main
+N=statements
+R=tern
+
+----------- TERMINALS -----------------------------------------
+p=program
+l=uses
+i=id
+c=const
+n=num
+v=var
+r=real
+u=integer
+f=function
+b=begin
+e=end
+g=get
+p=put
+x=exp

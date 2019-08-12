@@ -10,6 +10,8 @@ sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 
 sock.connect((ipaddr,port))
 
+sock.send(filename.encode())
+
 with open(filename,'wb') as f:
 	print('receiving data')
 	while(True):	
