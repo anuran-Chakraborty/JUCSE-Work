@@ -1,0 +1,39 @@
+package com.shopping;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+
+public class DAO {
+	
+	private Connection con;
+	private String url,uname,password;
+	
+	public DAO(String url, String uname, String password){
+		this.url=url;
+		this.uname=uname;
+		this.password=password;
+	}
+	
+	//Function to establish the connection
+	private void setConnection() throws ClassNotFoundException, SQLException
+	{
+		Class.forName("com.mysql.jdbc.Driver");
+		con=DriverManager.getConnection(url,uname,password);
+	}
+	
+	//Function to close the connection
+	private void closeConn()
+	{
+		con.close();
+	}
+	
+	public void loginCheck(String username, String password)
+	{
+		setConnection;
+		Statement st
+		String query=
+	}
+	
+	
+}
