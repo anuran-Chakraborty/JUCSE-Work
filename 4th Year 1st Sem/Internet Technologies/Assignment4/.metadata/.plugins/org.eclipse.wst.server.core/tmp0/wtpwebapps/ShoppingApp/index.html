@@ -49,6 +49,16 @@
 		.register-Form{
 			display: none;
 		}
+		
+		.forgot-pass-form{
+			display: none;
+		}
+
+		#duplicateUname{
+			display:none;
+			color: red;
+			
+		}
 
 	</style>
 
@@ -70,6 +80,7 @@
 				<input type="password" name="password" required="" placeholder="Enter your password"><br>
 				<input type="submit" id="submit" name="submit" value="Login">
 				<p class="notReg"> Not registered? <a class="reg-here" href="#">Register Here </a></p>
+				<p class="notReg"> Forgot password? <a class="forgot-pass" href="#">Click here </a></p>
 			</form>
 		
 			<form id="reg formAll" class="register-Form" action="register" method="post">
@@ -87,12 +98,19 @@
 				  <option value="newarr">New Arrivals</option>
 				</select><br>
 
-				<!-- <div id="duplicateUname">Sorry, this username is already taken</div> -->
+				<div id="duplicateUname">Sorry, this username is already taken</div>
+				
 				<input type="text" name="username" placeholder="Enter your Username"><br>
 				<input type="password" name="password" placeholder="Enter your password"><br>
 
 				<input type="submit" id="submit" name="submit" value="Register">
 				<p class="alreadyReg"> Already registered? <a class="login-here" href="#">Login Here </a></p>
+			</form>
+
+			<form id="forgot formAll" class="forgot-pass-form" action="forgot" method="post">
+				<input type="text" name="username" placeholder="Enter your username">
+				<input type="password" name="password" placeholder="Enter new password"> 
+				<input type="submit" name="submit" id="submit" value="Change Password">
 			</form>
 			
 		</div>
@@ -104,11 +122,19 @@
 		$(document).ready(function(){
 			$('.reg-here').click(function(){
 				$('.loginform').hide();
+				$('.forgot-pass-form').hide();
 				$('.register-Form').show();
 			});
 
+			$('.forgot-pass').click(function(){
+				$('.loginform').hide();
+				$('.forgot-pass-form').show();
+				$('.register-Form').hide();
+			})
+
 			$('.login-here').click(function(){
 				$('.loginform').show();
+				$('.forgot-pass-form').hide();
 				$('.register-Form').hide();
 			});
 		});

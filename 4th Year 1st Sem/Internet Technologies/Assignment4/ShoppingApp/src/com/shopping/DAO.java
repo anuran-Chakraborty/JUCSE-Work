@@ -20,6 +20,7 @@ public class DAO {
 	{
 		Class.forName("com.mysql.jdbc.Driver");
 		con=DriverManager.getConnection(url,uname,password);
+		stmt=con.createStatement(); 
 	}
 	
 	//Function to close the connection
@@ -32,7 +33,7 @@ public class DAO {
 	public ResultSet loginCheck(String username, String password) throws ClassNotFoundException, SQLException
 	{
 		setConnection();
-		String query="select * from loginInfo where uname=\'"+username+"' and password=\'"+password+'"';
+		String query="select * from logininfo where uname=\'"+username+"' and password=\'"+password+"'";
 		ResultSet rs=stmt.executeQuery(query);
 		
 		if(rs.next())
@@ -47,7 +48,7 @@ public class DAO {
 	public boolean checkUname(String username) throws ClassNotFoundException, SQLException
 	{
 		setConnection();
-		String query="select * from loginInfo where uname=\'"+username+"'";
+		String query="select * from logininfo where uname=\'"+username+"'";
 		ResultSet rs=stmt.executeQuery(query);
 		
 		if(rs.next())
@@ -62,9 +63,8 @@ public class DAO {
 	public void register(User u) throws ClassNotFoundException, SQLException
 	{
 		setConnection();
-		
-		String query="insert into loginInfo values('"+u.getName()+"','"+u.getGender()+"','"+u.getUname()+"','"+u.getPassword()+"','"+u.getChoice()+"'";
-		ResultSet rs=stmt.executeQuery(query);
+		String query="insert into logininfo values('"+u.getName()+"','"+u.getGender()+"','"+u.getUname()+"','"+u.getPassword()+"','"+u.getChoice()+"')";
+		int res=stmt.executeUpdate(query);
 		closeConn();
 		
 	}
@@ -73,15 +73,28 @@ public class DAO {
 	public ResultSet getItems(User u) throws ClassNotFoundException, SQLException
 	{
 		setConnection();
-		String query="select * from items where itemType=\'"+u.getChoice()+"' and gender='"+u.getGender()+"'";
+		String query="select * from items where itemtype='"+u.getChoice()+"' and gender='"+u.getGender()+"'";
+		System.out.println(query);
 		ResultSet rs=stmt.executeQuery(query);
 		
+//		while(rs.next())
+//			System.out.println(rs.getString("name"));
+//		
+//		System.out.println(rs);
 		if(rs.next())
 		{
 			return rs;
 		}
 		closeConn();
 		return null;
+	}
+	
+	public void updatePass(String username, String pass) throws ClassNotFoundException, SQLException
+	{
+		setConnection();
+		String query="update logininfo set password='"+pass+"' where uname='"+username+"'";
+		int res=stmt.executeUpdate(query);
+		closeConn();
 	}
 	
 }

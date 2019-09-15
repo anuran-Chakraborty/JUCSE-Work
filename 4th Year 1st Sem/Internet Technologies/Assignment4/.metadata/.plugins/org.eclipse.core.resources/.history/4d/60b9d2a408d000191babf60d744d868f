@@ -1,5 +1,0 @@
-package com.shopping;
-
-public class User {
-	private String name,uname,gender,choice,password;
-}
