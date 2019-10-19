@@ -1,0 +1,123 @@
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+    
+<%@ page import="java.sql.*" %>
+<%@ page import="travel.DAO" %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<link rel="stylesheet" href="style.css">
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+
+
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+
+
+<style>
+	.title-bar{
+	width: 100%;
+	height: 100%;
+	color: white;
+	padding: 40px;
+	font-family: serif;
+	font-size: 50px;
+	text-align: center;
+	background-color: #1abc9c;
+	}
+
+
+	.travel-form{
+		margin: 20px;
+
+	}
+
+</style>
+
+
+
+<title>Home</title>
+</head>
+<body>
+
+<!-- Title bar -->
+<div class="title-bar">
+	<h1> TravelThruAir </h1>
+</div>
+
+
+<%
+	String url,user,pass;
+	url="jdbc:mysql://localhost:3306/travel";
+	System.out.println(url);
+	user="root";
+	pass="";
+	
+	DAO dao=new DAO(url,user,pass);
+	ResultSet rs;
+	rs=dao.getCities();
+%>
+
+
+<!-- Form -->
+<div class="travel-form">
+	<form action="search" method="post">
+		<select class="src" name="src">
+			<%
+				do
+				{%>
+					<option value="<%=rs.getString("code")%>"> <strong><%=rs.getString("code")%></strong>-<%=rs.getString("city")%> </option>
+				<%}
+				while(rs.next());
+				rs=dao.getCities();
+			%>
+		</select>
+
+		<select class="dest" name="dest">
+			<%
+				do
+				{%>
+					<option value="<%=rs.getString("code")%>"> <strong><%=rs.getString("code")%></strong>-<%=rs.getString("city")%> </option>
+				<%}
+				while(rs.next());
+			%>
+		</select>
+
+		<input type="date" name="date" required="">
+		<input type="submit" value="submit">
+		
+	</form>
+</div>
+
+<!-- Offers -->
+<div class="offers">
+	<%
+		rs=dao.getOffers();
+		if(rs==null)
+		{%>
+			<div class="error">No offers right now</div>
+		<% }
+		else
+		{
+			{%>
+				<div class="offer">
+					START TIME: <%=rs.getString("start_time") %>
+					END TIME: <%=rs.getString("end_time") %>
+					DISCOUNT: <%=rs.getString("discount") %>
+					SRC: <%=rs.getString("src_city") %>
+					DEST: <%=rs.getString("dest_city") %>
+				</div>
+			<%}
+			while(rs.next());
+		}
+	%>
+</div>
+
+</body>
+</html>

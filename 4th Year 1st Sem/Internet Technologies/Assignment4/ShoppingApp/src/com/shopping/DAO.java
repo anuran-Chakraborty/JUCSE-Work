@@ -73,7 +73,13 @@ public class DAO {
 	public ResultSet getItems(User u) throws ClassNotFoundException, SQLException
 	{
 		setConnection();
-		String query="select * from items where itemtype='"+u.getChoice()+"' and gender='"+u.getGender()+"'";
+		String query="select * from items where gender='"+u.getGender()+"'";
+		
+		if(u.getChoice().equals("newarr"))
+			query+=" order by itemtype desc";
+		else
+			query+=" order by itemtype asc, discount desc";
+		
 		System.out.println(query);
 		ResultSet rs=stmt.executeQuery(query);
 		
@@ -88,6 +94,27 @@ public class DAO {
 		closeConn();
 		return null;
 	}
+	
+	//Function for fetching data from items table
+		public ResultSet getItemsByName(String name) throws ClassNotFoundException, SQLException
+		{
+			setConnection();
+			String query="select * from items where name='"+name+"'";
+			
+			System.out.println(query);
+			ResultSet rs=stmt.executeQuery(query);
+			
+//			while(rs.next())
+//				System.out.println(rs.getString("name"));
+//			
+//			System.out.println(rs);
+			if(rs.next())
+			{
+				return rs;
+			}
+			closeConn();
+			return null;
+		}
 	
 	public void updatePass(String username, String pass) throws ClassNotFoundException, SQLException
 	{

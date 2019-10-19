@@ -5,8 +5,6 @@
 <%@page import="com.shopping.DAO"%>
 <%@page import="com.shopping.User"%>
 
-<mvc:resources location="images/" mapping="images/**"></mvc:resources>
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -32,9 +30,8 @@
 	}
 
 	.cards{
-		width:10%;
+		width:12%;
 		display: inline-block;
-		border-radius: 10px;
 		margin:40px;
 		box-shadow:2px 2px 10px black;
 	}
@@ -50,6 +47,13 @@
 	.price{
 		text-align: center;
 		font-size: 20px;
+		padding:4px;
+	}
+
+	.gender{
+		text-align: center;
+		color:#a0a0a0;
+		font-size: 16px;
 		padding:4px;
 	}
 	
@@ -99,6 +103,7 @@
 	  content: "";
 	  position: absolute; left: 0px; top: 100%;
 	  z-index: -1;
+	  display: block;
 	  border-left: 3px solid #8F0808;
 	  border-right: 3px solid transparent;
 	  border-bottom: 3px solid transparent;
@@ -108,15 +113,48 @@
 	  content: "";
 	  position: absolute; right: 0px; top: 100%;
 	  z-index: -1;
+	  display: block;
 	  border-left: 3px solid transparent;
 	  border-right: 3px solid #8F0808;
 	  border-bottom: 3px solid transparent;
 	  border-top: 3px solid #8F0808;
 	}
 	
-	.images{
-		width:50px;
-		height:60px;
+	.images img{
+		width:100%;
+	}
+
+	.error{
+		font-size: 20px;
+		text-align: center;
+	}
+
+	.search-bar{
+		justify-content: center;
+		align-items: center;
+	}
+
+	.search-field{
+		margin: auto;
+		height: 30px;
+		width: 50%;
+		padding: 10px;
+		border-radius: 40px;
+	}
+
+	.search-btn{
+		height: 40px;
+		width: 10%;
+		padding: 10px;
+		border-radius: 40px;
+		background-color: grey;
+		color: white;
+		text-align: center;
+	}
+
+	.search-btn:hover{
+		background-color: black;
+		cursor: pointer;
 	}
 
 </style>
@@ -144,34 +182,60 @@
 	<br><br>
 	<!-- Now fetch the data -->
 
-
 	<div class="main">
+
+		<div class="search-bar">
+			<form method="post">
+				<input type="text" class="search-field" name="search" required="" placeholder="Search...">
+				<input type="submit" class="search-btn" name="submit" value="search">
+			</form>
+		</div>
 
 	<%
 		
 		DAO dao=(DAO)session.getAttribute("dao");
-		ResultSet rs=dao.getItems((User)session.getAttribute("user"));
+		ResultSet rs;
+		if(request.getParameter("submit")!=null)
+			rs=dao.getItemsByName(request.getParameter("search"));
+		else
+			rs=dao.getItems((User)session.getAttribute("user"));
+
+		if(rs==null)
+		{%>
+			<div class="error">
+				Sorry!! No Items match your search
+			</div>
+		<%}
+
+		else
 		do
 		{
-		System.out.println(rs);%>
+			System.out.println(rs);
+			
+			{%>
 			<div class="cards">
 				<%if(rs.getString("itemtype").equals("newarr")){ %>
 				
 				<div class="ribbon"><span>NEW</span></div>
 				<%} %>
 				
-				<img src='<c:url value="<%="images/"+rs.getString("name")+".png" %>"></c:url>' class="images"/>
-				
+				<div class="images">
+					<img src="<%="/ShoppingApp/images/"+rs.getString("name")+".png" %>"/>
+				</div>
+
 				<div class="title">
 					<h3><%=rs.getString("name")%></h3>
 				</div>
-				
+				<div class="gender">
+					Gender: <%=rs.getString("gender")%>
+				</div>
 				<%if(rs.getString("itemtype").equals("discount"))
 					{%>
 					<div class="origPrice">
 						Price: Rs. <%=rs.getString("price")%>
 					</div>
 				<%} %>
+				
 				<div class="price">
 					Price: Rs. 
 					<%
@@ -183,7 +247,9 @@
 				</div>
 
 			</div>
+				
 		<%}
+		}
 		while(rs.next());
 	%>
 
