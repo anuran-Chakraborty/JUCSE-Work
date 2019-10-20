@@ -92,27 +92,4 @@ public class DAO {
 		return null;
 	}
 	
-	//Function for getting flights 
-		public ResultSet getStops(String flight_id) throws ClassNotFoundException, SQLException
-		{
-			setConnection();
-			
-//			Timestamp time = new Timestamp(System.currentTimeMillis());
-//	        System.out.println(time);
-	        // and offers.src=flights.src_city and offers.dest=flights.dest_city
-			String query="select * from flight_stops where flight_id='"+flight_id+"' order by stop_no";
-			
-			System.out.println(query);
-			
-			ResultSet rs=stmt.executeQuery(query);
-			
-			
-			if(rs.next())
-			{
-				return rs;
-			}
-			closeConn();
-			return null;
-		}
-	
 }

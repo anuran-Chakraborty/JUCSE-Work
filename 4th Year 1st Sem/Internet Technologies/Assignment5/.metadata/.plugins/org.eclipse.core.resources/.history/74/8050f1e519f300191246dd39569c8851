@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
-	
+    pageEncoding="ISO-8859-1"%>
+    
 <%@ page import="java.sql.*" %>
 <%@ page import="travel.DAO" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -31,19 +31,14 @@
 	background-color: #1abc9c;
 	}
 
-	.error{
-		text-align: center;
-		font-size: 30px;
-		font-family: serif;
-	}
 
 	.travel-form{
 		margin: auto;
 		align-content: center;
 		display: block;
-		text-align: center;
-		background-color: #DBDADA;
-		padding: 20px;
+    	text-align: center;
+    	background-color: #DBDADA;
+    	padding: 20px;
 	}
 
 	.travel-form form{
@@ -139,27 +134,33 @@
 
 <script type="text/javascript">
 	function timeDiff(target) {
-		function z(n) {return (n<10? '0' : '') + n;}
-		var timeDiff = target - (new Date()); 
-		var hours    = timeDiff / 3.6e6 | 0;
-		var minutes  = timeDiff % 3.6e6 / 6e4 | 0;
-		var seconds  = timeDiff % 6e4 / 1e3 | 0;
-		if (hours<0 || minutes<0 || seconds<0) {
-		  document.getElementById('divBody').style.display='none';
-		  document.getElementById('divExpired').style.display='';    
-		  return '<b>EXPIRED</b>';
-		  }
-		else {
-		  return '<b>' + z(hours) + '</b> h <b>' + z(minutes) + '</b>  m <b>' + z(seconds) + '</b> s';
-		  }
-		}
+	    function z(n) {return (n<10? '0' : '') + n;}
+	    var timeDiff = target - (new Date()); 
+	    var hours    = timeDiff / 3.6e6 | 0;
+	    var minutes  = timeDiff % 3.6e6 / 6e4 | 0;
+	    var seconds  = timeDiff % 6e4 / 1e3 | 0;
+	    if (hours<0 || minutes<0 || seconds<0) {
+	      document.getElementById('divBody').style.display='none';
+	      document.getElementById('divExpired').style.display='';    
+	      return '<b>EXPIRED</b>';
+	      }
+	    else {
+	      return '<b>' + z(hours) + '</b> h <b>' + z(minutes) + '</b>  m <b>' + z(seconds) + '</b> s';
+	      }
+	    }
+
+	function doCountDown(target,elemId) {
+	    document.getElementById(elemId).innerHTML = '<span style=\"color:white\"><b>EXPIRES IN</b></span>: ' + timeDiff(target);
+	    var lag = 1020 - (new Date() % 100);
+	    setTimeout(function(){doCountDown(target);}, lag);
+	    }
 
 	var addFunctionOnWindowLoad = function(callback){
-	  if(window.addEventListener){
-		  window.addEventListener('load',callback,false);
-	  }else{
-		  window.attachEvent('onload',callback);
-	  }
+      if(window.addEventListener){
+          window.addEventListener('load',callback,false);
+      }else{
+          window.attachEvent('onload',callback);
+      }
 	}
 </script>
 
@@ -190,8 +191,8 @@
 
 <!-- Form -->
 <div class="travel-form">
-	<form action="search" id="travel-form" method="post">
-		<select class="src" id="src" name="src">
+	<form action="search" method="post">
+		<select class="src" name="src">
 			<%
 				do
 				{%>
@@ -202,7 +203,7 @@
 			%>
 		</select>
 
-		<select class="dest" id="dest" name="dest">
+		<select class="dest" name="dest">
 			<%
 				do
 				{%>
@@ -213,7 +214,7 @@
 		</select>
 
 		<input type="date" id="date" name="date" required="">
-		<input class="search" type="button" value="SEARCH" onclick="validate_and_submit()">
+		<input class="search" type="submit" value="SEARCH">
 		
 	</form>
 </div>
@@ -245,15 +246,11 @@
 					<div class="normal-text"><div id="countdown<%=rs.getString("id")%>"></div>
 
 						<script language="javaScript">              
-						  function doCountDown<%=rs.getString("id")%>(target) {
-							document.getElementById('countdown<%=rs.getString("id")%>').innerHTML = '<span style=\"color:white\"><b>EXPIRES IN</b></span>: ' + timeDiff(target);
-							var lag = 1020 - (new Date() % 100);
-							setTimeout(function(){doCountDown<%=rs.getString("id")%>(target);}, lag);
-							}
-						  var x<%=rs.getString("id")%> = function doStart<%=rs.getString("id")%>() {
-							//Insert Expiration Date from mySQL into t var
-							var t="<%=rs.getString("end_time")%>".split(/[- :]/);
-							doCountDown<%=rs.getString("id")%>(new Date(t[0],t[1]-1,t[2],t[3],t[4],t[5]));
+						  
+						  var x<%=rs.getString("id")%> = function doStart() {
+						    //Insert Expiration Date from mySQL into t var
+						    var t="<%=rs.getString("end_time")%>".split(/[- :]/);
+						    doCountDown(new Date(t[0],t[1]-1,t[2],t[3],t[4],t[5]),'countdown<%=rs.getString');
 						  }
 						  addFunctionOnWindowLoad(x<%=rs.getString("id")%>);
 
@@ -280,7 +277,6 @@
 	//Script for slideshow
 	var slideIndex = 1;
 	showSlides(slideIndex);
-	showSlidesAuto();
 
 	// Next/previous controls
 	function plusSlides(n) {
@@ -299,34 +295,11 @@
 	  if (n > slides.length) {slideIndex = 1}
 	  if (n < 1) {slideIndex = slides.length}
 	  for (i = 0; i < slides.length; i++) {
-		  slides[i].style.display = "none";
+	      slides[i].style.display = "none";
 	  }
 	  slides[slideIndex-1].style.display = "block";
 	}
 
-	function showSlidesAuto() {
-	  var i;
-	  var slides = document.getElementsByClassName("slide");
-	  for (i = 0; i < slides.length; i++) {
-	    slides[i].style.display = "none";
-	  }
-	  slideIndex++;
-	  if (slideIndex > slides.length) {slideIndex = 1}
-	  slides[slideIndex-1].style.display = "block";
-	  setTimeout(showSlidesAuto, 5000); // Change image every 2 seconds
-	}
-
-	function validate_and_submit(){
-		var src=document.getElementById("src").value;
-		var dest=document.getElementById("dest").value;
-		if(src===dest)
-		{
-			//Error
-			alert("Source and destination city cannot be same");
-		}
-		else
-			document.getElementById("travel-form").submit();
-	}
 
 
 </script>

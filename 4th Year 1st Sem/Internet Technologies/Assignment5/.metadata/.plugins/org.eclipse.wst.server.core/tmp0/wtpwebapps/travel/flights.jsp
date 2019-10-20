@@ -87,6 +87,15 @@
 		font-family: serif;
 	}
 
+	.duration{
+		font-size: 27px;
+		font-family: sans-serif;
+	}
+
+	.stop-list{
+		color: grey;
+	}
+
 </style>
 
 
@@ -98,7 +107,17 @@
 <div class="list">
 
 
-<% ResultSet rs=(ResultSet)request.getAttribute("flights");
+<%
+String url,user,pass;
+url="jdbc:mysql://localhost:3306/travel";
+System.out.println(url);
+user="root";
+pass="";
+
+DAO dao=new DAO(url,user,pass); 
+
+ResultSet rs=(ResultSet)request.getAttribute("flights");
+ResultSet rs2;
 	
 if(rs==null)
 {%>
@@ -160,7 +179,23 @@ else
 
 
 
+
+
+
+
 			<td>
+				<div class="duration">
+					<%
+					if(rs.getString("dur_hrs").compareTo("0")!=0)
+					{%>
+						<strong><%=rs.getString("dur_hrs")%>h </strong>
+					<%}
+					if(rs.getString("dur_min").compareTo("0")!=0)
+					{%>
+						<strong><%=rs.getString("dur_min")%>m </strong>
+					<%}%>
+				</div>
+
 				<div class="num-stops">
 					<%
 					if(rs.getString("num_stops").compareTo("0")==0)
@@ -170,9 +205,30 @@ else
 					else
 					{%>
 						<%=rs.getString("num_stops")%> stop(s)
+						<div class="stop-list">
+							
+							<%
+							rs2=dao.getStops(rs.getString("id"));
+							do{
+								if(Integer.parseInt(rs2.getString("stop_no"))<Integer.parseInt(rs.getString("num_stops"))){%>
+									<%=rs2.getString("dest_city")%><span style='font-size:15px;'>&#8594;</span>
+								<%}else
+								{%>
+									<%=rs2.getString("dest_city")%>
+							<%}}
+							while(rs2.next());
+							%>
+
+
+						</div>
 					<%}%>
 				</div>
 			</td>
+
+
+
+
+
 
 
 
