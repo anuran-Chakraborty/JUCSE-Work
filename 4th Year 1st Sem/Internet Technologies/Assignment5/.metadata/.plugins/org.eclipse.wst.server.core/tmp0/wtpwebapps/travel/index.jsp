@@ -195,7 +195,7 @@
 			<%
 				do
 				{%>
-					<option value="<%=rs.getString("code")%>"> <strong><%=rs.getString("code")%></strong>-<%=rs.getString("city")%> </option>
+					<option value="<%=rs.getString("code")%>"><%=rs.getString("code")%>-<%=rs.getString("city")%> </option>
 				<%}
 				while(rs.next());
 				rs=dao.getCities();
@@ -206,7 +206,7 @@
 			<%
 				do
 				{%>
-					<option value="<%=rs.getString("code")%>"> <strong><%=rs.getString("code")%></strong>-<%=rs.getString("city")%> </option>
+					<option value="<%=rs.getString("code")%>"><%=rs.getString("code")%>-<%=rs.getString("city")%> </option>
 				<%}
 				while(rs.next());
 			%>

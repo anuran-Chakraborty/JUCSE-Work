@@ -50,6 +50,11 @@
 		font-family: serif;
 	}
 
+	.stops{
+		font-size: 20px;
+		font-family: serif;
+	}
+
 	.time{
 		font-size: 25px;
 		font-family: sans-serif;
@@ -96,6 +101,24 @@
 		color: grey;
 	}
 
+	.travel-form{
+		margin: auto;
+		align-content: center;
+		display: block;
+		text-align: center;
+		background-color: #DBDADA;
+		padding: 20px;
+	}
+
+	.travel-form form{
+		display: inline-block;
+	}
+
+	.travel-form select, input{
+		height: 60px;
+		width: 300px;
+	}
+
 </style>
 
 
@@ -104,9 +127,6 @@
 </head>
 <body>
 
-<div class="list">
-
-
 <%
 String url,user,pass;
 url="jdbc:mysql://localhost:3306/travel";
@@ -114,11 +134,57 @@ System.out.println(url);
 user="root";
 pass="";
 
-DAO dao=new DAO(url,user,pass); 
+DAO dao=new DAO(url,user,pass);
 
-ResultSet rs=(ResultSet)request.getAttribute("flights");
+ResultSet rs;
+rs=dao.getCompanies();
+
+String day=(String)request.getAttribute("day");
+String src=(String)request.getAttribute("src");
+String dest=(String)request.getAttribute("dest");
 ResultSet rs2;
-	
+%>
+
+<a href="index.jsp">HOME</a>
+
+<!-- Form for filtering -->
+
+<div class="travel-form">
+	<form action="filter" id="filter-form" method="post">
+		<input type="hidden" name="day" value="<%=day%>">
+		<input type="hidden" name="src" value="<%=src%>">
+		<input type="hidden" name="dest" value="<%=dest%>">
+
+		<select class="company" id="company" name="company">
+			<option value="all">All</option>
+			<%
+				do
+				{%>
+					<option value="<%=rs.getString("company")%>"><%=rs.getString("company")%> </option>
+				<%}
+				while(rs.next());
+			%>
+		</select>
+
+		<select class="stops" id="stops" name="stops">
+			<option value="all">All</option>
+			<option value="0">Non-Stop</option>
+		</select>
+
+		<input class="search" type="button" value="SEARCH" onclick="validate_and_submit()">
+		
+	</form>
+</div>
+
+
+
+
+<div class="list">
+
+
+<%
+rs=null;
+rs=(ResultSet)request.getAttribute("flights");	
 if(rs==null)
 {%>
 	<div class="error">Sorry!!! No flights found</div>
@@ -226,12 +292,6 @@ else
 			</td>
 
 
-
-
-
-
-
-
 			<td>
 				<div class="time">
 					<%
@@ -276,4 +336,21 @@ else
 </table>
 </div>
 </body>
+
+
+<script type="text/javascript">
+	function validate_and_submit(){
+		// var src=document.getElementById("src").value;
+		// var dest=document.getElementById("dest").value;
+		// if(src===dest)
+		// {
+		// 	//Error
+		// 	alert("Source and destination city cannot be same");
+		// }
+		// else
+			document.getElementById("filter-form").submit();
+	}
+</script>
+
+
 </html>

@@ -66,7 +66,7 @@ public class SearchFlights extends HttpServlet {
 		
 		// get day of week from date string
 		String day;
-		SimpleDateFormat format1=new SimpleDateFormat("yyyy-mm-dd");
+		SimpleDateFormat format1=new SimpleDateFormat("yyyy-MM-dd");
 		Date dt1=null;
 		try 
 		{
@@ -90,8 +90,12 @@ public class SearchFlights extends HttpServlet {
 			e.printStackTrace();
 		}
 		request.setAttribute("flights",rs);
+		request.setAttribute("day",day);
+		request.setAttribute("src",src);
+		request.setAttribute("dest",dest);
+		
 		//Then redirect to dashboard
-		request.getRequestDispatcher("flights.jsp").forward(request, response);;  
+		request.getRequestDispatcher("flights.jsp").forward(request, response);
 		
 		
 	}

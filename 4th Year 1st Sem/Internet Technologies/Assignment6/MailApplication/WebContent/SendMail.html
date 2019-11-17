@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Compose Mail</title>
+</head>
+<body>
+	<h2>Compose Mail</h2>
+	<div class="mail-form">
+		<form id="email-form" action="send" method=post>
+			To: <input type="email" name="recipient" required=""><br>
+			Sub: <input type="text" name="subject"><br>
+			Message: <input type="text" name="message" required=""><br>
+			<input type="button" value="Send Mail" onclick="validate_and_submit()">
+		</form>
+	</div>
+</body>
+
+<script type="text/javascript">
+	function validate_and_submit(){
+
+		//May insert validation here
+		document.getElementById("email-form").submit();
+	}
+</script>
+</html>

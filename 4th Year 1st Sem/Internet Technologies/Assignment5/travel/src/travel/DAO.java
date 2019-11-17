@@ -49,9 +49,6 @@ public class DAO {
 	{
 		setConnection();
 		String query1="(select * from flights where src_city=\'"+src+"\' and dest_city=\'"+dest+"\' and day=\'"+day+"\')";
-		
-//		Timestamp time = new Timestamp(System.currentTimeMillis());
-//        System.out.println(time);
         
 		String query2="(select * from offers where CURRENT_TIMESTAMP between start_time and end_time)";
 		
@@ -74,9 +71,6 @@ public class DAO {
 	{
 		setConnection();
 		
-//		Timestamp time = new Timestamp(System.currentTimeMillis());
-//        System.out.println(time);
-        // and offers.src=flights.src_city and offers.dest=flights.dest_city
 		String query="select * from offers where CURRENT_TIMESTAMP between offers.start_time and offers.end_time";
 		
 		System.out.println(query);
@@ -93,13 +87,60 @@ public class DAO {
 	}
 	
 	//Function for getting flights 
+	public ResultSet getCompanies() throws ClassNotFoundException, SQLException
+	{
+		setConnection();
+		
+		String query="select distinct(company) as company from flights";
+		
+		System.out.println(query);
+		
+		ResultSet rs=stmt.executeQuery(query);
+		
+		
+		if(rs.next())
+		{
+			return rs;
+		}
+		closeConn();
+		return null;
+	}
+	
+	//Function for getting flights 
+	public ResultSet filterFlights(String src, String dest, String company, String stops, String day) throws ClassNotFoundException, SQLException
+	{
+		setConnection();
+		String query1="select * from flights where src_city=\'"+src+"\' and dest_city=\'"+dest+"\' and day=\'"+day+"\'";
+		
+		
+		if(company.compareToIgnoreCase("all")!=0)
+			query1+=" and company='"+company+"'";
+		if(stops.compareToIgnoreCase("all")!=0)
+			query1+=" and num_stops='"+stops+"'";
+		
+        
+		String query2="(select * from offers where CURRENT_TIMESTAMP between start_time and end_time)";
+		
+		String query="select * from ("+query1+") f left join "+query2+" o on f.src_city=o.src and f.dest_city=o.dest";
+		
+		System.out.println(query);
+		
+		ResultSet rs=stmt.executeQuery(query);
+		
+		if(rs.next())
+		{
+			return rs;
+		}
+		closeConn();
+		return null;
+	}
+	
+	//Function for getting flights 
 		public ResultSet getStops(String flight_id) throws ClassNotFoundException, SQLException
 		{
 			setConnection();
 			
-//			Timestamp time = new Timestamp(System.currentTimeMillis());
-//	        System.out.println(time);
-	        // and offers.src=flights.src_city and offers.dest=flights.dest_city
+
 			String query="select * from flight_stops where flight_id='"+flight_id+"' order by stop_no";
 			
 			System.out.println(query);
