@@ -49,6 +49,7 @@ public class SendServlet extends HttpServlet {
 		System.out.println(sendTo);
 		//Send the mail
 		sendMail(from, password, sendTo, sub, mess);
+		response.sendRedirect("index.jsp");
 		
 	}
 
@@ -62,7 +63,7 @@ public class SendServlet extends HttpServlet {
         props.put("mail.smtp.auth", "true");    
         props.put("mail.smtp.port", "465");    
         //get Session   
-        Session session = Session.getDefaultInstance(props,
+        Session session2 = Session.getInstance(props,
         		new javax.mail.Authenticator() {    
 		         protected PasswordAuthentication getPasswordAuthentication() {    
 		         return new PasswordAuthentication(from,password);  
@@ -71,7 +72,7 @@ public class SendServlet extends HttpServlet {
 		
         try 
         {    
-            MimeMessage message = new MimeMessage(session);    
+            MimeMessage message = new MimeMessage(session2);    
             message.addRecipient(Message.RecipientType.TO,new InternetAddress(sendTo));    
             message.setSubject(sub);    
             message.setText(mess);    
@@ -79,9 +80,9 @@ public class SendServlet extends HttpServlet {
             Transport.send(message);    
             System.out.println("message sent successfully");    
         } 
-        catch (MessagingException e) 
+        catch (Exception e) 
         {
-        	throw new RuntimeException(e);
+        	e.printStackTrace();
         } 
 	}
 
