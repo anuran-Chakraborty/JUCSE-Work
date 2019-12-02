@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <section name="Workbench">
-	<item value="F:\JUCSE WORK\4th Year 1st Sem\Internet Technologies\Assignment5\travel\WebContent\WEB-INF\lib" key="org.eclipse.jdt.ui.lastextjar"/>
+	<item key="org.eclipse.jdt.ui.lastextjar" value="F:\JUCSE WORK\4th Year 1st Sem\Internet Technologies\Assignment5\travel\WebContent\WEB-INF\lib"/>
 	<section name="NewClassWizardPage">
-		<item value="false" key="create_constructor"/>
-		<item value="true" key="create_unimplemented"/>
+		<item key="create_constructor" value="false"/>
+		<item key="create_unimplemented" value="true"/>
 	</section>
 	<section name="OptionalMessageDialog.hide.">
-		<item value="true" key="org.eclipse.jdt.ui.typecomment.deprecated"/>
+		<item key="org.eclipse.jdt.ui.typecomment.deprecated" value="true"/>
 	</section>
 	<section name="quick_assist_proposal_size">
 	</section>
 	<section name="BuildPathsPropertyPage">
-		<item value="2" key="pageIndex"/>
+		<item key="pageIndex" value="2"/>
 	</section>
 	<section name="completion_proposal_size">
 	</section>

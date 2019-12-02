@@ -154,7 +154,8 @@ ResultSet rs2;
 		<input type="hidden" name="day" value="<%=day%>">
 		<input type="hidden" name="src" value="<%=src%>">
 		<input type="hidden" name="dest" value="<%=dest%>">
-
+		
+		Company
 		<select class="company" id="company" name="company">
 			<option value="all">All</option>
 			<%
@@ -165,7 +166,8 @@ ResultSet rs2;
 				while(rs.next());
 			%>
 		</select>
-
+		
+		Stops
 		<select class="stops" id="stops" name="stops">
 			<option value="all">All</option>
 			<option value="0">Non-Stop</option>

@@ -1,0 +1,10 @@
+127.0.0.1 - - [30/Nov/2019:22:47:15 +0530] "GET / HTTP/1.1" 404 1074
+0:0:0:0:0:0:0:1 - - [30/Nov/2019:22:47:16 +0530] "GET /ShoppingApp/index.html HTTP/1.1" 200 3646
+0:0:0:0:0:0:0:1 - - [30/Nov/2019:22:47:16 +0530] "GET /favicon.ico HTTP/1.1" 404 1085
+0:0:0:0:0:0:0:1 - - [30/Nov/2019:22:48:54 +0530] "POST /ShoppingApp/register HTTP/1.1" 302 -
+0:0:0:0:0:0:0:1 - - [30/Nov/2019:22:48:54 +0530] "GET /ShoppingApp/index.html HTTP/1.1" 304 -
+0:0:0:0:0:0:0:1 - - [30/Nov/2019:22:49:41 +0530] "POST /ShoppingApp/login HTTP/1.1" 302 -
+0:0:0:0:0:0:0:1 - - [30/Nov/2019:22:49:42 +0530] "GET /ShoppingApp/dashboard.jsp HTTP/1.1" 200 4492
+0:0:0:0:0:0:0:1 - - [30/Nov/2019:22:49:42 +0530] "GET /ShoppingApp/images/ABCD5.png HTTP/1.1" 200 3599484
+0:0:0:0:0:0:0:1 - - [30/Nov/2019:22:49:42 +0530] "GET /ShoppingApp/images/ABCD1.png HTTP/1.1" 200 3559695
+0:0:0:0:0:0:0:1 - - [30/Nov/2019:22:49:42 +0530] "GET /ShoppingApp/images/ABCD4.png HTTP/1.1" 200 4095762
