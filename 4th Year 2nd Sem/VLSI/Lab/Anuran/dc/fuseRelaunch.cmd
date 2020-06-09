@@ -1,0 +1,1 @@
+-intstyle "ise" -incremental -o "D:/VLSILab/Anuran/dc/dc_isim_beh.exe" -prj "D:/VLSILab/Anuran/dc/dc_beh.prj" "work.dc" 

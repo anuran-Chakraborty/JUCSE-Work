@@ -1,0 +1,1 @@
+-intstyle "ise" -incremental -o "D:/VLSILab/Anuran/assgn3/twotofourdecoder4_isim_beh.exe" -prj "D:/VLSILab/Anuran/assgn3/twotofourdecoder4_beh.prj" "work.twotofourdecoder4" 

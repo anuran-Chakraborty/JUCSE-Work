@@ -1,0 +1,1 @@
+-intstyle "ise" -incremental -o "D:/VLSILab/Anuran/waasef/fourtotwoencoder_isim_beh.exe" -prj "D:/VLSILab/Anuran/waasef/fourtotwoencoder_beh.prj" "work.fourtotwoencoder" 

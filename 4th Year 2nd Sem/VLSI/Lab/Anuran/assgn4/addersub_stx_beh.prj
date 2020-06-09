@@ -1,0 +1,3 @@
+vhdl isim_temp "halfadder.vhd"
+vhdl isim_temp "fulladder.vhd"
+vhdl isim_temp "addersub.vhd"

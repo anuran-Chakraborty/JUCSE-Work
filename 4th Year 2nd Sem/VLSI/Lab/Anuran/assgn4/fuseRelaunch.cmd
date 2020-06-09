@@ -1,0 +1,1 @@
+-intstyle "ise" -incremental -o "D:/VLSILab/Anuran/assgn4/fbrcaprocess_isim_beh.exe" -prj "D:/VLSILab/Anuran/assgn4/fbrcaprocess_beh.prj" "work.fbrcaprocess" 

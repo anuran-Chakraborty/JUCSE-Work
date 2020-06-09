@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<generated_project xmlns="http://www.xilinx.com/XMLSchema" xmlns:xil_pn="http://www.xilinx.com/XMLSchema">
+
+  <!--                                                          -->
+
+  <!--             For tool use only. Do not edit.              -->
+
+  <!--                                                          -->
+
+  <!-- ProjectNavigator created generated project file.         -->
+
+  <!-- For use in tracking generated file and other information -->
+
+  <!-- allowing preservation of process status.                 -->
+
+  <!--                                                          -->
+
+  <!-- Copyright (c) 1995-2013 Xilinx, Inc.  All rights reserved. -->
+
+  <version xmlns="http://www.xilinx.com/XMLSchema">11.1</version>
+
+  <sourceproject xmlns="http://www.xilinx.com/XMLSchema" xil_pn:fileType="FILE_XISE" xil_pn:name="Assignments.xise"/>
+
+  <files xmlns="http://www.xilinx.com/XMLSchema">
+    <file xil_pn:branch="BehavioralSim" xil_pn:fileType="FILE_ISIM_EXE" xil_pn:name="BCDAdder_isim_beh.exe"/>
+    <file xil_pn:fileType="FILE_XST_PROJECT" xil_pn:name="BCDAdder_stx_beh.prj"/>
+    <file xil_pn:branch="BehavioralSim" xil_pn:fileType="FILE_ISIM_EXE" xil_pn:name="eighttothree_isim_beh.exe"/>
+    <file xil_pn:fileType="FILE_XST_PROJECT" xil_pn:name="eighttothree_stx_beh.prj"/>
+    <file xil_pn:branch="BehavioralSim" xil_pn:fileType="FILE_ISIM_EXE" xil_pn:name="eighttothreee_bhe_s_isim_beh.exe"/>
+    <file xil_pn:fileType="FILE_XST_PROJECT" xil_pn:name="eighttothreee_bhe_s_stx_beh.prj"/>
+    <file xil_pn:branch="BehavioralSim" xil_pn:fileType="FILE_ISIM_EXE" xil_pn:name="fourbitripple_gen_isim_beh.exe"/>
+    <file xil_pn:fileType="FILE_XST_PROJECT" xil_pn:name="fourbitripple_gen_stx_beh.prj"/>
+    <file xil_pn:fileType="FILE_XST_PROJECT" xil_pn:name="fourto2enc_beh2_beh.prj"/>
+    <file xil_pn:branch="BehavioralSim" xil_pn:fileType="FILE_ISIM_EXE" xil_pn:name="fourto2enc_beh2_isim_beh.exe"/>
+    <file xil_pn:fileType="FILE_ISIM_MISC" xil_pn:name="fourto2enc_beh2_isim_beh.wdb"/>
+    <file xil_pn:fileType="FILE_XST_PROJECT" xil_pn:name="fourto2enc_beh2_stx_beh.prj"/>
+    <file xil_pn:branch="BehavioralSim" xil_pn:fileType="FILE_ISIM_EXE" xil_pn:name="foutto2enc_beh_isim_beh.exe"/>
+    <file xil_pn:fileType="FILE_XST_PROJECT" xil_pn:name="foutto2enc_beh_stx_beh.prj"/>
+    <file xil_pn:branch="BehavioralSim" xil_pn:fileType="FILE_ISIM_EXE" xil_pn:name="foutto2enc_str_isim_beh.exe"/>
+    <file xil_pn:fileType="FILE_XST_PROJECT" xil_pn:name="foutto2enc_str_stx_beh.prj"/>
+    <file xil_pn:fileType="FILE_DIRECTORY" xil_pn:name="isim"/>
+    <file xil_pn:branch="BehavioralSim" xil_pn:fileType="FILE_CMD" xil_pn:name="isim.cmd"/>
+    <file xil_pn:branch="BehavioralSim" xil_pn:fileType="FILE_ISIM_EXE" xil_pn:name="threeto8dec_comp_isim_beh.exe"/>
+    <file xil_pn:fileType="FILE_ISIM_MISC" xil_pn:name="threeto8dec_comp_isim_beh.wdb"/>
+    <file xil_pn:fileType="FILE_XST_PROJECT" xil_pn:name="threeto8dec_comp_stx_beh.prj"/>
+    <file xil_pn:fileType="FILE_XST_PROJECT" xil_pn:name="threeto8dec_proc_stx_beh.prj"/>
+    <file xil_pn:fileType="FILE_XST_PROJECT" xil_pn:name="twotofourdecoder_stx_beh.prj"/>
+    <file xil_pn:branch="BehavioralSim" xil_pn:fileType="FILE_INI" xil_pn:name="xilinxsim.ini"/>
+  </files>
+
+  <transforms xmlns="http://www.xilinx.com/XMLSchema">
+    <transform xil_pn:end_ts="1591547759" xil_pn:name="TRAN_copyInitialToAbstractSimulation" xil_pn:start_ts="1591547759">
+      <status xil_pn:value="SuccessfullyRun"/>
+      <status xil_pn:value="ReadyToRun"/>
+    </transform>
+    <transform xil_pn:end_ts="1591547775" xil_pn:in_ck="8744458160661689009" xil_pn:name="TRAN_copyAbstractToPostAbstractSimulation" xil_pn:start_ts="1591547775">
+      <status xil_pn:value="SuccessfullyRun"/>
+      <status xil_pn:value="ReadyToRun"/>
+      <outfile xil_pn:name="../Anuran/assgn2/dectoBCD_str.vhd"/>
+      <outfile xil_pn:name="../Anuran/assgn4/addersub.vhd"/>
+      <outfile xil_pn:name="../Anuran/assgn4/addersubproc.vhd"/>
+      <outfile xil_pn:name="../Anuran/assgn4/fbrcaprocess.vhd"/>
+      <outfile xil_pn:name="../Anuran/assgn4/fourbitripplecarry.vhd"/>
+      <outfile xil_pn:name="../Anuran/assgn4/fulladder.vhd"/>
+      <outfile xil_pn:name="../Anuran/assgn4/fulladder2.vhd"/>
+      <outfile xil_pn:name="../Anuran/assgn4/halfadder.vhd"/>
+      <outfile xil_pn:name="../Anuran/assgn4/twoscomplement.vhd"/>
+      <outfile xil_pn:name="BCDAdder.vhd"/>
+      <outfile xil_pn:name="eighttothree_beh_c.vhd"/>
+      <outfile xil_pn:name="eighttothreee_bhe_s.vhd"/>
+      <outfile xil_pn:name="encoder.vhd"/>
+      <outfile xil_pn:name="fourbitripple_gen.vhd"/>
+      <outfile xil_pn:name="fourto2enc_beh2.vhd"/>
+      <outfile xil_pn:name="foutto2enc_beh.vhd"/>
+      <outfile xil_pn:name="foutto2enc_str.vhd"/>
+      <outfile xil_pn:name="fulladder.vhd"/>
+      <outfile xil_pn:name="halfadder.vhd"/>
+      <outfile xil_pn:name="onetotwodecoder.vhd"/>
+      <outfile xil_pn:name="onetotwodecoder2.vhd"/>
+      <outfile xil_pn:name="onetotwodecoder3.vhd"/>
+      <outfile xil_pn:name="onetotwodecoder4.vhd"/>
+      <outfile xil_pn:name="threeto8dec_comp.vhd"/>
+      <outfile xil_pn:name="threeto8dec_proc.vhd"/>
+      <outfile xil_pn:name="twotofourdecoder.vhd"/>
+      <outfile xil_pn:name="twotofourdecoder2.vhd"/>
+      <outfile xil_pn:name="twotofourdecoder3.vhd"/>
+      <outfile xil_pn:name="twotofourdecoder4.vhd"/>
+    </transform>
+    <transform xil_pn:end_ts="1591547759" xil_pn:name="TRAN_xawsToSimhdl" xil_pn:prop_ck="-1720370091268112353" xil_pn:start_ts="1591547759">
+      <status xil_pn:value="SuccessfullyRun"/>
+      <status xil_pn:value="ReadyToRun"/>
+    </transform>
+    <transform xil_pn:end_ts="1591547759" xil_pn:name="TRAN_schematicsToHdlSim" xil_pn:prop_ck="7103155514759853003" xil_pn:start_ts="1591547759">
+      <status xil_pn:value="SuccessfullyRun"/>
+      <status xil_pn:value="ReadyToRun"/>
+    </transform>
+    <transform xil_pn:end_ts="1591547759" xil_pn:name="TRAN_regenerateCoresSim" xil_pn:prop_ck="6301354503568168621" xil_pn:start_ts="1591547759">
+      <status xil_pn:value="SuccessfullyRun"/>
+      <status xil_pn:value="ReadyToRun"/>
+    </transform>
+    <transform xil_pn:end_ts="1591547778" xil_pn:in_ck="8744458160661689009" xil_pn:name="TRAN_copyPostAbstractToPreSimulation" xil_pn:start_ts="1591547778">
+      <status xil_pn:value="SuccessfullyRun"/>
+      <status xil_pn:value="ReadyToRun"/>
+      <outfile xil_pn:name="../Anuran/assgn2/dectoBCD_str.vhd"/>
+      <outfile xil_pn:name="../Anuran/assgn4/addersub.vhd"/>
+      <outfile xil_pn:name="../Anuran/assgn4/addersubproc.vhd"/>
+      <outfile xil_pn:name="../Anuran/assgn4/fbrcaprocess.vhd"/>
+      <outfile xil_pn:name="../Anuran/assgn4/fourbitripplecarry.vhd"/>
+      <outfile xil_pn:name="../Anuran/assgn4/fulladder.vhd"/>
+      <outfile xil_pn:name="../Anuran/assgn4/fulladder2.vhd"/>
+      <outfile xil_pn:name="../Anuran/assgn4/halfadder.vhd"/>
+      <outfile xil_pn:name="../Anuran/assgn4/twoscomplement.vhd"/>
+      <outfile xil_pn:name="BCDAdder.vhd"/>
+      <outfile xil_pn:name="eighttothree_beh_c.vhd"/>
+      <outfile xil_pn:name="eighttothreee_bhe_s.vhd"/>
+      <outfile xil_pn:name="encoder.vhd"/>
+      <outfile xil_pn:name="fourbitripple_gen.vhd"/>
+      <outfile xil_pn:name="fourto2enc_beh2.vhd"/>
+      <outfile xil_pn:name="foutto2enc_beh.vhd"/>
+      <outfile xil_pn:name="foutto2enc_str.vhd"/>
+      <outfile xil_pn:name="fulladder.vhd"/>
+      <outfile xil_pn:name="halfadder.vhd"/>
+      <outfile xil_pn:name="onetotwodecoder.vhd"/>
+      <outfile xil_pn:name="onetotwodecoder2.vhd"/>
+      <outfile xil_pn:name="onetotwodecoder3.vhd"/>
+      <outfile xil_pn:name="onetotwodecoder4.vhd"/>
+      <outfile xil_pn:name="threeto8dec_comp.vhd"/>
+      <outfile xil_pn:name="threeto8dec_proc.vhd"/>
+      <outfile xil_pn:name="twotofourdecoder.vhd"/>
+      <outfile xil_pn:name="twotofourdecoder2.vhd"/>
+      <outfile xil_pn:name="twotofourdecoder3.vhd"/>
+      <outfile xil_pn:name="twotofourdecoder4.vhd"/>
+    </transform>
+    <transform xil_pn:end_ts="1591547781" xil_pn:in_ck="8744458160661689009" xil_pn:name="TRAN_ISimulateBehavioralModelRunFuse" xil_pn:prop_ck="-23775300402021000" xil_pn:start_ts="1591547778">
+      <status xil_pn:value="FailedRun"/>
+      <status xil_pn:value="ReadyToRun"/>
+    </transform>
+    <transform xil_pn:end_ts="1591544904" xil_pn:in_ck="-349661712402970924" xil_pn:name="TRAN_ISimulateBehavioralModel" xil_pn:prop_ck="-3568854742698835983" xil_pn:start_ts="1591544904">
+      <status xil_pn:value="AbortedRun"/>
+      <status xil_pn:value="ReadyToRun"/>
+      <status xil_pn:value="OutOfDateForProperties"/>
+      <status xil_pn:value="OutOfDateForPredecessor"/>
+      <status xil_pn:value="OutOfDateForced"/>
+      <outfile xil_pn:name="isim.cmd"/>
+      <outfile xil_pn:name="threeto8dec_comp_isim_beh.wdb"/>
+    </transform>
+  </transforms>
+
+</generated_project>

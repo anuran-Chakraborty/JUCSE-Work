@@ -1,0 +1,17 @@
+1. What is soft computing
+2. Fuzzy sets definition
+
+2.1 crisp set vs fuzzy set
+2.2 type-n fuzzy set
+2.3 fuzzy set operations
+2.4 membership functions
+2.5 fuzzy logic operators
+2.6 fuzzy controller
+2.7 fuzzification and defuzzification
+2.8 fuzzy rules and reasoning
+2.9 
+
+3. Rough sets definition
+4. fuzzy rough vs rough fuzzy
+5. type 2 fuzzy sets
+6. 

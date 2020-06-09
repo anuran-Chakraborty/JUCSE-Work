@@ -1,0 +1,6 @@
+V3 3
+FL D:/VLSILab/Anuran/assgn1/encoder.vhd 2020/01/27.00:38:14 P.20131013
+EN work/eighttothree 1580066955 FL D:/VLSILab/Anuran/assgn1/encoder.vhd \
+      PB ieee/std_logic_1164 1381692176
+AR work/eighttothree/Behavioral 1580066956 \
+      FL D:/VLSILab/Anuran/assgn1/encoder.vhd EN work/eighttothree 1580066955

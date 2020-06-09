@@ -1,0 +1,4 @@
+vhdl isim_temp "halfadder.vhd"
+vhdl isim_temp "fulladder.vhd"
+vhdl isim_temp "fourbitripple_gen.vhd"
+vhdl isim_temp "BCDAdder.vhd"

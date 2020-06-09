@@ -1,0 +1,1 @@
+-intstyle "ise" -incremental -o "D:/VLSILab/Anuran/assgn1/eighttothreee_bhe_s_isim_beh.exe" -prj "D:/VLSILab/Anuran/assgn1/eighttothreee_bhe_s_beh.prj" "work.eighttothreee_bhe_s" 

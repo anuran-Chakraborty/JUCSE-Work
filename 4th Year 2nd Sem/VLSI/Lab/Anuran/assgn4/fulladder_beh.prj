@@ -1,0 +1,2 @@
+vhdl work "halfadder.vhd"
+vhdl work "fulladder.vhd"

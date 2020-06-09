@@ -1,0 +1,1 @@
+-intstyle "ise" -incremental -o "D:/VLSILab/Anuran/assgn2/dectoBCD_str_isim_beh.exe" -prj "D:/VLSILab/Anuran/assgn2/dectoBCD_str_beh.prj" "work.dectoBCD_str" 
