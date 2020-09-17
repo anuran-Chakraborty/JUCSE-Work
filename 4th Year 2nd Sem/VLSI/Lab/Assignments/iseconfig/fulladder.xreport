@@ -1,11 +1,11 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <report-views version="2.0" >
  <header>
-  <DateModified>2020-06-07T19:23:37</DateModified>
+  <DateModified>2020-06-21T18:16:48</DateModified>
   <ModuleName>fulladder</ModuleName>
   <SummaryTimeStamp>Unknown</SummaryTimeStamp>
   <SavedFilePath>D:/JUCSE WORK/4th Year 2nd Sem/VLSI/Lab/Assignments/iseconfig/fulladder.xreport</SavedFilePath>
-  <ImplementationReportsDirectory>D:/JUCSE WORK/4th Year 2nd Sem/VLSI/Lab/Assignments</ImplementationReportsDirectory>
+  <ImplementationReportsDirectory>D:/JUCSE WORK/4th Year 2nd Sem/VLSI/Lab/Assignments\</ImplementationReportsDirectory>
   <DateInitialized>2020-06-07T19:23:37</DateInitialized>
   <EnableMessageFiltering>false</EnableMessageFiltering>
  </header>

@@ -38,10 +38,22 @@
     <file xil_pn:fileType="FILE_XST_PROJECT" xil_pn:name="foutto2enc_beh_stx_beh.prj"/>
     <file xil_pn:branch="BehavioralSim" xil_pn:fileType="FILE_ISIM_EXE" xil_pn:name="foutto2enc_str_isim_beh.exe"/>
     <file xil_pn:fileType="FILE_XST_PROJECT" xil_pn:name="foutto2enc_str_stx_beh.prj"/>
+    <file xil_pn:fileType="FILE_LOG" xil_pn:name="fuse.log"/>
+    <file xil_pn:branch="BehavioralSim" xil_pn:fileType="FILE_ISIM_EXE" xil_pn:name="halfadder_isim_beh.exe"/>
+    <file xil_pn:fileType="FILE_XST_PROJECT" xil_pn:name="halfadder_stx_beh.prj"/>
+    <file xil_pn:fileType="FILE_XST_PROJECT" xil_pn:name="ifelse_beh.prj"/>
+    <file xil_pn:branch="BehavioralSim" xil_pn:fileType="FILE_ISIM_EXE" xil_pn:name="ifelse_isim_beh.exe"/>
+    <file xil_pn:fileType="FILE_ISIM_MISC" xil_pn:name="ifelse_isim_beh.wdb"/>
+    <file xil_pn:fileType="FILE_XST_PROJECT" xil_pn:name="ifelse_stx_beh.prj"/>
     <file xil_pn:fileType="FILE_DIRECTORY" xil_pn:name="isim"/>
     <file xil_pn:branch="BehavioralSim" xil_pn:fileType="FILE_CMD" xil_pn:name="isim.cmd"/>
+    <file xil_pn:branch="BehavioralSim" xil_pn:fileType="FILE_LOG" xil_pn:name="isim.log"/>
+    <file xil_pn:branch="BehavioralSim" xil_pn:fileType="FILE_ISIM_EXE" xil_pn:name="onetotwodecoder3_isim_beh.exe"/>
+    <file xil_pn:fileType="FILE_XST_PROJECT" xil_pn:name="onetotwodecoder3_stx_beh.prj"/>
+    <file xil_pn:branch="BehavioralSim" xil_pn:fileType="FILE_ISIM_EXE" xil_pn:name="program1_isim_beh.exe"/>
+    <file xil_pn:fileType="FILE_XST_PROJECT" xil_pn:name="program1_stx_beh.prj"/>
+    <file xil_pn:branch="BehavioralSim" xil_pn:fileType="FILE_ISIM_EXE" xil_pn:name="program3_isim_beh.exe"/>
     <file xil_pn:branch="BehavioralSim" xil_pn:fileType="FILE_ISIM_EXE" xil_pn:name="threeto8dec_comp_isim_beh.exe"/>
-    <file xil_pn:fileType="FILE_ISIM_MISC" xil_pn:name="threeto8dec_comp_isim_beh.wdb"/>
     <file xil_pn:fileType="FILE_XST_PROJECT" xil_pn:name="threeto8dec_comp_stx_beh.prj"/>
     <file xil_pn:fileType="FILE_XST_PROJECT" xil_pn:name="threeto8dec_proc_stx_beh.prj"/>
     <file xil_pn:fileType="FILE_XST_PROJECT" xil_pn:name="twotofourdecoder_stx_beh.prj"/>
@@ -53,7 +65,7 @@
       <status xil_pn:value="SuccessfullyRun"/>
       <status xil_pn:value="ReadyToRun"/>
     </transform>
-    <transform xil_pn:end_ts="1591547775" xil_pn:in_ck="8744458160661689009" xil_pn:name="TRAN_copyAbstractToPostAbstractSimulation" xil_pn:start_ts="1591547775">
+    <transform xil_pn:end_ts="1592743755" xil_pn:in_ck="-7163857238796894479" xil_pn:name="TRAN_copyAbstractToPostAbstractSimulation" xil_pn:start_ts="1592743755">
       <status xil_pn:value="SuccessfullyRun"/>
       <status xil_pn:value="ReadyToRun"/>
       <outfile xil_pn:name="../Anuran/assgn2/dectoBCD_str.vhd"/>
@@ -85,12 +97,14 @@
       <outfile xil_pn:name="twotofourdecoder2.vhd"/>
       <outfile xil_pn:name="twotofourdecoder3.vhd"/>
       <outfile xil_pn:name="twotofourdecoder4.vhd"/>
+      <outfile xil_pn:name="viva.vhd"/>
+      <outfile xil_pn:name="vivaa3.vhd"/>
     </transform>
-    <transform xil_pn:end_ts="1591547759" xil_pn:name="TRAN_xawsToSimhdl" xil_pn:prop_ck="-1720370091268112353" xil_pn:start_ts="1591547759">
+    <transform xil_pn:end_ts="1592743759" xil_pn:name="TRAN_xawsToSimhdl" xil_pn:prop_ck="1300024497472941189" xil_pn:start_ts="1592743759">
       <status xil_pn:value="SuccessfullyRun"/>
       <status xil_pn:value="ReadyToRun"/>
     </transform>
-    <transform xil_pn:end_ts="1591547759" xil_pn:name="TRAN_schematicsToHdlSim" xil_pn:prop_ck="7103155514759853003" xil_pn:start_ts="1591547759">
+    <transform xil_pn:end_ts="1592743759" xil_pn:name="TRAN_schematicsToHdlSim" xil_pn:prop_ck="4011364907852198449" xil_pn:start_ts="1592743759">
       <status xil_pn:value="SuccessfullyRun"/>
       <status xil_pn:value="ReadyToRun"/>
     </transform>
@@ -98,7 +112,7 @@
       <status xil_pn:value="SuccessfullyRun"/>
       <status xil_pn:value="ReadyToRun"/>
     </transform>
-    <transform xil_pn:end_ts="1591547778" xil_pn:in_ck="8744458160661689009" xil_pn:name="TRAN_copyPostAbstractToPreSimulation" xil_pn:start_ts="1591547778">
+    <transform xil_pn:end_ts="1592743759" xil_pn:in_ck="-7163857238796894479" xil_pn:name="TRAN_copyPostAbstractToPreSimulation" xil_pn:start_ts="1592743759">
       <status xil_pn:value="SuccessfullyRun"/>
       <status xil_pn:value="ReadyToRun"/>
       <outfile xil_pn:name="../Anuran/assgn2/dectoBCD_str.vhd"/>
@@ -130,19 +144,29 @@
       <outfile xil_pn:name="twotofourdecoder2.vhd"/>
       <outfile xil_pn:name="twotofourdecoder3.vhd"/>
       <outfile xil_pn:name="twotofourdecoder4.vhd"/>
+      <outfile xil_pn:name="viva.vhd"/>
+      <outfile xil_pn:name="vivaa3.vhd"/>
     </transform>
-    <transform xil_pn:end_ts="1591547781" xil_pn:in_ck="8744458160661689009" xil_pn:name="TRAN_ISimulateBehavioralModelRunFuse" xil_pn:prop_ck="-23775300402021000" xil_pn:start_ts="1591547778">
-      <status xil_pn:value="FailedRun"/>
+    <transform xil_pn:end_ts="1592743763" xil_pn:in_ck="-7163857238796894479" xil_pn:name="TRAN_ISimulateBehavioralModelRunFuse" xil_pn:prop_ck="-1640403605960444540" xil_pn:start_ts="1592743759">
+      <status xil_pn:value="SuccessfullyRun"/>
       <status xil_pn:value="ReadyToRun"/>
+      <status xil_pn:value="OutOfDateForOutputs"/>
+      <status xil_pn:value="OutputChanged"/>
+      <outfile xil_pn:name="fuse.log"/>
+      <outfile xil_pn:name="ifelse_beh.prj"/>
+      <outfile xil_pn:name="ifelse_isim_beh.exe"/>
+      <outfile xil_pn:name="isim"/>
+      <outfile xil_pn:name="isim.log"/>
+      <outfile xil_pn:name="xilinxsim.ini"/>
     </transform>
-    <transform xil_pn:end_ts="1591544904" xil_pn:in_ck="-349661712402970924" xil_pn:name="TRAN_ISimulateBehavioralModel" xil_pn:prop_ck="-3568854742698835983" xil_pn:start_ts="1591544904">
-      <status xil_pn:value="AbortedRun"/>
+    <transform xil_pn:end_ts="1592743764" xil_pn:in_ck="-2780210636234052668" xil_pn:name="TRAN_ISimulateBehavioralModel" xil_pn:prop_ck="-4351962565142785337" xil_pn:start_ts="1592743763">
+      <status xil_pn:value="SuccessfullyRun"/>
       <status xil_pn:value="ReadyToRun"/>
-      <status xil_pn:value="OutOfDateForProperties"/>
-      <status xil_pn:value="OutOfDateForPredecessor"/>
-      <status xil_pn:value="OutOfDateForced"/>
+      <status xil_pn:value="OutOfDateForOutputs"/>
+      <status xil_pn:value="OutputChanged"/>
+      <outfile xil_pn:name="ifelse_isim_beh.wdb"/>
       <outfile xil_pn:name="isim.cmd"/>
-      <outfile xil_pn:name="threeto8dec_comp_isim_beh.wdb"/>
+      <outfile xil_pn:name="isim.log"/>
     </transform>
   </transforms>
 

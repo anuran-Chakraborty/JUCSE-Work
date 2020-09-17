@@ -1,0 +1,2 @@
+vhdl isim_temp "../Anuran/assgn4/halfadder.vhd"
+vhdl isim_temp "halfadder.vhd"

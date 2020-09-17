@@ -5,7 +5,7 @@
      behavior or data corruption.  It is strongly advised that
      users do not edit the contents of this file. -->
 <messages>
-<msg type="fatal" file="Simulator" num="0" delta="unknown" srcfile="N:/P.20131013/env/Jobs/Simulator/Compiler/common/src\CompilerAssert.h" srcline="40" srcrcs="1.20" >Internal Compiler Error in file <arg fmt="%s" index="1">../src/VhdlTreeTransform.cpp</arg> at line <arg fmt="%d" index="2">296</arg>
+<msg type="warning" file="Simulator" num="0" delta="unknown" >Unable to copy libPortabilityNOSH.dll to the simulation executable directory: <arg fmt="%s" index="1">boost::filesystem::copy_file: The system cannot find the path specified, &quot;isim\ifelse_isim_beh.exe.sim\libPortability.dll&quot;</arg>.
 </msg>
 
 </messages>
